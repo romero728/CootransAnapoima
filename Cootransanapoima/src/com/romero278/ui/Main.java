@@ -5,15 +5,24 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.border.EmptyBorder;
+
+import com.mysql.jdbc.PreparedStatement;
+import com.romero278.kernel.connection.ConnectionBD;
 
 public class Main extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -33,6 +42,21 @@ public class Main extends JFrame {
 	}
 
 	public Main() {
+		ConnectionBD conBD = new ConnectionBD();
+		Connection connection = conBD.connection();
+		
+		/*String sql = "INSERT INTO lugares (nombre_lugar) VALUES ('Tolima')";
+		try {
+			
+			System.out.println(sql);
+			PreparedStatement prep = (PreparedStatement) connection.prepareStatement(sql);
+			prep.executeUpdate();
+			prep.close();
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}*/
+		
 		setTitle("My test");
 		setBounds(0, 0, 1200, 600);
 		setLocationRelativeTo(null);
@@ -51,6 +75,35 @@ public class Main extends JFrame {
 		JTextField tfEmpresa = new JTextField(30);
 		JPasswordField pfClave = new JPasswordField(30);
 		JButton btnNext = new JButton("Ingresar");
+		
+		btnNext.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(tfEmpresa.getText().isEmpty() || pfClave.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Debes diligenciar todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
+				} else {
+					String sql = "SELECT count(*) FROM empresas WHERE nombre_empresa = '"+tfEmpresa.getText()+"' and password_empresa = '"+pfClave.getText()+"'";
+					try {
+						PreparedStatement prep = (PreparedStatement) connection.prepareStatement(sql);
+						ResultSet res = (ResultSet) prep.executeQuery();
+						
+						while(res.next()) {
+							if(res.getString("count(*)").equals("0")) {								
+								JOptionPane.showMessageDialog(null, "Nombre de la empresa o contraseña errónea", "Error", JOptionPane.ERROR_MESSAGE);
+							} else {
+								JOptionPane.showMessageDialog(null, "Bienvenido al gestor de rodamientos", "OK", JOptionPane.INFORMATION_MESSAGE);
+							}
+						}
+						
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+				
+			}
+		});
 		
 		Container container = getContentPane();
 		SpringLayout springLayout = new SpringLayout();
