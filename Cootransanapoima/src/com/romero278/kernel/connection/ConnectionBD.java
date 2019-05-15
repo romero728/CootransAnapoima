@@ -17,11 +17,10 @@ public class ConnectionBD {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             connect = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/gestor_rutas", "root", "root");
-            //JOptionPane.showMessageDialog(null, "Connection successful","Notice",JOptionPane.INFORMATION_MESSAGE);
         } catch (ClassNotFoundException | SQLException error) {
             JOptionPane.showMessageDialog(null, "Connection failed "+"\n"+error,"Message Error",JOptionPane.ERROR_MESSAGE);
         }
+        
         return connect;
-
     }
 }

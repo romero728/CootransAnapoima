@@ -3,6 +3,7 @@ package com.romero278.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -24,7 +25,7 @@ import javax.swing.border.EmptyBorder;
 import com.mysql.jdbc.PreparedStatement;
 import com.romero278.kernel.connection.ConnectionBD;
 
-public class Main extends JFrame {
+public class Login extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
@@ -32,7 +33,7 @@ public class Main extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Main frame = new Main();
+					Login frame = new Login();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -41,23 +42,11 @@ public class Main extends JFrame {
 		});
 	}
 
-	public Main() {
+	public Login() {
 		ConnectionBD conBD = new ConnectionBD();
 		Connection connection = conBD.connection();
 		
-		/*String sql = "INSERT INTO lugares (nombre_lugar) VALUES ('Tolima')";
-		try {
-			
-			System.out.println(sql);
-			PreparedStatement prep = (PreparedStatement) connection.prepareStatement(sql);
-			prep.executeUpdate();
-			prep.close();
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}*/
-		
-		setTitle("My test");
+		setTitle("Ingreso");
 		setBounds(0, 0, 1200, 600);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -70,20 +59,24 @@ public class Main extends JFrame {
 		setContentPane(contentPane);
 		
 		JLabel title = new JLabel("Ingresa los datos para continuar: ");
-		JLabel lEmpresa = new JLabel("Empresa: ");
-		JLabel lClave = new JLabel("Clave: ");
-		JTextField tfEmpresa = new JTextField(30);
-		JPasswordField pfClave = new JPasswordField(30);
+		JLabel lCompany = new JLabel("Empresa: ");
+		JLabel lPassword = new JLabel("Clave: ");
+		JTextField tfCompany = new JTextField(20);
+		JPasswordField pfPassword = new JPasswordField(20);
 		JButton btnNext = new JButton("Ingresar");
+		
+		btnNext.setPreferredSize(new Dimension(200, 36));
 		
 		btnNext.addActionListener(new ActionListener() {
 			
+			@SuppressWarnings("deprecation")
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(tfEmpresa.getText().isEmpty() || pfClave.getText().isEmpty()) {
+				if(tfCompany.getText().isEmpty() || pfPassword.getText().isEmpty()) {
 					JOptionPane.showMessageDialog(null, "Debes diligenciar todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
 				} else {
-					String sql = "SELECT count(*) FROM empresas WHERE nombre_empresa = '"+tfEmpresa.getText()+"' and password_empresa = '"+pfClave.getText()+"'";
+					String sql = "SELECT count(*) FROM empresas WHERE nombre_empresa = '"+tfCompany.getText()+"' and password_empresa = '"+pfPassword.getText()+"'";
+					
 					try {
 						PreparedStatement prep = (PreparedStatement) connection.prepareStatement(sql);
 						ResultSet res = (ResultSet) prep.executeQuery();
@@ -92,16 +85,16 @@ public class Main extends JFrame {
 							if(res.getString("count(*)").equals("0")) {								
 								JOptionPane.showMessageDialog(null, "Nombre de la empresa o contraseña errónea", "Error", JOptionPane.ERROR_MESSAGE);
 							} else {
-								JOptionPane.showMessageDialog(null, "Bienvenido al gestor de rodamientos", "OK", JOptionPane.INFORMATION_MESSAGE);
+								setVisible(false);
+								
+								MainMenu mainMenu = new MainMenu(tfCompany.getText());
+								mainMenu.setVisible(true);
 							}
-						}
-						
+						}						
 					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-				}
-				
+				}				
 			}
 		});
 		
@@ -109,48 +102,47 @@ public class Main extends JFrame {
 		SpringLayout springLayout = new SpringLayout();
 		container.setLayout(springLayout);
 		
-		springLayout.putConstraint(SpringLayout.WEST, title, 300, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, title, 600, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, title, 120, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, lEmpresa, 340, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, lEmpresa, 220, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.WEST, lCompany, 420, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lCompany, 220, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, tfEmpresa, 450, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, tfEmpresa, 220, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.WEST, tfCompany, 520, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, tfCompany, 220, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, lClave, 340, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, lClave, 260, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.WEST, lPassword, 420, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lPassword, 260, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, pfClave, 450, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, pfClave, 260, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.WEST, pfPassword, 520, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, pfPassword, 260, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, btnNext, 550, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnNext, 600, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, btnNext, 320, SpringLayout.NORTH, container);
 		
 		container.add(title);
-		container.add(lEmpresa);
-		container.add(tfEmpresa);
-		container.add(lClave);
-		container.add(pfClave);
+		container.add(lCompany);
+		container.add(tfCompany);
+		container.add(lPassword);
+		container.add(pfPassword);
 		container.add(btnNext);
 		
 		title.setFont(new Font("Arial", Font.BOLD, 40));
 		title.setForeground(new Color (116, 128, 148));
 		
-		lEmpresa.setFont(new Font("Arial", Font.BOLD, 20));
-		lEmpresa.setForeground(new Color (116, 128, 148));
+		lCompany.setFont(new Font("Arial", Font.BOLD, 20));
+		lCompany.setForeground(new Color (116, 128, 148));
 		
-		lClave.setFont(new Font("Arial", Font.BOLD, 20));
-		lClave.setForeground(new Color (116, 128, 148));
+		lPassword.setFont(new Font("Arial", Font.BOLD, 20));
+		lPassword.setForeground(new Color (116, 128, 148));
 		
-		tfEmpresa.setFont(new Font("Arial", Font.PLAIN, 18));
-		tfEmpresa.setForeground(new Color (116, 128, 148));
+		tfCompany.setFont(new Font("Arial", Font.PLAIN, 18));
+		tfCompany.setForeground(new Color (116, 128, 148));
 		
-		pfClave.setFont(new Font("Arial", Font.PLAIN, 18));
-		pfClave.setForeground(new Color (116, 128, 148));
+		pfPassword.setFont(new Font("Arial", Font.PLAIN, 18));
+		pfPassword.setForeground(new Color (116, 128, 148));
 		
 		btnNext.setFont(new Font("Arial", Font.BOLD, 18));
 		btnNext.setForeground(new Color (100, 100, 100));
 	}
-
 }
