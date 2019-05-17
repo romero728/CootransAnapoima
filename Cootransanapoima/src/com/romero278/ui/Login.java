@@ -67,37 +67,6 @@ public class Login extends JFrame {
 		
 		btnNext.setPreferredSize(new Dimension(200, 36));
 		
-		btnNext.addActionListener(new ActionListener() {
-			
-			@SuppressWarnings("deprecation")
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(tfCompany.getText().isEmpty() || pfPassword.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(null, "Debes diligenciar todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
-				} else {
-					String sql = "SELECT count(*) FROM empresas WHERE nombre_empresa = '"+tfCompany.getText()+"' and password_empresa = '"+pfPassword.getText()+"'";
-					
-					try {
-						PreparedStatement prep = (PreparedStatement) connection.prepareStatement(sql);
-						ResultSet res = (ResultSet) prep.executeQuery();
-						
-						while(res.next()) {
-							if(res.getString("count(*)").equals("0")) {								
-								JOptionPane.showMessageDialog(null, "Nombre de la empresa o contraseña errónea", "Error", JOptionPane.ERROR_MESSAGE);
-							} else {
-								setVisible(false);
-								
-								MainMenu mainMenu = new MainMenu(tfCompany.getText());
-								mainMenu.setVisible(true);
-							}
-						}						
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}
-				}				
-			}
-		});
-		
 		Container container = getContentPane();
 		SpringLayout springLayout = new SpringLayout();
 		container.setLayout(springLayout);
@@ -144,5 +113,37 @@ public class Login extends JFrame {
 		
 		btnNext.setFont(new Font("Arial", Font.BOLD, 18));
 		btnNext.setForeground(new Color (100, 100, 100));
+		
+		/* --- Logic Part --- */
+		
+		btnNext.addActionListener(new ActionListener() {			
+			@SuppressWarnings("deprecation")
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(tfCompany.getText().isEmpty() || pfPassword.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Debes diligenciar todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
+				} else {
+					String sql = "SELECT count(*) FROM empresas WHERE nombre_empresa = '"+tfCompany.getText()+"' and password_empresa = '"+pfPassword.getText()+"'";
+					
+					try {
+						PreparedStatement prep = (PreparedStatement) connection.prepareStatement(sql);
+						ResultSet res = (ResultSet) prep.executeQuery();
+						
+						while(res.next()) {
+							if(res.getString("count(*)").equals("0")) {								
+								JOptionPane.showMessageDialog(null, "Nombre de la empresa o contraseña errónea", "Error", JOptionPane.ERROR_MESSAGE);
+							} else {
+								setVisible(false);
+								
+								MainMenu mainMenu = new MainMenu(tfCompany.getText());
+								mainMenu.setVisible(true);
+							}
+						}						
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+				}				
+			}
+		});
 	}
 }

@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -33,7 +35,7 @@ public class MainMenu extends JFrame {
 		JLabel title = new JLabel(nameCompany.toUpperCase());
 		JLabel subtitle = new JLabel("Elige una opción");
 		JLabel lGenerate = new JLabel("Puedes generar el plan de rodamiento semanal");
-		JLabel lEdit = new JLabel("Puedes configurar las rutas, los móviles, entre otros");
+		JLabel lEdit = new JLabel("Puedes configurar las rutas, los móviles, entre otros aspectos");
 		JButton btnGenerate = new JButton("Generar plan");
 		JButton btnEdit = new JButton("Configuración");
 		
@@ -86,6 +88,18 @@ public class MainMenu extends JFrame {
 		
 		lEdit.setFont(new Font("Arial", Font.BOLD, 12));
 		lEdit.setForeground(new Color (116, 128, 148));
+		
+		/* --- Logic Part --- */
+		
+		btnEdit.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+				
+				ConfigMenu config = new ConfigMenu();
+				config.setVisible(true);
+			}
+		});
 	}
 
 }
