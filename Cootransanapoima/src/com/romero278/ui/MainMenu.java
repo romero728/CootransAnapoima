@@ -96,7 +96,7 @@ public class MainMenu extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 				
-				ConfigMenu config = new ConfigMenu();
+				ConfigMenu config = new ConfigMenu(nameCompany);
 				config.setVisible(true);
 			}
 		});

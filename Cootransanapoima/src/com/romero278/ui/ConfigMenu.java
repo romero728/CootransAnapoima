@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,7 +19,11 @@ public class ConfigMenu extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
-	public ConfigMenu() {
+	String nameCompany;
+	
+	public ConfigMenu(String nameComp) {
+		nameCompany = nameComp; 
+		
 		setTitle("Configuración");
 		setBounds(0, 0, 1200, 600);
 		setLocationRelativeTo(null);
@@ -42,12 +48,14 @@ public class ConfigMenu extends JFrame {
 		JButton btnPlaces = new JButton("Lugares");
 		JButton btnRoutes = new JButton("Rutas");
 		JButton btnTours = new JButton("Recorridos");
+		JButton btnBack = new JButton("Atrás");
 		
 		btnOwners.setPreferredSize(new Dimension(200, 36));
 		btnMobile.setPreferredSize(new Dimension(200, 36));
 		btnPlaces.setPreferredSize(new Dimension(200, 36));
 		btnRoutes.setPreferredSize(new Dimension(200, 36));
 		btnTours.setPreferredSize(new Dimension(200, 36));
+		btnBack.setPreferredSize(new Dimension(100, 30));
 		
 		Container container = getContentPane();
 		SpringLayout springLayout = new SpringLayout();
@@ -89,6 +97,9 @@ public class ConfigMenu extends JFrame {
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lTours, 600, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, lTours, 510, SpringLayout.NORTH, container);
 		
+		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnBack, 100, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, btnBack, 500, SpringLayout.NORTH, container);
+		
 		container.add(title);
 		container.add(subtitle);
 		container.add(btnOwners);
@@ -101,6 +112,7 @@ public class ConfigMenu extends JFrame {
 		container.add(lRoutes);
 		container.add(btnTours);
 		container.add(lTours);
+		container.add(btnBack);
 		
 		title.setFont(new Font("Arial", Font.BOLD, 40));
 		title.setForeground(new Color (116, 128, 148));
@@ -137,5 +149,67 @@ public class ConfigMenu extends JFrame {
 		
 		lTours.setFont(new Font("Arial", Font.BOLD, 12));
 		lTours.setForeground(new Color (116, 128, 148));
+		
+		btnBack.setFont(new Font("Arial", Font.BOLD, 14));
+		btnBack.setForeground(Color.WHITE);
+		btnBack.setBackground(new Color (196,69,59));
+		
+		/* --- Logic part --- */
+		
+		btnOwners.addActionListener(new ActionListener() {			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				goToOptions("Propietarios");
+			}
+		});
+		
+		btnMobile.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				goToOptions("Móviles");
+			}
+		});
+		
+		btnPlaces.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				goToOptions("Lugares");
+			}
+		});
+		
+		btnRoutes.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				goToOptions("Rutas");
+			}
+		});
+		
+		btnTours.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				goToOptions("Recorridos");
+			}
+		});
+		
+		btnBack.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				goBack();
+			}
+		});
+	}
+	
+	void goToOptions(String flag) {
+		setVisible(false);
+		
+		ConfigOptions options = new ConfigOptions(flag, nameCompany);
+		options.setVisible(true);
+	}
+	
+	void goBack() {
+		setVisible(false);
+		
+		MainMenu menu = new MainMenu(nameCompany);
+		menu.setVisible(true);
 	}
 }
