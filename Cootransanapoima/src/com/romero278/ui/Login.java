@@ -8,9 +8,6 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,8 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.border.EmptyBorder;
 
-import com.mysql.jdbc.PreparedStatement;
-import com.romero278.kernel.connection.ConnectionBD;
+import com.romero278.kernel.connection.SQLLogin;
 
 public class Login extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -42,10 +38,7 @@ public class Login extends JFrame {
 		});
 	}
 
-	public Login() {
-		ConnectionBD conBD = new ConnectionBD();
-		Connection connection = conBD.connection();
-		
+	public Login() {		
 		setTitle("Ingreso");
 		setBounds(0, 0, 1200, 600);
 		setLocationRelativeTo(null);
@@ -58,7 +51,7 @@ public class Login extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
-		JLabel title = new JLabel("Ingresa los datos para continuar: ");
+		JLabel title = new JLabel("Ingresa los datos para continuar ");
 		JLabel lCompany = new JLabel("Empresa: ");
 		JLabel lPassword = new JLabel("Clave: ");
 		JTextField tfCompany = new JTextField(20);
@@ -123,24 +116,16 @@ public class Login extends JFrame {
 				if(tfCompany.getText().isEmpty() || pfPassword.getText().isEmpty()) {
 					JOptionPane.showMessageDialog(null, "Debes diligenciar todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
 				} else {
-					String sql = "SELECT count(*) FROM empresas WHERE nombre_empresa = '"+tfCompany.getText()+"' and password_empresa = '"+pfPassword.getText()+"'";
+					SQLLogin log = new SQLLogin();
+					boolean request = log.login(tfCompany.getText(), pfPassword.getText());
 					
-					try {
-						PreparedStatement prep = (PreparedStatement) connection.prepareStatement(sql);
-						ResultSet res = (ResultSet) prep.executeQuery();
+					if(request) {
+						setVisible(false);
 						
-						while(res.next()) {
-							if(res.getString("count(*)").equals("0")) {								
-								JOptionPane.showMessageDialog(null, "Nombre de la empresa o contraseña errónea", "Error", JOptionPane.ERROR_MESSAGE);
-							} else {
-								setVisible(false);
-								
-								MainMenu mainMenu = new MainMenu(tfCompany.getText());
-								mainMenu.setVisible(true);
-							}
-						}						
-					} catch (SQLException e1) {
-						e1.printStackTrace();
+						MainMenu mainMenu = new MainMenu(tfCompany.getText());
+						mainMenu.setVisible(true);
+					} else {
+						JOptionPane.showMessageDialog(null, "Nombre de la empresa o contraseña errónea", "Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}				
 			}

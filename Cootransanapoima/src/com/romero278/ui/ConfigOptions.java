@@ -124,6 +124,30 @@ public class ConfigOptions extends JFrame {
 		
 		/* --- Logic part --- */
 		
+		final String fOption = option;
+		
+		btnAdd.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+				
+				switch(fOption) {
+					case "Propietario":
+						AddOwner addo = new AddOwner(flag, fOption);
+						addo.setVisible(true);
+						break;
+					case "Móvil":
+						break;
+					case "Lugar":
+						break;
+					case "Ruta":
+						break;
+					case "Recorrido":
+						break;
+				}
+			}
+		});
+		
 		btnBack.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

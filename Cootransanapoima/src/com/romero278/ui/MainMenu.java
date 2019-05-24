@@ -19,7 +19,11 @@ public class MainMenu extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
-	public MainMenu(String nameCompany) {
+	String nameCompany;
+	
+	public MainMenu(String nameComp) {
+		nameCompany = nameComp;
+		
 		setTitle("Menú principal");
 		setBounds(0, 0, 1200, 600);
 		setLocationRelativeTo(null);
