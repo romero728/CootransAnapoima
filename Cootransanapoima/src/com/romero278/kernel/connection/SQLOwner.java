@@ -3,6 +3,8 @@ package com.romero278.kernel.connection;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 import com.mysql.jdbc.PreparedStatement;
 
@@ -34,9 +36,61 @@ public class SQLOwner {
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
+		} else {
+			return "document";
 		}
 		
 		return "";
+	}
+	
+	public ArrayList<String> listOwners() {
+		ArrayList<String> alOwners = new ArrayList<String>();
+		String sql1 = "SELECT * FROM propietarios";
+		
+		try {
+			prep = (PreparedStatement) connection.prepareStatement(sql1);
+			res = (ResultSet) prep.executeQuery();
+			
+			while(res.next()) { 
+				alOwners.add(res.getString("id_propietario") + ". " + res.getString("nombre_propietario") + " " + res.getString("apellido_propietario"));
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}		
+		
+		return alOwners;
+	}
+	
+	public String selectOwner(String idO) {
+		idO.replace('.', '|');
+		String[] parts = idO.split(Pattern.quote("|"));
+		String id = parts[0];
+		String infoOwner = "";
+		String sql1 = "SELECT * FROM propietarios WHERE id_propietario = '" + id + "'";
+		String nom, ape, td, doc, fec, dir, ci, tel, em;		
+		
+		try {
+			PreparedStatement preps = (PreparedStatement) connection.prepareStatement(sql1);
+			ResultSet ress = (ResultSet) preps.executeQuery();
+			
+			while(ress.next()) {
+				td = getTypeNameDocument(ress.getString("tipodocumento_propietario"));
+				nom = ress.getString("nombre_propietario");
+				ape = ress.getString("apellido_propietario");
+				doc = ress.getString("documento_propietario");
+				fec = ress.getString("fechanacimiento_propietario");
+				dir = ress.getString("direccion_propietario");
+				ci = ress.getString("ciudad_propietario");
+				tel = ress.getString("telefono_propietario");
+				em = ress.getString("email_propietario");
+				
+				infoOwner = nom + " " + ape + "|" + td + " " + doc + "|" + fec + "|" + dir + "|" + ci + "|" + tel + "|" + em + "|";
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		return infoOwner;
 	}
 	
 	String getTypeDocument(String typeDoc) {
@@ -48,6 +102,23 @@ public class SQLOwner {
 			
 			while(res.next()) {
 				return res.getString("id_tipodocumento");
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		return "";
+	}
+	
+	String getTypeNameDocument(String idType) {
+		String sql1 = "SELECT nombre_tipodocumento FROM tipodocumento WHERE id_tipodocumento = '" + idType + "'";
+		
+		try {
+			prep = (PreparedStatement) connection.prepareStatement(sql1);
+			res = (ResultSet) prep.executeQuery();
+			
+			while(res.next()) {
+				return res.getString("nombre_tipodocumento");
 			}
 		} catch (SQLException e1) {
 			e1.printStackTrace();

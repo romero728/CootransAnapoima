@@ -152,7 +152,7 @@ public class ConfigMenu extends JFrame {
 		
 		btnBack.setFont(new Font("Arial", Font.BOLD, 14));
 		btnBack.setForeground(Color.WHITE);
-		btnBack.setBackground(new Color (196,69,59));
+		btnBack.setBackground(new Color (196, 69, 59));
 		
 		/* --- Logic part --- */
 		

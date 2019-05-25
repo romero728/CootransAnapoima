@@ -34,6 +34,7 @@ public class AddOwner extends JFrame {
 	public AddOwner(String fg, String op) {
 		flag = fg;
 		option = op;
+		
 		setTitle(option + " - Agregar");
 		setBounds(0, 0, 1200, 600);
 		setLocationRelativeTo(null);
@@ -242,7 +243,7 @@ public class AddOwner extends JFrame {
 		
 		btnBack.setFont(new Font("Arial", Font.BOLD, 14));
 		btnBack.setForeground(Color.WHITE);
-		btnBack.setBackground(new Color (196,69,59));
+		btnBack.setBackground(new Color (196, 69, 59));
 		
 		/* --- Logic part --- */
 		
@@ -264,7 +265,6 @@ public class AddOwner extends JFrame {
 					String request;
 					DateFormat df = new SimpleDateFormat("yyyy/MM/dd");	
 					String birthdate = df.format(dcBirthdate.getDate());
-					System.out.println(birthdate);
 					
 					SQLOwner ow = new SQLOwner();
 					request = ow.insertOwner(tfFirstName.getText(), tfLastName.getText(), typeDoc, tfDocument.getText(), birthdate, tfAddress.getText(), tfCity.getText(), tfPhone.getText(), tfEmail.getText());
@@ -279,6 +279,8 @@ public class AddOwner extends JFrame {
 							break;
 						case "document":
 							JOptionPane.showMessageDialog(null, "El N° de documento ya ha sido agregado previamente", "Error", JOptionPane.ERROR_MESSAGE);
+							break;
+						default:
 							break;
 					}
 				}

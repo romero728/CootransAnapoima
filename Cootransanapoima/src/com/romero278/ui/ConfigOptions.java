@@ -53,6 +53,8 @@ public class ConfigOptions extends JFrame {
 			case "Recorridos":
 				option = tour(flag);
 				break;
+			default:
+				break;
 		}
 		
 		JLabel title = new JLabel(flag.toUpperCase());
@@ -120,11 +122,27 @@ public class ConfigOptions extends JFrame {
 		
 		btnBack.setFont(new Font("Arial", Font.BOLD, 14));
 		btnBack.setForeground(Color.WHITE);
-		btnBack.setBackground(new Color (196,69,59));
+		btnBack.setBackground(new Color (196, 69, 59));
 		
 		/* --- Logic part --- */
 		
 		final String fOption = option;
+		
+		btnList.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+				
+				switch (fOption) {
+				case "Propietario":
+					ListOwners listo = new ListOwners(flag, fOption);
+					listo.setVisible(true);
+					break;
+				default:
+					break;
+				}
+			}
+		});
 		
 		btnAdd.addActionListener(new ActionListener() {
 			@Override
