@@ -84,13 +84,51 @@ public class SQLOwner {
 				tel = ress.getString("telefono_propietario");
 				em = ress.getString("email_propietario");
 				
-				infoOwner = nom + " " + ape + "|" + td + " " + doc + "|" + fec + "|" + dir + "|" + ci + "|" + tel + "|" + em + "|";
+				infoOwner = id + "|" + nom + "|" + ape + "|" + td + "|" + doc + "|" + fec + "|" + dir + "|" + ci + "|" + tel + "|" + em + "|";
 			}
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		
 		return infoOwner;
+	}
+	
+	public String updateOwner(String id, String firstName, String lastName, String birthdate, String address, String city, String phone, String email) {
+		String sql1 = "UPDATE propietarios SET nombre_propietario = '" + firstName + "', apellido_propietario = '" + lastName + "', fechanacimiento_propietario = '" + birthdate + "', direccion_propietario = '" + address + "', ciudad_propietario = '" + city + "', telefono_propietario = '" + phone + "', email_propietario = '" + email + "' WHERE id_propietario = '" + id + "'";
+		
+		try {
+			prep = (PreparedStatement) connection.prepareStatement(sql1);
+			int i = prep.executeUpdate();
+			
+			if(i > 0) {
+				return "success";
+			} else {
+				return "error update";
+			}					
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		return "";
+	}
+	
+	public String deleteOwner(String id) {
+		String sql1 = "DELETE FROM propietarios WHERE id_propietario = '" + id + "'";
+		
+		try {
+			prep = (PreparedStatement) connection.prepareStatement(sql1);
+			int i = prep.executeUpdate();
+			
+			if(i > 0) {
+				return "success";
+			} else {
+				return "error delete";
+			}					
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		return "";
 	}
 	
 	String getTypeDocument(String typeDoc) {

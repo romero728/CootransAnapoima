@@ -7,13 +7,16 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.ParseException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
@@ -25,7 +28,8 @@ public class ListOwners extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
-	String flag, option, completeNameOwner, documentOwner, birthdayOwner, addressOwner, cityOwner, phoneOwner, emailOwner;
+	String flag, option, idOwner, completeNameOwner, documentOwner, birthdayOwner, addressOwner, cityOwner, phoneOwner, emailOwner;
+	String[] dataOwner;
 	
 	public ListOwners(String fg, String op) {
 		flag = fg;
@@ -61,6 +65,7 @@ public class ListOwners extends JFrame {
 		JTextField tfPhone = new JTextField(15);
 		JTextField tfEmail = new JTextField(20);
 		JTextArea taList = new JTextArea();
+		JScrollPane scroll = new JScrollPane(taList);
 		JComboBox<String> cbOwner = new JComboBox<String>();
 		JButton btnSelect = new JButton("Seleccionar");
 		JButton btnModify = new JButton("Modificar");
@@ -75,8 +80,11 @@ public class ListOwners extends JFrame {
 		tfPhone.setEditable(false);
 		tfEmail.setEditable(false);
 		
-		taList.setPreferredSize(new Dimension(350, 280));
 		taList.setEditable(false);
+		taList.setLineWrap(true);
+		
+		scroll.setPreferredSize(new Dimension(350, 280));
+		scroll.setBorder(null);
 		
 		lName.setVisible(false);
 		lDocument.setVisible(false);
@@ -114,8 +122,8 @@ public class ListOwners extends JFrame {
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, title, 600, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, title, 100, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, taList, 150, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, taList, 180, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.WEST, scroll, 150, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, scroll, 180, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lSelectOwner1, 600, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, lSelectOwner1, 250, SpringLayout.NORTH, container);
@@ -181,7 +189,7 @@ public class ListOwners extends JFrame {
 		springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, btnBack, 500, SpringLayout.NORTH, container);
 		
 		container.add(title);
-		container.add(taList);
+		container.add(scroll);
 		container.add(lSelectOwner1);
 		container.add(lSelectOwner2);
 		container.add(cbOwner);
@@ -279,13 +287,16 @@ public class ListOwners extends JFrame {
 		
 		/* --- Logic Part --- */
 		
-		String acumList = "";
+		String acumList = "", replaceOwner;
+		String[] split;
 		SQLOwner ow = new SQLOwner();
 		ArrayList<String> alOwners = new ArrayList<String>();		
 		alOwners = ow.listOwners();
 		
 		for(int i = 0; i < alOwners.size(); i++) {
-			cbOwner.addItem((i+1) + ". ");
+			replaceOwner = alOwners.get(i).replace('.', '|');
+			split = replaceOwner.split("|");
+			cbOwner.addItem(split[0] + ". ");
 			acumList += alOwners.get(i) + "\n";
 		}
 		
@@ -295,15 +306,16 @@ public class ListOwners extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String infoOwner = ow.selectOwner(cbOwner.getSelectedItem().toString());
-				String[] parts = infoOwner.split(java.util.regex.Pattern.quote("|"));
+				dataOwner = infoOwner.split(java.util.regex.Pattern.quote("|"));
 				
-				completeNameOwner = parts[0];
-				documentOwner = parts[1];
-				birthdayOwner = parts[2];
-				addressOwner = parts[3];
-				cityOwner = parts[4];
-				phoneOwner = parts[5];
-				emailOwner = parts[6];
+				idOwner = dataOwner[0];
+				completeNameOwner = dataOwner[1] + " " + dataOwner[2];
+				documentOwner = dataOwner[3] + " " + dataOwner[4];
+				birthdayOwner = dataOwner[5];
+				addressOwner = dataOwner[6];
+				cityOwner = dataOwner[7];
+				phoneOwner = dataOwner[8];
+				emailOwner = dataOwner[9];
 				
 				lName.setVisible(true);
 				lDocument.setVisible(true);
@@ -329,6 +341,45 @@ public class ListOwners extends JFrame {
 				tfCity.setText(cityOwner);
 				tfPhone.setText(phoneOwner);
 				tfEmail.setText(emailOwner);
+			}
+		});
+		
+		btnModify.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+				
+				ModifyOwner mod = null;
+				try {
+					mod = new ModifyOwner(flag, option, dataOwner);
+				} catch (ParseException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				mod.setVisible(true);
+			}
+		});
+		
+		btnDelete.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int answer = JOptionPane.showConfirmDialog(null, "¿Deseas eliminar este " + option.toLowerCase() + "?", option + " - Eliminar", JOptionPane.YES_NO_OPTION);
+				
+				if(answer == JOptionPane.YES_OPTION) {							
+					String request;
+					request = ow.deleteOwner(idOwner);
+					
+					switch (request) {
+						case "success":
+							JOptionPane.showMessageDialog(null, option +  " eliminado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+							goBack();
+							break;
+						case "error delete":
+							JOptionPane.showMessageDialog(null, "Ha ocurrido un error, inténtalo de nuevo", "Error", JOptionPane.ERROR_MESSAGE);
+							break;
+					}
+				}
 			}
 		});
 		

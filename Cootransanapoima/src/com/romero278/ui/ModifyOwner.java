@@ -8,11 +8,11 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -22,20 +22,21 @@ import javax.swing.SpringLayout;
 import javax.swing.border.EmptyBorder;
 
 import com.romero278.kernel.connection.SQLOwner;
-import com.romero278.kernel.connection.SQLTypeDocument;
 import com.toedter.calendar.JDateChooser;
 
-public class AddOwner extends JFrame {
+public class ModifyOwner extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
-	String flag, option;
+	String flag, option, idOwner;
+	String[] dataOwner;
 	
-	public AddOwner(String fg, String op) {
+	public ModifyOwner(String fg, String op, String[] data) throws ParseException {
 		flag = fg;
 		option = op;
+		dataOwner = data;
 		
-		setTitle(option + " - Agregar");
+		setTitle(option + " - Modificar");
 		setBounds(0, 0, 1200, 600);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -47,7 +48,7 @@ public class AddOwner extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
-		JLabel title = new JLabel("Agregar " + option.toLowerCase());
+		JLabel title = new JLabel("Modificar " + option.toLowerCase());
 		JLabel subtitle = new JLabel("Ingresa los datos");
 		JLabel lFirstName = new JLabel("Nombre(s):");
 		JLabel lLastName = new JLabel("Apellido(s):");
@@ -60,17 +61,23 @@ public class AddOwner extends JFrame {
 		JLabel lEmail = new JLabel("Correo electrónico:");
 		JTextField tfFirstName = new JTextField(15);
 		JTextField tfLastName = new JTextField(15);
+		JTextField tfTypeDocument = new JTextField(5);
 		JTextField tfDocument = new JTextField(15);
 		JTextField tfAddress = new JTextField(15);
 		JTextField tfCity = new JTextField(15);
 		JTextField tfPhone = new JTextField(15);
 		JTextField tfEmail = new JTextField(15);
-		JComboBox<String> cbTypeDocument = new JComboBox<String>();
 		JDateChooser dcBirthdate = new JDateChooser("dd/MM/yyyy", "##/##/####", '-');
-		JButton btnAdd = new JButton("Agregar");
+		JButton btnModify = new JButton("Modificar");
 		JButton btnBack = new JButton("Atrás");
 		
-		btnAdd.setPreferredSize(new Dimension(200, 36));
+		tfTypeDocument.setEditable(false);
+		tfTypeDocument.setBorder(null);
+		
+		tfDocument.setEditable(false);
+		tfDocument.setBorder(null);
+		
+		btnModify.setPreferredSize(new Dimension(200, 36));
 		btnBack.setPreferredSize(new Dimension(100, 30));
 		
 		Container container = getContentPane();
@@ -102,8 +109,8 @@ public class AddOwner extends JFrame {
 		springLayout.putConstraint(SpringLayout.WEST, lTypeDocument, 250, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, lTypeDocument, 250, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, cbTypeDocument, 470, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, cbTypeDocument, 250, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.WEST, tfTypeDocument, 470, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, tfTypeDocument, 250, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.WEST, lDocument, 600, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, lDocument, 250, SpringLayout.NORTH, container);
@@ -149,8 +156,8 @@ public class AddOwner extends JFrame {
 		
 		//---
 		
-		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnAdd, 600, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, btnAdd, 450, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnModify, 600, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, btnModify, 450, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnBack, 100, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, btnBack, 500, SpringLayout.NORTH, container);
@@ -162,7 +169,7 @@ public class AddOwner extends JFrame {
 		container.add(lLastName);
 		container.add(tfLastName);
 		container.add(lTypeDocument);
-		container.add(cbTypeDocument);
+		container.add(tfTypeDocument);
 		container.add(lDocument);
 		container.add(tfDocument);
 		container.add(lBirthdate);
@@ -175,7 +182,7 @@ public class AddOwner extends JFrame {
 		container.add(tfPhone);
 		container.add(lEmail);
 		container.add(tfEmail);
-		container.add(btnAdd);
+		container.add(btnModify);
 		container.add(btnBack);
 		
 		title.setFont(new Font("Arial", Font.BOLD, 40));
@@ -199,8 +206,8 @@ public class AddOwner extends JFrame {
 		lTypeDocument.setFont(new Font("Arial", Font.BOLD, 20));
 		lTypeDocument.setForeground(new Color (116, 128, 148));
 		
-		cbTypeDocument.setFont(new Font("Arial", Font.PLAIN, 18));
-		cbTypeDocument.setForeground(new Color (116, 128, 148));
+		tfTypeDocument.setFont(new Font("Arial", Font.PLAIN, 18));
+		tfTypeDocument.setForeground(new Color (116, 128, 148));
 		
 		lDocument.setFont(new Font("Arial", Font.BOLD, 20));
 		lDocument.setForeground(new Color (116, 128, 148));
@@ -238,8 +245,8 @@ public class AddOwner extends JFrame {
 		tfEmail.setFont(new Font("Arial", Font.PLAIN, 18));
 		tfEmail.setForeground(new Color (116, 128, 148));
 		
-		btnAdd.setFont(new Font("Arial", Font.BOLD, 20));
-		btnAdd.setForeground(new Color (116, 128, 148));
+		btnModify.setFont(new Font("Arial", Font.BOLD, 20));
+		btnModify.setForeground(new Color (116, 128, 148));
 		
 		btnBack.setFont(new Font("Arial", Font.BOLD, 14));
 		btnBack.setForeground(Color.WHITE);
@@ -247,40 +254,43 @@ public class AddOwner extends JFrame {
 		
 		/* --- Logic part --- */
 		
-		SQLTypeDocument td = new SQLTypeDocument();
-		ArrayList<String> alTypeDocument = new ArrayList<String>();
-		alTypeDocument = td.selectTypeDocuments();
+		idOwner = dataOwner[0];
+		tfFirstName.setText(dataOwner[1]);
+		tfLastName.setText(dataOwner[2]);
+		tfTypeDocument.setText(dataOwner[3]);
+		tfDocument.setText(dataOwner[4]);
 		
-		for(int i = 0; i < alTypeDocument.size(); i++) {
-			cbTypeDocument.addItem(alTypeDocument.get(i));
-		}
+		DateFormat formaty = new SimpleDateFormat("yyyy-MM-dd");
+		DateFormat formatd = new SimpleDateFormat("dd-MM-yyyy");
+		Date date = (Date) formaty.parse(dataOwner[5]);
+		String strDate = formatd.format(date);
+		String otherDate = strDate.replace('-', '/');
+		Date newDate = new SimpleDateFormat("dd/MM/yyyy").parse(otherDate);
+		dcBirthdate.setDate(newDate);
 		
-		btnAdd.addActionListener(new ActionListener() {
+		tfAddress.setText(dataOwner[6]);
+		tfCity.setText(dataOwner[7]);
+		tfPhone.setText(dataOwner[8]);
+		tfEmail.setText(dataOwner[9]);
+		
+		btnModify.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(tfFirstName.getText().isEmpty() || tfLastName.getText().isEmpty() || tfDocument.getText().isEmpty() || tfAddress.getText().isEmpty() || tfCity.getText().isEmpty() || tfPhone.getText().isEmpty() || tfEmail.getText().isEmpty()) {
-					JOptionPane.showMessageDialog(null, "Debes diligenciar todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
-				} else {
-					String typeDoc = cbTypeDocument.getSelectedItem().toString();
-					String request;
-					DateFormat df = new SimpleDateFormat("yyyy/MM/dd");	
-					String birthdate = df.format(dcBirthdate.getDate());
-					
-					SQLOwner ow = new SQLOwner();
-					request = ow.insertOwner(tfFirstName.getText(), tfLastName.getText(), typeDoc, tfDocument.getText(), birthdate, tfAddress.getText(), tfCity.getText(), tfPhone.getText(), tfEmail.getText());
-					
-					switch(request) {
-						case "success":
-							JOptionPane.showMessageDialog(null, option +  " agregado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);							
-							goBack();							
-							break;
-						case "error insert":
-							JOptionPane.showMessageDialog(null, "Ha ocurrido un error, inténtalo de nuevo", "Error", JOptionPane.ERROR_MESSAGE);
-							break;
-						case "document":
-							JOptionPane.showMessageDialog(null, "El N° de documento ya ha sido agregado previamente", "Error", JOptionPane.ERROR_MESSAGE);
-							break;
-					}
+				DateFormat df = new SimpleDateFormat("yyyy/MM/dd");	
+				String birthdate = df.format(dcBirthdate.getDate());
+				String request;
+				
+				SQLOwner sqlo = new SQLOwner();
+				request = sqlo.updateOwner(idOwner, tfFirstName.getText(), tfLastName.getText(), birthdate, tfAddress.getText(), tfCity.getText(), tfPhone.getText(), tfEmail.getText());
+				
+				switch(request) {
+					case "success":
+						JOptionPane.showMessageDialog(null, option +  " modificado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);							
+						goBack();							
+						break;
+					case "error update":
+						JOptionPane.showMessageDialog(null, "Ha ocurrido un error, inténtalo de nuevo", "Error", JOptionPane.ERROR_MESSAGE);
+						break;
 				}
 			}
 		});
@@ -290,13 +300,13 @@ public class AddOwner extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				goBack();
 			}
-		});	
+		});
 	}
 	
 	void goBack() {
 		setVisible(false);
 		
-		ConfigOptions conOps = new ConfigOptions(flag, option);
-		conOps.setVisible(true);
+		ListOwners list = new ListOwners(flag, option);
+		list.setVisible(true);
 	}
 }

@@ -53,8 +53,6 @@ public class ConfigOptions extends JFrame {
 			case "Recorridos":
 				option = tour(flag);
 				break;
-			default:
-				break;
 		}
 		
 		JLabel title = new JLabel(flag.toUpperCase());
@@ -137,8 +135,6 @@ public class ConfigOptions extends JFrame {
 				case "Propietario":
 					ListOwners listo = new ListOwners(flag, fOption);
 					listo.setVisible(true);
-					break;
-				default:
 					break;
 				}
 			}
