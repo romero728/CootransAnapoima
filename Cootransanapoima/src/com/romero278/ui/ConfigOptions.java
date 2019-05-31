@@ -144,6 +144,10 @@ public class ConfigOptions extends JFrame {
 						ListPlaces listpl = new ListPlaces(flag, fOption);
 						listpl.setVisible(true);
 						break;
+					case "Ruta":
+						ListRoutes listrou = new ListRoutes(flag, fOption);
+						listrou.setVisible(true);
+						break;
 				}
 			}
 		});
@@ -167,6 +171,8 @@ public class ConfigOptions extends JFrame {
 						addpl.setVisible(true);
 						break;
 					case "Ruta":
+						AddRoute addRou = new AddRoute(flag, fOption);
+						addRou.setVisible(true);
 						break;
 					case "Recorrido":
 						break;
