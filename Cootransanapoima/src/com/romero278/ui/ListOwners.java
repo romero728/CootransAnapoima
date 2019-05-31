@@ -48,7 +48,7 @@ public class ListOwners extends JFrame {
 		setContentPane(contentPane);
 		
 		JLabel title = new JLabel("Listado de " + flag.toLowerCase());
-		JLabel lSelectOwner1 = new JLabel("Selecciona un propietario");
+		JLabel lSelectOwner1 = new JLabel("Selecciona un " + option.toLowerCase());
 		JLabel lSelectOwner2 = new JLabel("para ver su información");
 		JLabel lName = new JLabel("Nombre:");
 		JLabel lDocument = new JLabel("Documento:");
@@ -296,7 +296,7 @@ public class ListOwners extends JFrame {
 		for(int i = 0; i < alOwners.size(); i++) {
 			replaceOwner = alOwners.get(i).replace('.', '|');
 			split = replaceOwner.split("|");
-			cbOwner.addItem(split[0] + ". ");
+			cbOwner.addItem(split[0] + ".");
 			acumList += alOwners.get(i) + "\n";
 		}
 		

@@ -132,10 +132,18 @@ public class ConfigOptions extends JFrame {
 				setVisible(false);
 				
 				switch (fOption) {
-				case "Propietario":
-					ListOwners listo = new ListOwners(flag, fOption);
-					listo.setVisible(true);
-					break;
+					case "Propietario":
+						ListOwners listo = new ListOwners(flag, fOption);
+						listo.setVisible(true);
+						break;
+					case "Móvil":
+						ListMobiles listmob = new ListMobiles(flag, fOption);
+						listmob.setVisible(true);
+						break;
+					case "Lugar":
+						ListPlaces listpl = new ListPlaces(flag, fOption);
+						listpl.setVisible(true);
+						break;
 				}
 			}
 		});
@@ -151,8 +159,12 @@ public class ConfigOptions extends JFrame {
 						addo.setVisible(true);
 						break;
 					case "Móvil":
+						AddMobile addmo = new AddMobile(flag, fOption);
+						addmo.setVisible(true);
 						break;
 					case "Lugar":
+						AddPlace addpl = new AddPlace(flag, fOption);
+						addpl.setVisible(true);
 						break;
 					case "Ruta":
 						break;

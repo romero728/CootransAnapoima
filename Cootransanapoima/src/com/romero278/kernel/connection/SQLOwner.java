@@ -17,6 +17,7 @@ public class SQLOwner {
 	ResultSet res;
 	
 	public String insertOwner(String firstName, String lastName, String typeDocument, String document, String birthdate, String address, String city, String phone, String email) {
+		String request = "";
 		boolean validDocument = validDocument(document);		
 		
 		if(validDocument) {
@@ -29,18 +30,18 @@ public class SQLOwner {
 				int i = prep.executeUpdate();
 				
 				if(i > 0) {
-					return "success";
+					request = "success";
 				} else {
-					return "error insert";
+					request = "error insert";
 				}					
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
 		} else {
-			return "document";
+			request = "document";
 		}
 		
-		return "";
+		return request;
 	}
 	
 	public ArrayList<String> listOwners() {
@@ -52,7 +53,7 @@ public class SQLOwner {
 			res = (ResultSet) prep.executeQuery();
 			
 			while(res.next()) { 
-				alOwners.add(res.getString("id_propietario") + ". " + res.getString("nombre_propietario") + " " + res.getString("apellido_propietario"));
+				alOwners.add(res.getString("id_propietario") + "." + res.getString("nombre_propietario") + " " + res.getString("apellido_propietario"));
 			}
 		} catch (SQLException e1) {
 			e1.printStackTrace();
