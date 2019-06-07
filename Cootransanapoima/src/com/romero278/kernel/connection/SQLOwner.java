@@ -46,7 +46,7 @@ public class SQLOwner {
 	
 	public ArrayList<String> listOwners() {
 		ArrayList<String> alOwners = new ArrayList<String>();
-		String sql1 = "SELECT * FROM propietarios";
+		String sql1 = "SELECT * FROM propietarios ORDER BY id_propietario ASC";
 		
 		try {
 			prep = (PreparedStatement) connection.prepareStatement(sql1);

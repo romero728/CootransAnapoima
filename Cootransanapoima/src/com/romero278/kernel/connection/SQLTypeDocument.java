@@ -17,7 +17,7 @@ public class SQLTypeDocument {
 	
 	public ArrayList<String> selectTypeDocuments() {
 		ArrayList<String> alTypeDocument = new ArrayList<String>();
-		sql = "SELECT nombre_tipodocumento FROM tipodocumento";
+		sql = "SELECT nombre_tipodocumento FROM tipodocumento ORDER BY id_tipodocumento ASC";
 		
 		try {
 			prep = (PreparedStatement) connection.prepareStatement(sql);

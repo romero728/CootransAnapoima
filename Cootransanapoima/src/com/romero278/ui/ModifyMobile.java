@@ -233,8 +233,9 @@ public class ModifyMobile extends JFrame {
 		SQLMobile mob = new SQLMobile();
 		
 		ArrayList<String> alOwners = ow.listOwners();
-		ArrayList<String> alTypeVehicle = tve.selectTypeVehicles();
+		ArrayList<String> alTypeVehicle = tve.listTypeVehicles();
 		ArrayList<String[]> alMobOw = new ArrayList<String[]>();
+		ArrayList<String[]> alMobType = new ArrayList<String[]>();
 		
 		String aux;
 		String[] split = null;
@@ -246,8 +247,12 @@ public class ModifyMobile extends JFrame {
 			cbOwner.addItem(split[1]);
 		}
 		
+		String[] splitType = null;
+		
 		for(int i = 0; i < alTypeVehicle.size(); i++) {
-			cbType.addItem(alTypeVehicle.get(i));
+			splitType = alTypeVehicle.get(i).split(Pattern.quote("|"));
+			alMobType.add(splitType);
+			cbType.addItem(splitType[1]);
 		}
 		
 		cbActive.addItem("Si");
@@ -283,7 +288,19 @@ public class ModifyMobile extends JFrame {
 						}
 					}
 					
-					request = mob.updateMobile(dataMobile[0], tfNumber.getText(), idOwner, tfBrand.getText(), tfModel.getText(), tfLicensePlate.getText(), tfCapacity.getText(), cbType.getSelectedItem().toString(), cbActive.getSelectedItem().toString());
+					String type = cbType.getSelectedItem().toString();
+					String idType = "";
+					String[] arAuxTy = null;
+					
+					for(int i = 0; i < alMobType.size(); i++) {
+						arAuxTy = alMobType.get(i); 
+						
+						if(arAuxTy[1].equals(type)) {
+							idType = arAuxTy[0];
+						}
+					}
+					
+					request = mob.updateMobile(dataMobile[0], tfNumber.getText(), idOwner, tfBrand.getText(), tfModel.getText(), tfLicensePlate.getText(), tfCapacity.getText(), idType, cbActive.getSelectedItem().toString());
 					
 					if(request.equals("success")) {
 						JOptionPane.showMessageDialog(null, option +  " agregado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);							

@@ -28,7 +28,7 @@ public class SQLMobile {
 				act = "0";
 			}			
 			
-			sql = "INSERT INTO moviles(numero_movil, empresa_movil, propietario_movil, marca_movil, modelo_movil, placa_movil, capacidadpasajeros_movil, tipo_movil, activo_movil) VALUES ('" + number + "', '1', '" + owner + "', '" + brand + "', '" + model + "', '" + licensePlate + "', '" + capacity + "', '" + getIdTypeVehicle(typeVehicle) + "', '" + act + "')";
+			sql = "INSERT INTO moviles(numero_movil, empresa_movil, propietario_movil, marca_movil, modelo_movil, placa_movil, capacidadpasajeros_movil, tipo_movil, activo_movil) VALUES ('" + number + "', '1', '" + owner + "', '" + brand + "', '" + model + "', '" + licensePlate + "', '" + capacity + "', '" + typeVehicle + "', '" + act + "')";
 			
 			try {
 				prep = (PreparedStatement) connection.prepareStatement(sql);
@@ -115,7 +115,7 @@ public class SQLMobile {
 			act = "0";
 		}
 		
-		sql = "UPDATE moviles SET numero_movil = '" + number + "', empresa_movil = '1', propietario_movil = '" + owner + "', marca_movil = '" + brand + "', modelo_movil = '" + model + "', placa_movil = '" + licensePlate + "', capacidadpasajeros_movil = '" + capacity + "', tipo_movil = '" + getIdTypeVehicle(typeVehicle) + "', activo_movil = '"+ act + "' WHERE id_movil = '" + id + "'";
+		sql = "UPDATE moviles SET numero_movil = '" + number + "', empresa_movil = '1', propietario_movil = '" + owner + "', marca_movil = '" + brand + "', modelo_movil = '" + model + "', placa_movil = '" + licensePlate + "', capacidadpasajeros_movil = '" + capacity + "', tipo_movil = '" + typeVehicle + "', activo_movil = '"+ act + "' WHERE id_movil = '" + id + "'";
 		
 		try {
 			prep = (PreparedStatement) connection.prepareStatement(sql);
@@ -211,25 +211,6 @@ public class SQLMobile {
 		}
 		
 		return nameOwner;
-	}
-	
-	String getIdTypeVehicle(String name) {
-		String idType = "";
-		
-		String sql1 = "SELECT id_tipovehiculo FROM tipovehiculo WHERE nombre_tipovehiculo = '" + name + "'";
-		
-		try {
-			PreparedStatement prep1 = (PreparedStatement) connection.prepareStatement(sql1);
-			ResultSet res1 = (ResultSet) prep1.executeQuery();
-			
-			while(res1.next()) {
-				idType = res1.getString("id_tipovehiculo");
-			}
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-		
-		return idType;
 	}
 	
 	String getNameTypeVehicle(String idType) {

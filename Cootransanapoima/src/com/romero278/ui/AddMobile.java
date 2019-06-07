@@ -231,21 +231,26 @@ public class AddMobile extends JFrame {
 		SQLMobile mob = new SQLMobile();
 		
 		ArrayList<String> alOwners = ow.listOwners();
-		ArrayList<String> alTypeVehicle = tve.selectTypeVehicles();
+		ArrayList<String> alTypeVehicle = tve.listTypeVehicles();
 		ArrayList<String[]> alMobOw = new ArrayList<String[]>();
+		ArrayList<String[]> alMobType = new ArrayList<String[]>();
 		
 		String aux;
-		String[] split = null;
+		String[] splitOwner = null;
 		
 		for(int i = 0; i < alOwners.size(); i++) {
 			aux = alOwners.get(i).replace('.', '|');
-			split = aux.split(Pattern.quote("|"));
-			alMobOw.add(split);
-			cbOwner.addItem(split[1]);
+			splitOwner = aux.split(Pattern.quote("|"));
+			alMobOw.add(splitOwner);
+			cbOwner.addItem(splitOwner[1]);
 		}
 		
+		String[] splitType = null;
+		
 		for(int i = 0; i < alTypeVehicle.size(); i++) {
-			cbType.addItem(alTypeVehicle.get(i));
+			splitType = alTypeVehicle.get(i).split(Pattern.quote("|"));
+			alMobType.add(splitType);
+			cbType.addItem(splitType[1]);
 		}
 		
 		cbActive.addItem("Si");
@@ -258,20 +263,32 @@ public class AddMobile extends JFrame {
 					JOptionPane.showMessageDialog(null, "Debes diligenciar todos los campos", "Error", JOptionPane.ERROR_MESSAGE);
 				} else {
 					String request;
-					String owner = cbOwner.getSelectedItem().toString();
 					
+					String owner = cbOwner.getSelectedItem().toString();
 					String idOwner = "";
-					String[] arAux = null;
+					String[] arAuxOw = null;
 					
 					for(int i = 0; i < alMobOw.size(); i++) {
-						arAux = alMobOw.get(i); 
+						arAuxOw = alMobOw.get(i); 
 						
-						if(arAux[1].equals(owner)) {
-							idOwner = arAux[0];
+						if(arAuxOw[1].equals(owner)) {
+							idOwner = arAuxOw[0];
 						}
 					}
 					
-					request = mob.insertMobile(tfNumber.getText(), idOwner, tfBrand.getText(), tfModel.getText(), tfLicensePlate.getText(), tfCapacity.getText(), cbType.getSelectedItem().toString(), cbActive.getSelectedItem().toString());
+					String type = cbType.getSelectedItem().toString();
+					String idType = "";
+					String[] arAuxTy = null;
+					
+					for(int i = 0; i < alMobType.size(); i++) {
+						arAuxTy = alMobType.get(i); 
+						
+						if(arAuxTy[1].equals(type)) {
+							idType = arAuxTy[0];
+						}
+					}
+					
+					request = mob.insertMobile(tfNumber.getText(), idOwner, tfBrand.getText(), tfModel.getText(), tfLicensePlate.getText(), tfCapacity.getText(), idType, cbActive.getSelectedItem().toString());
 					
 					switch (request) {
 						case "success":

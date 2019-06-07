@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import com.mysql.jdbc.PreparedStatement;
 
-public class SQLTypeVehicle {
+public class SQLDay {
 	ConnectionBD conBD = new ConnectionBD();
 	Connection connection = conBD.connection();
 	
@@ -15,16 +15,16 @@ public class SQLTypeVehicle {
 	PreparedStatement prep;
 	ResultSet res;
 	
-	public ArrayList<String> listTypeVehicles() {
-		ArrayList<String> alTypeVehicle = new ArrayList<String>();
-		sql = "SELECT * FROM tipovehiculo ORDER BY id_tipovehiculo ASC";
+	public ArrayList<String> listDays() {
+		ArrayList<String> alDays = new ArrayList<String>();
+		sql = "SELECT id_dia, nombre_dia FROM dias ORDER BY id_dia ASC";
 		
 		try {
 			prep = (PreparedStatement) connection.prepareStatement(sql);
 			res = (ResultSet) prep.executeQuery();
 			
 			while(res.next()) {
-				alTypeVehicle.add(res.getString("id_tipovehiculo") + "|" + res.getString("nombre_tipovehiculo"));
+				alDays.add(res.getString("id_dia") + "|" + res.getString("nombre_dia"));
 		
 			}
 			
@@ -32,6 +32,6 @@ public class SQLTypeVehicle {
 			e.printStackTrace();
 		}
 		
-		return alTypeVehicle;
+		return alDays;
 	}
 }
