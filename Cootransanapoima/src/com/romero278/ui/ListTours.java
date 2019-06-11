@@ -361,6 +361,12 @@ public class ListTours extends JFrame {
 			}
 		});
 		
+		if(alTours.isEmpty()) {
+			btnSelectRoute.setVisible(false);
+		} else {
+			btnSelectRoute.setVisible(true);
+		}
+		
 		btnSelectRoute.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

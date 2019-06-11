@@ -183,6 +183,12 @@ public class ListPlaces extends JFrame {
 		
 		taList.setText(acumList);
 		
+		if(alPlaces.isEmpty()) {
+			btnSelect.setVisible(false);
+		} else {
+			btnSelect.setVisible(true);
+		}
+		
 		btnSelect.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

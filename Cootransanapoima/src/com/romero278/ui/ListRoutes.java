@@ -223,6 +223,12 @@ public class ListRoutes extends JFrame {
 		
 		taList.setText(acumList);
 		
+		if(alRoutes.isEmpty()) {
+			btnSelect.setVisible(false);
+		} else {
+			btnSelect.setVisible(true);
+		}
+		
 		btnSelect.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
