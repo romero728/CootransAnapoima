@@ -126,10 +126,10 @@ public class ModifyMobile extends JFrame {
 		
 		// ---
 		
-		springLayout.putConstraint(SpringLayout.WEST, lType, 390, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.WEST, lType, 305, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, lType, 350, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, cbType, 452, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.WEST, cbType, 367, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, cbType, 350, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.WEST, lActive, 600, SpringLayout.WEST, container);
