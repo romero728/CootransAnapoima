@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -50,9 +51,13 @@ public class AddRoute extends JFrame {
 		JLabel lPlaceEnd = new JLabel("Destino: ");
 		JLabel lDuration = new JLabel("Duración: ");
 		JLabel lActive = new JLabel("Activo: ");
+		JLabel lType = new JLabel("Tipo de vehículo: ");
 		JTextField tfDuration = new JTextField(6);
 		JComboBox<String> cbPlaceEnd = new JComboBox<String>();
 		JComboBox<String> cbActive = new JComboBox<String>();
+		JCheckBox chTypeMicro = new JCheckBox("Microbus");
+		JCheckBox chTypeCamp = new JCheckBox("Campero / Camioneta");
+		JCheckBox chTypeWag = new JCheckBox("Wagon");
 		JButton btnAdd = new JButton("Agregar");
 		JButton btnBack = new JButton("Atrás");
 		
@@ -87,6 +92,18 @@ public class AddRoute extends JFrame {
 		springLayout.putConstraint(SpringLayout.WEST, cbActive, 720, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, cbActive, 300, SpringLayout.NORTH, container);
 		
+		springLayout.putConstraint(SpringLayout.WEST, lType, 260, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lType, 350, SpringLayout.NORTH, container);
+		
+		springLayout.putConstraint(SpringLayout.WEST, chTypeMicro, 440, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, chTypeMicro, 350, SpringLayout.NORTH, container);
+		
+		springLayout.putConstraint(SpringLayout.WEST, chTypeCamp, 550, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, chTypeCamp, 350, SpringLayout.NORTH, container);
+		
+		springLayout.putConstraint(SpringLayout.WEST, chTypeWag, 760, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, chTypeWag, 350, SpringLayout.NORTH, container);
+		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnAdd, 600, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, btnAdd, 400, SpringLayout.NORTH, container);
 		
@@ -101,6 +118,10 @@ public class AddRoute extends JFrame {
 		container.add(tfDuration);
 		container.add(lActive);
 		container.add(cbActive);
+		container.add(lType);
+		container.add(chTypeMicro);
+		container.add(chTypeCamp);
+		container.add(chTypeWag);
 		container.add(btnAdd);
 		container.add(btnBack);
 		
@@ -127,6 +148,18 @@ public class AddRoute extends JFrame {
 		
 		cbActive.setFont(new Font("Arial", Font.PLAIN, 18));
 		cbActive.setForeground(new Color (116, 128, 148));
+		
+		lType.setFont(new Font("Arial", Font.BOLD, 20));
+		lType.setForeground(new Color (116, 128, 148));
+		
+		chTypeMicro.setFont(new Font("Arial", Font.PLAIN, 18));
+		chTypeMicro.setForeground(new Color (116, 128, 148));
+		
+		chTypeCamp.setFont(new Font("Arial", Font.PLAIN, 18));
+		chTypeCamp.setForeground(new Color (116, 128, 148));
+		
+		chTypeWag.setFont(new Font("Arial", Font.PLAIN, 18));
+		chTypeWag.setForeground(new Color (116, 128, 148));
 		
 		btnAdd.setFont(new Font("Arial", Font.BOLD, 20));
 		btnAdd.setForeground(new Color (116, 128, 148));
@@ -170,7 +203,27 @@ public class AddRoute extends JFrame {
 						}
 					}
 					
-					request = route.insertRoute(end, tfDuration.getText(), cbActive.getSelectedItem().toString());
+					String[] types = new String[3];
+					
+					if(chTypeMicro.isSelected()) {
+						types[0] = "1";
+					} else {
+						types[0] = "0";
+					}
+					
+					if(chTypeCamp.isSelected()) {
+						types[1] = "1";
+					} else {
+						types[1] = "0";
+					}
+					
+					if(chTypeWag.isSelected()) {
+						types[2] = "1";
+					} else {
+						types[2] = "0";
+					}
+					
+					request = route.insertRoute(end, tfDuration.getText(), cbActive.getSelectedItem().toString(), types);
 					
 					switch(request) {
 						case "success":

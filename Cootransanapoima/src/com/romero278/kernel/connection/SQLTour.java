@@ -15,12 +15,12 @@ public class SQLTour {
 	PreparedStatement prep;
 	ResultSet res;
 	
-	public String insertTour(String route, String day, String hour, String type) {
+	public String insertTour(String route, String day, String hour) {
 		String request = "";
 		boolean valid = validTour(route, day, hour);
 		
 		if(valid) {
-			sql = "INSERT INTO recorridos(ruta_recorrido, dia_recorrido, hora_recorrido, tipovehiculo_recorrido) VALUES ('" + route + "', '" + day + "', '" + hour + "', '" + type + "')";
+			sql = "INSERT INTO recorridos(ruta_recorrido, dia_recorrido, hora_recorrido) VALUES ('" + route + "', '" + day + "', '" + hour + "')";
 			
 			try {
 				prep = (PreparedStatement) connection.prepareStatement(sql);
@@ -69,7 +69,7 @@ public class SQLTour {
 			res = (ResultSet) prep.executeQuery();
 			
 			while(res.next()) {
-				request = res.getString("id_recorrido") + "|" + getNameRoute(res.getString("ruta_recorrido")) + "|" + getNameDay(res.getString("dia_recorrido")) + "|" + res.getString("hora_recorrido") + "|" + getNameTypeVehicle(res.getString("tipovehiculo_recorrido"));
+				request = res.getString("id_recorrido") + "|" + getNameRoute(res.getString("ruta_recorrido")) + "|" + getNameDay(res.getString("dia_recorrido")) + "|" + res.getString("hora_recorrido") + "|";
 			}
 		} catch (SQLException e1) {
 			e1.printStackTrace();
@@ -78,12 +78,12 @@ public class SQLTour {
 		return request;
 	}
 	
-	public String updateTour(String id, String route, String day, String hour, String type) {
+	public String updateTour(String id, String route, String day, String hour) {
 		String request = "";
 		boolean valid = validTour(route, day, hour);
 		
 		if(valid) {
-			sql = "UPDATE recorridos SET ruta_recorrido = '" + route + "', dia_recorrido = '" + day + "', hora_recorrido = '" + hour + "', tipovehiculo_recorrido = '" + type + "' WHERE id_recorrido = '" + id + "'";
+			sql = "UPDATE recorridos SET ruta_recorrido = '" + route + "', dia_recorrido = '" + day + "', hora_recorrido = '" + hour + "' WHERE id_recorrido = '" + id + "'";
 			
 			try {
 				prep = (PreparedStatement) connection.prepareStatement(sql);
@@ -188,24 +188,6 @@ public class SQLTour {
 			
 			while(res.next()) { 
 				request = res.getString("nombre_dia");
-			}
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
-		
-		return request;
-	}
-	
-	String getNameTypeVehicle(String id) {
-		String request = "";
-		String sql = "SELECT nombre_tipovehiculo FROM tipovehiculo WHERE id_tipovehiculo = '" + id + "'";
-		
-		try {
-			PreparedStatement prep = (PreparedStatement) connection.prepareStatement(sql);
-			ResultSet res = (ResultSet) prep.executeQuery();
-			
-			while(res.next()) { 
-				request = res.getString("nombre_tipovehiculo");
 			}
 		} catch (SQLException e1) {
 			e1.printStackTrace();

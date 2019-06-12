@@ -34,4 +34,24 @@ public class SQLTypeVehicle {
 		
 		return alTypeVehicle;
 	}
+	
+	public String getNameTypeVehicle(String id) {
+		String request = "";
+		
+		sql = "SELECT nombre_tipovehiculo FROM tipovehiculo WHERE id_tipovehiculo = '" + id + "'";
+		
+		try {
+			prep = (PreparedStatement) connection.prepareStatement(sql);
+			res = (ResultSet) prep.executeQuery();
+			
+			while(res.next()) {
+				request = res.getString("nombre_tipovehiculo");		
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return request;
+	}
 }

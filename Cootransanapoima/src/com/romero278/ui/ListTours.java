@@ -61,13 +61,11 @@ public class ListTours extends JFrame {
 		JLabel lRoute = new JLabel("Ruta: ");
 		JLabel lDay = new JLabel("Día: ");
 		JLabel lHour = new JLabel("Hora: ");
-		JLabel lType = new JLabel("Tipo vehículo: ");
 		JTextArea taList = new JTextArea();
 		JScrollPane scroll = new JScrollPane(taList);
 		JTextField tfRoute = new JTextField(16);
 		JTextField tfDay = new JTextField(10);
 		JTextField tfHour = new JTextField(6);
-		JTextField tfType = new JTextField(12);
 		JComboBox<String> cbSelectDay = new JComboBox<String>();
 		JComboBox<String> cbSelectRoute = new JComboBox<String>();
 		JComboBox<String> cbTour = new JComboBox<String>();
@@ -88,20 +86,16 @@ public class ListTours extends JFrame {
 		tfDay.setVisible(false);
 		lHour.setVisible(false);
 		tfHour.setVisible(false);
-		lType.setVisible(false);
-		tfType.setVisible(false);
 		btnModify.setVisible(false);
 		btnDelete.setVisible(false);
 		
 		tfRoute.setEditable(false);
 		tfDay.setEditable(false);
 		tfHour.setEditable(false);
-		tfType.setEditable(false);
 		
 		tfRoute.setBorder(null);
 		tfDay.setBorder(null);
 		tfHour.setBorder(null);
-		tfType.setBorder(null);
 		
 		taList.setEditable(false);
 		taList.setLineWrap(true);
@@ -171,12 +165,6 @@ public class ListTours extends JFrame {
 		springLayout.putConstraint(SpringLayout.WEST, tfHour, 780, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, tfHour, 300, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, lType, 720, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, lType, 340, SpringLayout.NORTH, container);
-		
-		springLayout.putConstraint(SpringLayout.WEST, tfType, 860, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, tfType, 340, SpringLayout.NORTH, container);
-		
 		springLayout.putConstraint(SpringLayout.WEST, btnModify, 720, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, btnModify, 420, SpringLayout.NORTH, container);
 		
@@ -204,8 +192,6 @@ public class ListTours extends JFrame {
 		container.add(tfDay);
 		container.add(lHour);
 		container.add(tfHour);
-		container.add(lType);
-		container.add(tfType);
 		container.add(btnModify);
 		container.add(btnDelete);
 		container.add(btnBack);
@@ -264,12 +250,6 @@ public class ListTours extends JFrame {
 		
 		tfHour.setFont(new Font("Arial", Font.PLAIN, 20));
 		tfHour.setForeground(new Color (116, 128, 148));
-		
-		lType.setFont(new Font("Arial", Font.BOLD, 20));
-		lType.setForeground(new Color (116, 128, 148));
-		
-		tfType.setFont(new Font("Arial", Font.PLAIN, 20));
-		tfType.setForeground(new Color (116, 128, 148));
 		
 		btnModify.setFont(new Font("Arial", Font.BOLD, 20));
 		btnModify.setForeground(Color.WHITE);
@@ -340,6 +320,12 @@ public class ListTours extends JFrame {
 				
 				alTours = tour.listTours(idDay, idRoute);
 				
+				if(alTours.isEmpty()) {
+					btnSelectRoute.setVisible(false);
+				} else {
+					btnSelectRoute.setVisible(true);
+				}
+				
 				String acumList = "";
 				String[] splHour = null;
 				cbTour.removeAllItems();
@@ -357,15 +343,8 @@ public class ListTours extends JFrame {
 				lSelectTour1.setVisible(true);
 				lSelectTour2.setVisible(true);
 				cbTour.setVisible(true);
-				btnSelectRoute.setVisible(true);
 			}
 		});
-		
-		if(alTours.isEmpty()) {
-			btnSelectRoute.setVisible(false);
-		} else {
-			btnSelectRoute.setVisible(true);
-		}
 		
 		btnSelectRoute.addActionListener(new ActionListener() {
 			@Override
@@ -377,7 +356,6 @@ public class ListTours extends JFrame {
 				
 				tfRoute.setText(dataTour[1]);
 				tfDay.setText(dataTour[2]);
-				tfType.setText(dataTour[4]);
 				
 				String[] splHour = null;
 				splHour = dataTour[3].split(Pattern.quote(":"));
@@ -390,8 +368,6 @@ public class ListTours extends JFrame {
 				tfDay.setVisible(true);
 				lHour.setVisible(true);
 				tfHour.setVisible(true);
-				lType.setVisible(true);
-				tfType.setVisible(true);
 				btnModify.setVisible(true);
 				btnDelete.setVisible(true);
 			}

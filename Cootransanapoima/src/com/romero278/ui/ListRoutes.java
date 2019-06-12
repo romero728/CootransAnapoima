@@ -23,6 +23,7 @@ import javax.swing.SpringLayout;
 import javax.swing.border.EmptyBorder;
 
 import com.romero278.kernel.connection.SQLRoute;
+import com.romero278.kernel.connection.SQLTypeVehicle;
 
 public class ListRoutes extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -53,11 +54,14 @@ public class ListRoutes extends JFrame {
 		JLabel lPlaceEnd = new JLabel("Destino: ");
 		JLabel lDuration = new JLabel("Duración: ");
 		JLabel lActive = new JLabel("Activo: ");
-		JTextArea taList = new JTextArea();
+		JLabel lType = new JLabel("Tipo: ");
 		JTextField tfPlaceEnd = new JTextField(12);
 		JTextField tfDuration = new JTextField(6);
 		JTextField tfActive = new JTextField(2);
+		JTextArea taList = new JTextArea();
+		JTextArea tfType = new JTextArea();
 		JScrollPane scroll = new JScrollPane(taList);
+		JScrollPane scrollType = new JScrollPane(tfType);
 		JComboBox<String> cbRoute = new JComboBox<String>();
 		JButton btnSelect = new JButton("Seleccionar");
 		JButton btnModify = new JButton("Modificar");
@@ -67,6 +71,7 @@ public class ListRoutes extends JFrame {
 		tfPlaceEnd.setEditable(false);
 		tfDuration.setEditable(false);
 		tfActive.setEditable(false);
+		tfType.setEditable(false);
 		
 		tfPlaceEnd.setBorder(null);
 		tfDuration.setBorder(null);
@@ -78,12 +83,17 @@ public class ListRoutes extends JFrame {
 		scroll.setPreferredSize(new Dimension(250, 280));
 		scroll.setBorder(null);
 		
+		scrollType.setPreferredSize(new Dimension(200, 60));
+		scrollType.setBorder(null);
+		
 		lPlaceEnd.setVisible(false);
 		tfPlaceEnd.setVisible(false);
 		lDuration.setVisible(false);
 		tfDuration.setVisible(false);
 		lActive.setVisible(false);
 		tfActive.setVisible(false);
+		lType.setVisible(false);
+		tfType.setVisible(false);
 		btnModify.setVisible(false);
 		btnDelete.setVisible(false);
 		
@@ -131,6 +141,12 @@ public class ListRoutes extends JFrame {
 		springLayout.putConstraint(SpringLayout.WEST, tfActive, 800, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, tfActive, 260, SpringLayout.NORTH, container);
 		
+		springLayout.putConstraint(SpringLayout.WEST, lType, 720, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lType, 300, SpringLayout.NORTH, container);
+		
+		springLayout.putConstraint(SpringLayout.WEST, tfType, 800, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, tfType, 300, SpringLayout.NORTH, container);
+		
 		springLayout.putConstraint(SpringLayout.WEST, btnModify, 720, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, btnModify, 400, SpringLayout.NORTH, container);
 		
@@ -152,6 +168,8 @@ public class ListRoutes extends JFrame {
 		container.add(tfDuration);
 		container.add(lActive);
 		container.add(tfActive);
+		container.add(lType);
+		container.add(tfType);
 		container.add(btnModify);
 		container.add(btnDelete);
 		container.add(btnBack);
@@ -193,6 +211,13 @@ public class ListRoutes extends JFrame {
 		tfActive.setFont(new Font("Arial", Font.PLAIN, 20));
 		tfActive.setForeground(new Color (116, 128, 148));
 		
+		lType.setFont(new Font("Arial", Font.BOLD, 20));
+		lType.setForeground(new Color (116, 128, 148));
+		
+		tfType.setFont(new Font("Arial", Font.PLAIN, 20));
+		tfType.setForeground(new Color (116, 128, 148));
+		tfType.setBackground(new Color (238, 238, 238));
+		
 		btnModify.setFont(new Font("Arial", Font.BOLD, 20));
 		btnModify.setForeground(Color.WHITE);
 		btnModify.setBackground(new Color (25, 127, 210));
@@ -208,6 +233,7 @@ public class ListRoutes extends JFrame {
 		/* --- Logic Part --- */
 		
 		SQLRoute route = new SQLRoute();
+		SQLTypeVehicle typeVehicle = new SQLTypeVehicle();
 		ArrayList<String> alRoutes = new ArrayList<String>();
 		String acumList = "", replaceRoute = "";
 		String[] split;
@@ -240,12 +266,29 @@ public class ListRoutes extends JFrame {
 				tfDuration.setText(dataRoute[3]);
 				tfActive.setText(dataRoute[4]);
 				
+				String[] types = route.getTypeVehicle(idRoute);
+				String acumTypes = "";
+				
+				if(types.length == 3) {
+					tfType.setText("Todos");
+				} else {
+					for(int i = 0; i < types.length; i++) {
+						System.out.println(types[i]);
+						acumTypes += typeVehicle.getNameTypeVehicle(types[i]) + " ";
+					}
+					
+					System.out.println(acumTypes);
+					tfType.setText(acumTypes);
+				}
+				
 				lPlaceEnd.setVisible(true);
 				tfPlaceEnd.setVisible(true);
 				lDuration.setVisible(true);
 				tfDuration.setVisible(true);
 				lActive.setVisible(true);
 				tfActive.setVisible(true);
+				lType.setVisible(true);
+				tfType.setVisible(true);
 				btnModify.setVisible(true);
 				btnDelete.setVisible(true);
 			}

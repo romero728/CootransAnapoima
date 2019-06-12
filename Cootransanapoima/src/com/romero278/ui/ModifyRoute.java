@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -52,9 +53,13 @@ public class ModifyRoute extends JFrame {
 		JLabel lPlaceEnd = new JLabel("Destino: ");
 		JLabel lDuration = new JLabel("Duración: ");
 		JLabel lActive = new JLabel("Activo: ");
+		JLabel lType = new JLabel("Tipo de vehículo: ");
 		JTextField tfDuration = new JTextField(6);
 		JComboBox<String> cbPlaceEnd = new JComboBox<String>();
 		JComboBox<String> cbActive = new JComboBox<String>();
+		JCheckBox chTypeMicro = new JCheckBox("Microbus");
+		JCheckBox chTypeCamp = new JCheckBox("Campero / Camioneta");
+		JCheckBox chTypeWag = new JCheckBox("Wagon");
 		JButton btnModify = new JButton("Modificar");
 		JButton btnBack = new JButton("Atrás");
 		
@@ -89,6 +94,18 @@ public class ModifyRoute extends JFrame {
 		springLayout.putConstraint(SpringLayout.WEST, cbActive, 720, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, cbActive, 300, SpringLayout.NORTH, container);
 		
+		springLayout.putConstraint(SpringLayout.WEST, lType, 260, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lType, 350, SpringLayout.NORTH, container);
+		
+		springLayout.putConstraint(SpringLayout.WEST, chTypeMicro, 440, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, chTypeMicro, 350, SpringLayout.NORTH, container);
+		
+		springLayout.putConstraint(SpringLayout.WEST, chTypeCamp, 550, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, chTypeCamp, 350, SpringLayout.NORTH, container);
+		
+		springLayout.putConstraint(SpringLayout.WEST, chTypeWag, 760, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, chTypeWag, 350, SpringLayout.NORTH, container);
+		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnModify, 600, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, btnModify, 400, SpringLayout.NORTH, container);
 		
@@ -103,6 +120,10 @@ public class ModifyRoute extends JFrame {
 		container.add(tfDuration);
 		container.add(lActive);
 		container.add(cbActive);
+		container.add(lType);
+		container.add(chTypeMicro);
+		container.add(chTypeCamp);
+		container.add(chTypeWag);
 		container.add(btnModify);
 		container.add(btnBack);
 		
@@ -129,6 +150,18 @@ public class ModifyRoute extends JFrame {
 		
 		cbActive.setFont(new Font("Arial", Font.PLAIN, 18));
 		cbActive.setForeground(new Color (116, 128, 148));
+		
+		lType.setFont(new Font("Arial", Font.BOLD, 20));
+		lType.setForeground(new Color (116, 128, 148));
+		
+		chTypeMicro.setFont(new Font("Arial", Font.PLAIN, 18));
+		chTypeMicro.setForeground(new Color (116, 128, 148));
+		
+		chTypeCamp.setFont(new Font("Arial", Font.PLAIN, 18));
+		chTypeCamp.setForeground(new Color (116, 128, 148));
+		
+		chTypeWag.setFont(new Font("Arial", Font.PLAIN, 18));
+		chTypeWag.setForeground(new Color (116, 128, 148));
 		
 		btnModify.setFont(new Font("Arial", Font.BOLD, 20));
 		btnModify.setForeground(new Color (116, 128, 148));
@@ -159,6 +192,24 @@ public class ModifyRoute extends JFrame {
 		cbPlaceEnd.setSelectedItem(dataRoute[2]);
 		cbActive.setSelectedItem(dataRoute[4]);
 		
+		String[] types = route.getTypeVehicle(idRoute);
+		
+		for(int i = 0; i < types.length; i++) {
+			switch (types[i]) {
+				case "1":
+					chTypeMicro.setSelected(true);
+					break;
+				case "2":
+					chTypeCamp.setSelected(true);
+					break;
+				case "3":
+					chTypeWag.setSelected(true);
+					break;
+				default:
+					break;
+			}
+		}
+		
 		btnModify.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -177,11 +228,31 @@ public class ModifyRoute extends JFrame {
 						}
 					}
 					
-					request = route.updateRoute(idRoute, end, tfDuration.getText(), cbActive.getSelectedItem().toString());
+					String[] types = new String[3];
+					
+					if(chTypeMicro.isSelected()) {
+						types[0] = "1";
+					} else {
+						types[0] = "0";
+					}
+					
+					if(chTypeCamp.isSelected()) {
+						types[1] = "1";
+					} else {
+						types[1] = "0";
+					}
+					
+					if(chTypeWag.isSelected()) {
+						types[2] = "1";
+					} else {
+						types[2] = "0";
+					}
+					
+					request = route.updateRoute(idRoute, end, tfDuration.getText(), cbActive.getSelectedItem().toString(), types);
 					
 					switch(request) {
 						case "success":
-							JOptionPane.showMessageDialog(null, option +  " agregado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);							
+							JOptionPane.showMessageDialog(null, option +  " modificado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);							
 							goBack();
 							break;
 						case "end":

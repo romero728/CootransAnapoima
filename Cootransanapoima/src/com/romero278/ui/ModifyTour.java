@@ -23,7 +23,6 @@ import javax.swing.border.EmptyBorder;
 import com.romero278.kernel.connection.SQLDay;
 import com.romero278.kernel.connection.SQLRoute;
 import com.romero278.kernel.connection.SQLTour;
-import com.romero278.kernel.connection.SQLTypeVehicle;
 
 public class ModifyTour extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -54,11 +53,9 @@ public class ModifyTour extends JFrame {
 		JLabel lRoute = new JLabel("Ruta: ");
 		JLabel lDay = new JLabel("Día: ");
 		JLabel lHour = new JLabel("Hora: ");
-		JLabel lType = new JLabel("Tipo de vehículo: ");
 		JTextField tfHour = new JTextField(6);
 		JComboBox<String> cbRoute = new JComboBox<String>();
 		JComboBox<String> cbDay = new JComboBox<String>();
-		JComboBox<String> cbType = new JComboBox<String>();
 		JButton btnModify = new JButton("Modificar");
 		JButton btnBack = new JButton("Atrás");
 		
@@ -93,12 +90,6 @@ public class ModifyTour extends JFrame {
 		springLayout.putConstraint(SpringLayout.WEST, tfHour, 720, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, tfHour, 300, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, lType, 460, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, lType, 350, SpringLayout.NORTH, container);
-		
-		springLayout.putConstraint(SpringLayout.WEST, cbType, 630, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, cbType, 350, SpringLayout.NORTH, container);
-		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnModify, 600, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, btnModify, 400, SpringLayout.NORTH, container);
 		
@@ -113,8 +104,6 @@ public class ModifyTour extends JFrame {
 		container.add(cbDay);
 		container.add(lHour);
 		container.add(tfHour);
-		container.add(lType);
-		container.add(cbType);
 		container.add(btnModify);
 		container.add(btnBack);
 		
@@ -142,12 +131,6 @@ public class ModifyTour extends JFrame {
 		tfHour.setFont(new Font("Arial", Font.PLAIN, 18));
 		tfHour.setForeground(new Color (116, 128, 148));
 		
-		lType.setFont(new Font("Arial", Font.BOLD, 20));
-		lType.setForeground(new Color (116, 128, 148));
-		
-		cbType.setFont(new Font("Arial", Font.PLAIN, 18));
-		cbType.setForeground(new Color (116, 128, 148));
-		
 		btnModify.setFont(new Font("Arial", Font.BOLD, 20));
 		btnModify.setForeground(new Color (116, 128, 148));
 		
@@ -159,7 +142,6 @@ public class ModifyTour extends JFrame {
 		
 		SQLTour tour = new SQLTour();
 		SQLRoute route = new SQLRoute();
-		SQLTypeVehicle typeVehicle = new SQLTypeVehicle();
 		SQLDay day = new SQLDay();
 		
 		ArrayList<String> alRoutes = route.listRoutes();
@@ -185,21 +167,10 @@ public class ModifyTour extends JFrame {
 			cbDay.addItem(split[1]);
 		}
 		
-		ArrayList<String> alTypes = typeVehicle.listTypeVehicles();
-		ArrayList<String[]> alTourType = new ArrayList<String[]>();
-		split = null;
-		
-		for(int i = 0; i < alTypes.size(); i++) {
-			split = alTypes.get(i).split(Pattern.quote("|"));
-			alTourType.add(split);
-			cbType.addItem(split[1]);
-		}
-		
 		idTour = dataTour[0];
 		cbRoute.setSelectedItem(dataTour[1]);
 		cbDay.setSelectedItem(dataTour[2]);
 		tfHour.setText(dataTour[3]);
-		cbType.setSelectedItem(dataTour[4]);
 		
 		btnModify.addActionListener(new ActionListener() {
 			@Override
@@ -233,19 +204,7 @@ public class ModifyTour extends JFrame {
 						}
 					}
 					
-					String type = cbType.getSelectedItem().toString();
-					String idType = "";
-					arAux = null;
-					
-					for(int i = 0; i < alTourType.size(); i++) {
-						arAux = alTourType.get(i); 
-						
-						if(arAux[1].equals(type)) {
-							idType = arAux[0];
-						}
-					}
-					
-					request = tour.insertTour(idRoute, idDay, tfHour.getText(), idType);
+					request = tour.updateTour(idTour, idRoute, idDay, tfHour.getText());
 					
 					switch (request) {
 						case "success":
