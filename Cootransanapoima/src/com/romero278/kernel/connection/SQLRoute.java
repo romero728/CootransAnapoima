@@ -10,7 +10,7 @@ import com.mysql.jdbc.PreparedStatement;
 
 public class SQLRoute {
 	ConnectionBD conBD = new ConnectionBD();
-	Connection connection = conBD.connection();
+	Connection connection;
 	
 	String sql;
 	PreparedStatement prep;
@@ -32,11 +32,11 @@ public class SQLRoute {
 			sql = "INSERT INTO rutas(lugarorigen_ruta, lugardestino_ruta, duracion_ruta, activo_ruta) VALUES ('1', '" + placeEnd + "', '" + duration + "', '" + act + "')";
 			
 			try {
+				connection = conBD.connection();
 				prep = (PreparedStatement) connection.prepareStatement(sql);
 				int i = prep.executeUpdate();
 				
 				if(i > 0) {
-					//request = "success";
 					sql = "SELECT last_insert_id()";
 					
 					prep = (PreparedStatement) connection.prepareStatement(sql);
@@ -86,7 +86,9 @@ public class SQLRoute {
 					}
 				} else {
 					request = "error insert";
-				}					
+				}
+				
+				connection.close();
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
@@ -102,12 +104,15 @@ public class SQLRoute {
 		sql = "SELECT id_ruta, lugardestino_ruta FROM rutas ORDER BY id_ruta ASC";
 		
 		try {
+			connection = conBD.connection();
 			prep = (PreparedStatement) connection.prepareStatement(sql);
 			res = (ResultSet) prep.executeQuery();
 			
 			while(res.next()) {
 				alRoutes.add(res.getString("id_ruta") + "." + getNamePlace(res.getString("lugardestino_ruta")));
 			}
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
@@ -121,6 +126,7 @@ public class SQLRoute {
 		sql = "SELECT * FROM rutas WHERE id_ruta = '" + id + "'";
 		
 		try {
+			connection = conBD.connection();
 			prep = (PreparedStatement) connection.prepareStatement(sql);
 			res = (ResultSet) prep.executeQuery();
 			
@@ -136,6 +142,8 @@ public class SQLRoute {
 					request += "No" + "|";
 				}
 			}
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
@@ -155,56 +163,74 @@ public class SQLRoute {
 		sql = "UPDATE rutas SET lugardestino_ruta = '" + placeEnd + "', duracion_ruta = '" + duration + "', activo_ruta = '" + act + "' WHERE id_ruta = '" + id + "'";
 		
 		try {
+			connection = conBD.connection();
 			prep = (PreparedStatement) connection.prepareStatement(sql);
 			int i = prep.executeUpdate();
 			
 			if(i > 0) {
-				sql = "DELETE FROM ruta_tipovehiculo WHERE idruta_rutatipovehiculo = '" + id + "'";
+				String sql1 = "SELECT count(*) FROM ruta_tipovehiculo WHERE idruta_rutatipovehiculo = '" + id + "'";
 				
-				prep = (PreparedStatement) connection.prepareStatement(sql);
-				i = prep.executeUpdate();
+				PreparedStatement prep1 = (PreparedStatement) connection.prepareStatement(sql1);
+				ResultSet res1 = (ResultSet) prep1.executeQuery();
 				
-				if(i > 0) {					
-					if(type[0].equals("1")) {
-						sql = "INSERT INTO ruta_tipovehiculo (idruta_rutatipovehiculo, idtipo_rutatipovehiculo) VALUES ('" + id + "', '1')";
+				while(res1.next()) {
+					if(Integer.parseInt(res1.getString("count(*)")) > 0) {
+						String sql2 = "DELETE FROM ruta_tipovehiculo WHERE idruta_rutatipovehiculo = '" + id + "'";
 						
-						prep = (PreparedStatement) connection.prepareStatement(sql);
-						i = prep.executeUpdate();
+						PreparedStatement prep2 = (PreparedStatement) connection.prepareStatement(sql2);
+						int j = prep2.executeUpdate();
 						
-						if(i > 0) {
+						if(j > 0) {
 							request = "success";
 						} else {
-							request = "error insert";
+							request = "error update";
 						}
 					}
+				}				
+						
+				if(type[0].equals("1")) {
+					sql = "INSERT INTO ruta_tipovehiculo (idruta_rutatipovehiculo, idtipo_rutatipovehiculo) VALUES ('" + id + "', '1')";
 					
-					if(type[1].equals("1")) {
-						sql = "INSERT INTO ruta_tipovehiculo (idruta_rutatipovehiculo, idtipo_rutatipovehiculo) VALUES ('" + id + "', '2')";
-						
-						prep = (PreparedStatement) connection.prepareStatement(sql);
-						i = prep.executeUpdate();
-						
-						if(i > 0) {
-							request = "success";
-						} else {
-							request = "error insert";
-						}
-					}
+					prep = (PreparedStatement) connection.prepareStatement(sql);
+					i = prep.executeUpdate();
 					
-					if(type[2].equals("1")) {
-						sql = "INSERT INTO ruta_tipovehiculo (idruta_rutatipovehiculo, idtipo_rutatipovehiculo) VALUES ('" + id + "', '3')";
-						
-						prep = (PreparedStatement) connection.prepareStatement(sql);
-						i = prep.executeUpdate();
-						
-						if(i > 0) {
-							request = "success";
-						} else {
-							request = "error insert";
-						}
+					if(i > 0) {
+						request = "success";
+					} else {
+						request = "error update";
 					}
 				}
+				
+				if(type[1].equals("1")) {
+					sql = "INSERT INTO ruta_tipovehiculo (idruta_rutatipovehiculo, idtipo_rutatipovehiculo) VALUES ('" + id + "', '2')";
+					
+					prep = (PreparedStatement) connection.prepareStatement(sql);
+					i = prep.executeUpdate();
+					
+					if(i > 0) {
+						request = "success";
+					} else {
+						request = "error update";
+					}
+				}
+				
+				if(type[2].equals("1")) {
+					sql = "INSERT INTO ruta_tipovehiculo (idruta_rutatipovehiculo, idtipo_rutatipovehiculo) VALUES ('" + id + "', '3')";
+					
+					prep = (PreparedStatement) connection.prepareStatement(sql);
+					i = prep.executeUpdate();
+					
+					if(i > 0) {
+						request = "success";
+					} else {
+						request = "error update";
+					}
+				}
+			} else {
+				request = "error update";
 			}
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
@@ -217,6 +243,7 @@ public class SQLRoute {
 		sql = "DELETE FROM ruta_tipovehiculo WHERE idruta_rutatipovehiculo = '" + id + "'";
 		
 		try {
+			connection = conBD.connection();
 			prep = (PreparedStatement) connection.prepareStatement(sql);
 			int i = prep.executeUpdate();
 			
@@ -233,7 +260,9 @@ public class SQLRoute {
 				}
 			} else {
 				request = "error delete";
-			}					
+			}
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
@@ -247,12 +276,15 @@ public class SQLRoute {
 		String sql1 = "SELECT idtipo_rutatipovehiculo FROM ruta_tipovehiculo WHERE idruta_rutatipovehiculo = '" + id + "'";
 		
 		try {
+			connection = conBD.connection();
 			PreparedStatement prep = (PreparedStatement) connection.prepareStatement(sql1);
 			ResultSet res = (ResultSet) prep.executeQuery();
 			
 			while(res.next()) { 
 				request += res.getString("idtipo_rutatipovehiculo") + "|";
 			}
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
@@ -268,6 +300,7 @@ public class SQLRoute {
 		sql = "SELECT count(*) FROM rutas WHERE lugardestino_ruta = '" + end + "'";
 		
 		try {
+			connection = conBD.connection();
 			prep = (PreparedStatement) connection.prepareStatement(sql);
 			res = (ResultSet) prep.executeQuery();
 			
@@ -278,6 +311,8 @@ public class SQLRoute {
 					valid = false;
 				}
 			}
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
@@ -290,12 +325,15 @@ public class SQLRoute {
 		String sql = "SELECT nombre_lugar FROM lugares WHERE id_lugar = '" + id + "'";
 		
 		try {
+			connection = conBD.connection();
 			PreparedStatement prep = (PreparedStatement) connection.prepareStatement(sql);
 			ResultSet res = (ResultSet) prep.executeQuery();
 			
 			while(res.next()) { 
 				request = res.getString("nombre_lugar");
 			}
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}

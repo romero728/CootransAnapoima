@@ -273,11 +273,9 @@ public class ListRoutes extends JFrame {
 					tfType.setText("Todos");
 				} else {
 					for(int i = 0; i < types.length; i++) {
-						System.out.println(types[i]);
 						acumTypes += typeVehicle.getNameTypeVehicle(types[i]) + " ";
 					}
 					
-					System.out.println(acumTypes);
 					tfType.setText(acumTypes);
 				}
 				

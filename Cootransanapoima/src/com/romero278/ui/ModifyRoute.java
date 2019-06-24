@@ -184,6 +184,8 @@ public class ModifyRoute extends JFrame {
 			cbPlaceEnd.addItem(splitPlace[1]);
 		}
 		
+		cbPlaceEnd.removeItem("Anapoima");
+		
 		cbActive.addItem("Si");
 		cbActive.addItem("No");
 		
@@ -260,6 +262,8 @@ public class ModifyRoute extends JFrame {
 							break;
 						case "error update":
 							JOptionPane.showMessageDialog(null, "Ha ocurrido un error, inténtalo de nuevo", "Error", JOptionPane.ERROR_MESSAGE);
+							break;
+						default:
 							break;
 					}
 				}

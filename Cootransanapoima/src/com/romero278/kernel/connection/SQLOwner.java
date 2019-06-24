@@ -10,7 +10,7 @@ import com.mysql.jdbc.PreparedStatement;
 
 public class SQLOwner {
 	ConnectionBD conBD = new ConnectionBD();
-	Connection connection = conBD.connection();
+	Connection connection;
 	
 	String sql;
 	PreparedStatement prep;
@@ -26,6 +26,7 @@ public class SQLOwner {
 			sql = "INSERT INTO propietarios(nombre_propietario, apellido_propietario, tipodocumento_propietario, documento_propietario, fechanacimiento_propietario, direccion_propietario, ciudad_propietario, telefono_propietario, email_propietario) VALUES ('" + firstName + "', '" + lastName + "', '" + iTypeDocument + "', '" + document + "', '" + birthdate + "', '" + address + "', '" + city + "', '" + phone + "', '" + email + "')";
 			
 			try {
+				connection = conBD.connection();
 				prep = (PreparedStatement) connection.prepareStatement(sql);
 				int i = prep.executeUpdate();
 				
@@ -33,7 +34,9 @@ public class SQLOwner {
 					request = "success";
 				} else {
 					request = "error insert";
-				}					
+				}
+				
+				connection.close();
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
@@ -49,12 +52,15 @@ public class SQLOwner {
 		String sql1 = "SELECT * FROM propietarios ORDER BY id_propietario ASC";
 		
 		try {
+			connection = conBD.connection();
 			prep = (PreparedStatement) connection.prepareStatement(sql1);
 			res = (ResultSet) prep.executeQuery();
 			
 			while(res.next()) { 
 				alOwners.add(res.getString("id_propietario") + "." + res.getString("nombre_propietario") + " " + res.getString("apellido_propietario"));
 			}
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}		
@@ -71,6 +77,7 @@ public class SQLOwner {
 		String nom, ape, td, doc, fec, dir, ci, tel, em;		
 		
 		try {
+			connection = conBD.connection();
 			PreparedStatement preps = (PreparedStatement) connection.prepareStatement(sql1);
 			ResultSet ress = (ResultSet) preps.executeQuery();
 			
@@ -87,6 +94,8 @@ public class SQLOwner {
 				
 				infoOwner = id + "|" + nom + "|" + ape + "|" + td + "|" + doc + "|" + fec + "|" + dir + "|" + ci + "|" + tel + "|" + em + "|";
 			}
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
@@ -95,95 +104,115 @@ public class SQLOwner {
 	}
 	
 	public String updateOwner(String id, String firstName, String lastName, String birthdate, String address, String city, String phone, String email) {
+		String request = "";
 		String sql1 = "UPDATE propietarios SET nombre_propietario = '" + firstName + "', apellido_propietario = '" + lastName + "', fechanacimiento_propietario = '" + birthdate + "', direccion_propietario = '" + address + "', ciudad_propietario = '" + city + "', telefono_propietario = '" + phone + "', email_propietario = '" + email + "' WHERE id_propietario = '" + id + "'";
 		
 		try {
+			connection = conBD.connection();
 			prep = (PreparedStatement) connection.prepareStatement(sql1);
 			int i = prep.executeUpdate();
 			
 			if(i > 0) {
-				return "success";
+				request = "success";
 			} else {
-				return "error update";
-			}					
+				request = "error update";
+			}			
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		
-		return "";
+		return request;
 	}
 	
 	public String deleteOwner(String id) {
+		String request = "";
 		String sql1 = "DELETE FROM propietarios WHERE id_propietario = '" + id + "'";
 		
 		try {
+			connection = conBD.connection();
 			prep = (PreparedStatement) connection.prepareStatement(sql1);
 			int i = prep.executeUpdate();
 			
 			if(i > 0) {
-				return "success";
+				request = "success";
 			} else {
-				return "error delete";
-			}					
+				request = "error delete";
+			}
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		
-		return "";
+		return request;
 	}
 	
 	String getTypeDocument(String typeDoc) {
+		String request = "";
 		String sql1 = "SELECT id_tipodocumento FROM tipodocumento WHERE nombre_tipodocumento = '" + typeDoc + "'";
 		
 		try {
+			connection = conBD.connection();
 			prep = (PreparedStatement) connection.prepareStatement(sql1);
 			res = (ResultSet) prep.executeQuery();
 			
 			while(res.next()) {
-				return res.getString("id_tipodocumento");
+				request = res.getString("id_tipodocumento");
 			}
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		
-		return "";
+		return request;
 	}
 	
 	String getTypeNameDocument(String idType) {
+		String request = "";
 		String sql1 = "SELECT nombre_tipodocumento FROM tipodocumento WHERE id_tipodocumento = '" + idType + "'";
 		
 		try {
+			connection = conBD.connection();
 			prep = (PreparedStatement) connection.prepareStatement(sql1);
 			res = (ResultSet) prep.executeQuery();
 			
 			while(res.next()) {
-				return res.getString("nombre_tipodocumento");
+				request = res.getString("nombre_tipodocumento");
 			}
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		
-		return "";
+		return request;
 	}
 	
 	boolean validDocument(String doc) {
+		boolean valid = true;
 		String sql1 = "SELECT count(*) FROM propietarios WHERE documento_propietario = '" + doc + "'";
 		
 		try {
+			connection = conBD.connection();
 			prep = (PreparedStatement) connection.prepareStatement(sql1);
 			res = (ResultSet) prep.executeQuery();
 			
 			while(res.next()) { 
 				if(res.getString("count(*)").equals("0")) {
-					return true;
+					valid = true;
 				} else {
-					return false;
+					valid = false;
 				}
 			}
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		
-		return false;
+		return valid;
 	}
 }

@@ -9,7 +9,7 @@ import com.mysql.jdbc.PreparedStatement;
 
 public class SQLTypeVehicle {
 	ConnectionBD conBD = new ConnectionBD();
-	Connection connection = conBD.connection();
+	Connection connection;
 	
 	String sql;
 	PreparedStatement prep;
@@ -20,6 +20,7 @@ public class SQLTypeVehicle {
 		sql = "SELECT * FROM tipovehiculo ORDER BY id_tipovehiculo ASC";
 		
 		try {
+			connection = conBD.connection();
 			prep = (PreparedStatement) connection.prepareStatement(sql);
 			res = (ResultSet) prep.executeQuery();
 			
@@ -28,6 +29,7 @@ public class SQLTypeVehicle {
 		
 			}
 			
+			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -41,6 +43,7 @@ public class SQLTypeVehicle {
 		sql = "SELECT nombre_tipovehiculo FROM tipovehiculo WHERE id_tipovehiculo = '" + id + "'";
 		
 		try {
+			connection = conBD.connection();
 			prep = (PreparedStatement) connection.prepareStatement(sql);
 			res = (ResultSet) prep.executeQuery();
 			
@@ -48,6 +51,7 @@ public class SQLTypeVehicle {
 				request = res.getString("nombre_tipovehiculo");		
 			}
 			
+			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -9,7 +9,7 @@ import com.mysql.jdbc.PreparedStatement;
 
 public class SQLPlace {
 	ConnectionBD conBD = new ConnectionBD();
-	Connection connection = conBD.connection();
+	Connection connection;
 	
 	String sql;
 	PreparedStatement prep;
@@ -23,6 +23,7 @@ public class SQLPlace {
 			sql = "INSERT INTO lugares(nombre_lugar) VALUES ('" + name + "')";
 			
 			try {
+				connection = conBD.connection();
 				prep = (PreparedStatement) connection.prepareStatement(sql);
 				int i = prep.executeUpdate();
 				
@@ -30,7 +31,9 @@ public class SQLPlace {
 					request = "success";
 				} else {
 					request = "error insert";
-				}					
+				}
+				
+				connection.close();
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
@@ -46,12 +49,15 @@ public class SQLPlace {
 		sql = "SELECT id_lugar, nombre_lugar FROM lugares ORDER BY id_lugar ASC";
 		
 		try {
+			connection = conBD.connection();
 			prep = (PreparedStatement) connection.prepareStatement(sql);
 			res = (ResultSet) prep.executeQuery();
 			
 			while(res.next()) { 
 				alPlaces.add(res.getString("id_lugar") + "." + res.getString("nombre_lugar"));
 			}
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
@@ -64,6 +70,7 @@ public class SQLPlace {
 		sql = "SELECT * FROM lugares WHERE id_lugar = '" + id + "'";
 		
 		try {
+			connection = conBD.connection();
 			prep = (PreparedStatement) connection.prepareStatement(sql);
 			res = (ResultSet) prep.executeQuery();
 			
@@ -71,6 +78,8 @@ public class SQLPlace {
 				infoPlace += res.getString("id_lugar") + "|";
 				infoPlace += res.getString("nombre_lugar") + "|";
 			}
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}		
@@ -84,6 +93,7 @@ public class SQLPlace {
 		sql = "UPDATE lugares SET nombre_lugar = '" + name + "' WHERE id_lugar = '" + id + "'";
 		
 		try {
+			connection = conBD.connection();
 			prep = (PreparedStatement) connection.prepareStatement(sql);
 			int i = prep.executeUpdate();
 			
@@ -91,7 +101,9 @@ public class SQLPlace {
 				request = "success";
 			} else {
 				request = "error update";
-			}					
+			}
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
@@ -105,6 +117,7 @@ public class SQLPlace {
 		sql = "DELETE FROM lugares WHERE id_lugar = '" + id + "'";
 		
 		try {
+			connection = conBD.connection();
 			prep = (PreparedStatement) connection.prepareStatement(sql);
 			int i = prep.executeUpdate();
 			
@@ -112,7 +125,9 @@ public class SQLPlace {
 				request = "success";
 			} else {
 				request = "error delete";
-			}					
+			}
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
@@ -126,6 +141,7 @@ public class SQLPlace {
 		sql = "SELECT count(*) FROM lugares WHERE nombre_lugar = '" + name + "'";
 		
 		try {
+			connection = conBD.connection();
 			prep = (PreparedStatement) connection.prepareStatement(sql);
 			res = (ResultSet) prep.executeQuery();
 			
@@ -136,6 +152,8 @@ public class SQLPlace {
 					valid = false;
 				}
 			}
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}

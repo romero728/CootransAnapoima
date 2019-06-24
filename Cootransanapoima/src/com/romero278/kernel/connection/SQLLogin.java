@@ -8,12 +8,13 @@ import com.mysql.jdbc.PreparedStatement;
 
 public class SQLLogin {
 	ConnectionBD conBD = new ConnectionBD();
-	Connection connection = conBD.connection();
+	Connection connection;
 	
 	public boolean login(String company, String password) {
 		String sql = "SELECT count(*) FROM empresas WHERE nombre_empresa = '" + company + "' and password_empresa = '" + password + "'";
 		
 		try {
+			connection = conBD.connection();
 			PreparedStatement prep = (PreparedStatement) connection.prepareStatement(sql);
 			ResultSet res = (ResultSet) prep.executeQuery();
 			
@@ -23,7 +24,9 @@ public class SQLLogin {
 				} else {
 					return true;
 				}
-			}						
+			}
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}

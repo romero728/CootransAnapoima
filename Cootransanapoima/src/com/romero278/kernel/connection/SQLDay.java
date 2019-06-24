@@ -9,7 +9,7 @@ import com.mysql.jdbc.PreparedStatement;
 
 public class SQLDay {
 	ConnectionBD conBD = new ConnectionBD();
-	Connection connection = conBD.connection();
+	Connection connection;
 	
 	String sql;
 	PreparedStatement prep;
@@ -20,14 +20,15 @@ public class SQLDay {
 		sql = "SELECT id_dia, nombre_dia FROM dias ORDER BY id_dia ASC";
 		
 		try {
+			connection = conBD.connection();
 			prep = (PreparedStatement) connection.prepareStatement(sql);
 			res = (ResultSet) prep.executeQuery();
 			
 			while(res.next()) {
-				alDays.add(res.getString("id_dia") + "|" + res.getString("nombre_dia"));
-		
+				alDays.add(res.getString("id_dia") + "|" + res.getString("nombre_dia"));		
 			}
 			
+			connection.close();			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

@@ -182,6 +182,8 @@ public class AddRoute extends JFrame {
 			cbPlaceEnd.addItem(splitPlace[1]);
 		}
 		
+		cbPlaceEnd.removeItem("Anapoima");
+		
 		cbActive.addItem("Si");
 		cbActive.addItem("No");
 		

@@ -9,7 +9,7 @@ import com.mysql.jdbc.PreparedStatement;
 
 public class SQLTour {
 	ConnectionBD conBD = new ConnectionBD();
-	Connection connection = conBD.connection();
+	Connection connection;
 	
 	String sql;
 	PreparedStatement prep;
@@ -23,6 +23,7 @@ public class SQLTour {
 			sql = "INSERT INTO recorridos(ruta_recorrido, dia_recorrido, hora_recorrido) VALUES ('" + route + "', '" + day + "', '" + hour + "')";
 			
 			try {
+				connection = conBD.connection();
 				prep = (PreparedStatement) connection.prepareStatement(sql);
 				int i = prep.executeUpdate();
 				
@@ -30,7 +31,9 @@ public class SQLTour {
 					request = "success";
 				} else {
 					request = "error insert";
-				}					
+				}
+				
+				connection.close();
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
@@ -47,12 +50,15 @@ public class SQLTour {
 		sql = "SELECT id_recorrido, hora_recorrido FROM recorridos WHERE dia_recorrido = '" + day + "' and ruta_recorrido = '" + route + "' ORDER BY hora_recorrido ASC";
 		
 		try {
+			connection = conBD.connection();
 			prep = (PreparedStatement) connection.prepareStatement(sql);
 			res = (ResultSet) prep.executeQuery();
 			
 			while(res.next()) {
 				alTours.add(res.getString("id_recorrido") + "|" + res.getString("hora_recorrido"));
 			}
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
@@ -65,12 +71,15 @@ public class SQLTour {
 		sql = "SELECT * FROM recorridos WHERE id_recorrido = '" + id + "'";
 		
 		try {
+			connection = conBD.connection();
 			prep = (PreparedStatement) connection.prepareStatement(sql);
 			res = (ResultSet) prep.executeQuery();
 			
 			while(res.next()) {
 				request = res.getString("id_recorrido") + "|" + getNameRoute(res.getString("ruta_recorrido")) + "|" + getNameDay(res.getString("dia_recorrido")) + "|" + res.getString("hora_recorrido") + "|";
 			}
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
@@ -86,6 +95,7 @@ public class SQLTour {
 			sql = "UPDATE recorridos SET ruta_recorrido = '" + route + "', dia_recorrido = '" + day + "', hora_recorrido = '" + hour + "' WHERE id_recorrido = '" + id + "'";
 			
 			try {
+				connection = conBD.connection();
 				prep = (PreparedStatement) connection.prepareStatement(sql);
 				int i = prep.executeUpdate();
 				
@@ -93,7 +103,9 @@ public class SQLTour {
 					request = "success";
 				} else {
 					request = "error update";
-				}					
+				}
+				
+				connection.close();
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
@@ -111,6 +123,7 @@ public class SQLTour {
 		System.out.println(sql);
 		
 		try {
+			connection = conBD.connection();
 			prep = (PreparedStatement) connection.prepareStatement(sql);
 			int i = prep.executeUpdate();
 			
@@ -118,7 +131,9 @@ public class SQLTour {
 				request = "success";
 			} else {
 				request = "error delete";
-			}					
+			}
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
@@ -132,6 +147,7 @@ public class SQLTour {
 		String sql = "SELECT count(*) FROM recorridos WHERE ruta_recorrido = '" + route + "'and dia_recorrido = '" + day + "'and hora_recorrido = '" + hour + "'";
 		
 		try {
+			connection = conBD.connection();
 			PreparedStatement prep = (PreparedStatement) connection.prepareStatement(sql);
 			ResultSet res = (ResultSet) prep.executeQuery();
 			
@@ -142,6 +158,8 @@ public class SQLTour {
 					valid = false;
 				}
 			}
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
@@ -154,6 +172,7 @@ public class SQLTour {
 		String sql = "SELECT lugardestino_ruta FROM rutas WHERE id_ruta = '" + id + "'";
 		
 		try {
+			connection = conBD.connection();
 			PreparedStatement prep = (PreparedStatement) connection.prepareStatement(sql);
 			ResultSet res = (ResultSet) prep.executeQuery();
 			
@@ -171,6 +190,8 @@ public class SQLTour {
 					e1.printStackTrace();
 				}
 			}
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
@@ -183,12 +204,15 @@ public class SQLTour {
 		String sql = "SELECT nombre_dia FROM dias WHERE id_dia = '" + id + "'";
 		
 		try {
+			connection = conBD.connection();
 			PreparedStatement prep = (PreparedStatement) connection.prepareStatement(sql);
 			ResultSet res = (ResultSet) prep.executeQuery();
 			
 			while(res.next()) { 
 				request = res.getString("nombre_dia");
 			}
+			
+			connection.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}

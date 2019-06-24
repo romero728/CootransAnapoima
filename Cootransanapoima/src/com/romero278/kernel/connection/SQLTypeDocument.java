@@ -9,7 +9,7 @@ import com.mysql.jdbc.PreparedStatement;
 
 public class SQLTypeDocument {
 	ConnectionBD conBD = new ConnectionBD();
-	Connection connection = conBD.connection();
+	Connection connection;
 	
 	String sql;
 	PreparedStatement prep;
@@ -20,6 +20,7 @@ public class SQLTypeDocument {
 		sql = "SELECT nombre_tipodocumento FROM tipodocumento ORDER BY id_tipodocumento ASC";
 		
 		try {
+			connection = conBD.connection();
 			prep = (PreparedStatement) connection.prepareStatement(sql);
 			res = (ResultSet) prep.executeQuery();
 			
@@ -28,11 +29,11 @@ public class SQLTypeDocument {
 		
 			}
 			
+			connection.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
 		return alTypeDocument;
-	}
-	
+	}	
 }

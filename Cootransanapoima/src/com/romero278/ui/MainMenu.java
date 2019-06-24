@@ -95,6 +95,16 @@ public class MainMenu extends JFrame {
 		
 		/* --- Logic Part --- */
 		
+		btnGenerate.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+				
+				GeneratePlan plan = new GeneratePlan(nameCompany);
+				plan.setVisible(true);
+			}
+		});
+		
 		btnEdit.addActionListener(new ActionListener() {			
 			@Override
 			public void actionPerformed(ActionEvent e) {
