@@ -31,7 +31,7 @@ public class ModifyPlace extends JFrame {
 		option = op;
 		dataPlace = data;
 		
-		setTitle(option + " - Agregar");
+		setTitle(option + " - Modificar");
 		setBounds(0, 0, 1200, 600);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -43,11 +43,11 @@ public class ModifyPlace extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
-		JLabel title = new JLabel("Agregar " + option.toLowerCase());
+		JLabel title = new JLabel("Modificar " + option.toLowerCase());
 		JLabel subtitle = new JLabel("Ingresa los datos");
 		JLabel lName = new JLabel("Nombre: ");
 		JTextField tfName = new JTextField(16);
-		JButton btnModify = new JButton("Agregar");
+		JButton btnModify = new JButton("Modificar");
 		JButton btnBack = new JButton("Atrás");
 		
 		btnModify.setPreferredSize(new Dimension(200, 36));

@@ -25,6 +25,7 @@ public class GeneratePlan extends JFrame {
 	private JPanel contentPane;
 	
 	String nameCompany;
+	ArrayList<ArrayList<String>> alPlan = new ArrayList<>();
 	
 	public GeneratePlan(String comp) {
 		nameCompany = comp;
@@ -101,15 +102,21 @@ public class GeneratePlan extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(newPlan()) {
+					JOptionPane.showMessageDialog(null, "Rodamiento generado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
 					btnPrint.setVisible(true);
+				} else {
+					JOptionPane.showMessageDialog(null, "Ha ocurrido un error, por favor vuelve a generar el rodamiento", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
 		
 		btnPrint.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "En construcción", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+			public void actionPerformed(ActionEvent e) {				
+				setVisible(false);
+				
+				GenerateDocuments genDoc = new GenerateDocuments(nameCompany, alPlan);
+				genDoc.setVisible(true);
 			}
 		});
 		
@@ -123,13 +130,15 @@ public class GeneratePlan extends JFrame {
 	
 	boolean newPlan() {
 		boolean request = false;
+		
+		alPlan = new ArrayList<>();
+		
 		DataPlan plan = new DataPlan();
 		
 		ArrayList<ArrayList<String>> alActiveMobiles = plan.getActiveMobiles();
 		ArrayList<ArrayList<String>> alActiveMobiles2 = new ArrayList<>();
 		ArrayList<ArrayList<String>> alTours = plan.getTours();
 		ArrayList<String> alTypeRoute = new ArrayList<>();
-		ArrayList<ArrayList<String>> alPlan = new ArrayList<>();
 		
 		HashMap<String, Integer> hashBegin = new HashMap<String, Integer>();
 		HashMap<String, Integer> hashFinish = new HashMap<String, Integer>();
@@ -145,18 +154,20 @@ public class GeneratePlan extends JFrame {
 		int sizeMobiles2 = 0;
 		int sizeTypeRoute = 0;
 		int sizeTours = alTours.size();
+		int randomBegin = 0;
 		int iterations = 0;
 		
 		while(sizeTours != alPlan.size()) {
-			System.out.println("iteration: " + iterations);
+//			System.out.println("iteration: " + iterations);
 			
 			if(iterations > 10) {
-				JOptionPane.showMessageDialog(null, "Ha ocurrido un error, por favor vuelve a generar el rodamiento", "Error", JOptionPane.ERROR_MESSAGE);
+				iterations = 0;
+				request = false;
 				break;
 			} else {
-				int randomBegin = (int) (Math.random() * sizeMobiles);
+				randomBegin = (int) (Math.random() * sizeMobiles);
 				
-//				System.out.println("Random value mobiles: " + alActiveMobiles.get(randomBegin).get(0));
+				randomBegin = 15;
 				
 				for(int i = 0; i < sizeMobiles; i++) {
 					if(i >= randomBegin) {
@@ -169,8 +180,6 @@ public class GeneratePlan extends JFrame {
 				boolean bolBegin, bolFinish;
 				
 				for(int i = 0; i < sizeTours; i++) {
-//					System.out.println("---");
-//					System.out.println("Recorrido: " + i);
 					alTypeRoute = plan.getTypeRoute(alTours.get(i).get(1));
 					sizeTypeRoute = alTypeRoute.size();
 					
@@ -180,7 +189,6 @@ public class GeneratePlan extends JFrame {
 					}
 					
 					for(int j = 0; j < sizeMobiles2; j++) {
-//						System.out.println("Carro:" + j);
 						for(int k = 0; k < sizeTypeRoute; k++) {
 							if(alActiveMobiles2.get(j).get(1).equals(alTypeRoute.get(k))) {
 								ArrayList<String> current = new ArrayList<>();
@@ -207,8 +215,6 @@ public class GeneratePlan extends JFrame {
 											j = sizeMobiles2;
 											
 											bolBegin = true;
-											
-//											System.out.println("Begin asignado");
 										}
 									}
 
@@ -231,8 +237,6 @@ public class GeneratePlan extends JFrame {
 												j = sizeMobiles2;
 												
 												bolFinish = true;
-												
-//												System.out.println("Finish asignado");
 											} else {
 												j++;									
 												break;
@@ -256,8 +260,6 @@ public class GeneratePlan extends JFrame {
 									
 									k = sizeTypeRoute;
 									j = sizeMobiles2;
-									
-//									System.out.println("Asignado");
 								}
 							} else {
 								if(j == sizeMobiles2-1 && k == sizeTypeRoute-1) {
@@ -269,7 +271,6 @@ public class GeneratePlan extends JFrame {
 					}
 					
 					if(alPlan.get(alPlan.size()-1).get(1) != alTours.get(i).get(0)) {
-//						System.out.println("Huérfana");
 						alActiveMobiles2.addAll(alActiveMobiles);
 						i--;
 					}
@@ -285,42 +286,42 @@ public class GeneratePlan extends JFrame {
 			iterations++;
 		}				
 		
-		for(String key:hashBegin.keySet()) {
-			System.out.println("Mobile: " + key + ", day begin: " + hashBegin.get(key));
-			System.out.println("Mobile: " + key + ", day finish: " + hashFinish.get(key));
-		}
+//		for(String key:hashBegin.keySet()) {
+//			System.out.println("Mobile: " + key + ", day begin: " + hashBegin.get(key));
+//			System.out.println("Mobile: " + key + ", day finish: " + hashFinish.get(key));
+//		}
 		
-		/*for(int j = 0; j < alPlan.size(); j++) {
-			System.out.println(alPlan.get(j).get(0));
-			
-			switch (alPlan.get(j).get(1)) {
-				case "121":
-					System.out.println("\n ----- \n");
-					break;
-				case "242":
-					System.out.println("\n ----- \n");
-					break;
-				case "369":
-					System.out.println("\n ----- \n");
-					break;
-				case "490":
-					System.out.println("\n ----- \n");
-					break;
-				case "611":
-					System.out.println("\n ----- \n");
-					break;
-				case "732":
-					System.out.println("\n ----- \n");
-					break;
-				default:
-					break;
-			}
-		}*/
+//		for(int j = 0; j < alPlan.size(); j++) {
+//			System.out.println(alPlan.get(j).get(0) + " - " + alPlan.get(j).get(1));
+//			
+//			switch (alPlan.get(j).get(1)) {
+//				case "121":
+//					System.out.println("\n ----- Martes ----- \n");
+//					break;
+//				case "242":
+//					System.out.println("\n ----- Miércoles ----- \n");
+//					break;
+//				case "369":
+//					System.out.println("\n ----- Jueves ----- \n");
+//					break;
+//				case "490":
+//					System.out.println("\n ----- Viernes ----- \n");
+//					break;
+//				case "611":
+//					System.out.println("\n ----- Sábado ----- \n");
+//					break;
+//				case "732":
+//					System.out.println("\n ----- Domingo ----- \n");
+//					break;
+//				default:
+//					break;
+//			}
+//		}
 		
-		System.out.println("All tours: " + sizeTours);
-		System.out.println("Plan size: " + alPlan.size());
+//		System.out.println("All tours: " + sizeTours);
+//		System.out.println("Plan size: " + alPlan.size());
 		
-		if(sizeTours == alPlan.size()) {
+		if(sizeTours == alPlan.size() && alPlan.get(alPlan.size()-1).get(1).equals(alTours.get(alTours.size()-1).get(0))) {
 			request = true;
 		}
 		

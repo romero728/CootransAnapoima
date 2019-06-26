@@ -59,7 +59,9 @@ public class SQLTour {
 			}
 			
 			connection.close();
-		} catch (SQLException e1) {
+		}
+		
+		catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		
@@ -70,18 +72,25 @@ public class SQLTour {
 		String request = "";
 		sql = "SELECT * FROM recorridos WHERE id_recorrido = '" + id + "'";
 		
+		Connection conn = conBD.connection();
+		PreparedStatement prep1;
+		ResultSet res1;
+		
 		try {
-			connection = conBD.connection();
-			prep = (PreparedStatement) connection.prepareStatement(sql);
-			res = (ResultSet) prep.executeQuery();
+			prep1 = (PreparedStatement) conn.prepareStatement(sql);
+			res1 = (ResultSet) prep1.executeQuery();
 			
-			while(res.next()) {
-				request = res.getString("id_recorrido") + "|" + getNameRoute(res.getString("ruta_recorrido")) + "|" + getNameDay(res.getString("dia_recorrido")) + "|" + res.getString("hora_recorrido") + "|";
+			while(res1.next()) {
+				request = res1.getString("id_recorrido") + "|" + getNameRoute(res1.getString("ruta_recorrido")) + "|" + getNameDay(res1.getString("dia_recorrido")) + "|" + res1.getString("hora_recorrido") + "|";
 			}
 			
-			connection.close();
+			res1.close();
+			prep1.close();
+			conn.close();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
+		} finally {
+			
 		}
 		
 		return request;
