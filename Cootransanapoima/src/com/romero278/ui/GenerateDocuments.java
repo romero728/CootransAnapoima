@@ -43,6 +43,8 @@ public class GenerateDocuments extends JFrame {
 	private JPanel contentPane;
 	
 	String nameCompany;
+	boolean repeatDocGen = false;
+	boolean repeatDocEach = false;
 	
 	DataPlan plan = new DataPlan();
 	ArrayList<ArrayList<String>> alActiveMobiles = new ArrayList<>();
@@ -75,6 +77,8 @@ public class GenerateDocuments extends JFrame {
 		
 		JLabel title = new JLabel("GENERAR DOCUMENTOS");
 		JLabel subtitle = new JLabel("Elige una opción");
+		JLabel lGeneral = new JLabel("Se genera documento para los despachadores");
+		JLabel lEach = new JLabel("Se genera documento para los conductores");
 		JButton btnGeneral = new JButton("Documento general");
 		JButton btnEach = new JButton("Documento de cada móvil");
 		JButton btnBack = new JButton("Atrás");
@@ -96,8 +100,14 @@ public class GenerateDocuments extends JFrame {
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnGeneral, 600, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, btnGeneral, 260, SpringLayout.NORTH, container);
 		
+		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lGeneral, 600, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lGeneral, 300, SpringLayout.NORTH, container);
+		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnEach, 600, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, btnEach, 320, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, btnEach, 340, SpringLayout.NORTH, container);
+		
+		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lEach, 600, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lEach, 380, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnBack, 100, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, btnBack, 500, SpringLayout.NORTH, container);
@@ -105,7 +115,9 @@ public class GenerateDocuments extends JFrame {
 		container.add(title);
 		container.add(subtitle);
 		container.add(btnGeneral);
+		container.add(lGeneral);
 		container.add(btnEach);
+		container.add(lEach);
 		container.add(btnBack);
 		
 		title.setFont(new Font("Arial", Font.BOLD, 40));
@@ -117,8 +129,14 @@ public class GenerateDocuments extends JFrame {
 		btnGeneral.setFont(new Font("Arial", Font.BOLD, 20));
 		btnGeneral.setForeground(new Color (116, 128, 148));
 		
+		lGeneral.setFont(new Font("Arial", Font.BOLD, 12));
+		lGeneral.setForeground(new Color (116, 128, 148));
+		
 		btnEach.setFont(new Font("Arial", Font.BOLD, 20));
 		btnEach.setForeground(new Color (116, 128, 148));
+		
+		lEach.setFont(new Font("Arial", Font.BOLD, 12));
+		lEach.setForeground(new Color (116, 128, 148));
 		
 		btnBack.setFont(new Font("Arial", Font.BOLD, 14));
 		btnBack.setForeground(Color.WHITE);
@@ -129,32 +147,42 @@ public class GenerateDocuments extends JFrame {
 		btnGeneral.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getData();
-				separatePerDays();
-				
-				try {
-					modifyDocumentGeneral();
-				} catch (IOException e1) {
-					e1.printStackTrace();
+				if(!repeatDocGen) {
+					getData();
+					separatePerDays();
+					
+					try {
+						modifyDocumentGeneral();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+					
+					JOptionPane.showMessageDialog(null, "Documento generado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+					repeatDocGen = true;
+				} else {
+					JOptionPane.showMessageDialog(null, "Ya has generado este documento", "Error", JOptionPane.ERROR_MESSAGE);
 				}
-				
-				JOptionPane.showMessageDialog(null, "Documento generado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		
 		btnEach.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				getData();
-				separatePerDays();
-				
-				try {
-					modifyDocumentEachMobile();
-				} catch (IOException e1) {
-					e1.printStackTrace();
+				if(!repeatDocEach) {
+					getData();
+					separatePerDays();
+					
+					try {
+						modifyDocumentEachMobile();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+					
+					JOptionPane.showMessageDialog(null, "Documento generado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+					repeatDocEach = true;
+				} else {
+					JOptionPane.showMessageDialog(null, "Ya has generado este documento", "Error", JOptionPane.ERROR_MESSAGE);
 				}
-				
-				JOptionPane.showMessageDialog(null, "Documento generado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		

@@ -45,10 +45,13 @@ public class GeneratePlan extends JFrame {
 		
 		JLabel title = new JLabel("GENERAR RODAMIENTO");
 		JLabel subtitle = new JLabel("Elige una opción");
+		JLabel lGenerate = new JLabel("Se asignarán los móviles activos a los recorridos correspondientes");
+		JLabel lPrint = new JLabel("Podrás ver los resultados generales o de cada móvil en formato Excel");
 		JButton btnGenerate = new JButton("Generar plan");
 		JButton btnPrint = new JButton("Generar documento de Excel");
 		JButton btnBack = new JButton("Atrás");
-	
+		
+		lPrint.setVisible(false);
 		btnPrint.setVisible(false);
 		
 		btnGenerate.setPreferredSize(new Dimension(200, 36));
@@ -68,8 +71,14 @@ public class GeneratePlan extends JFrame {
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnGenerate, 600, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, btnGenerate, 260, SpringLayout.NORTH, container);
 		
+		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lGenerate, 600, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lGenerate, 300, SpringLayout.NORTH, container);
+		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnPrint, 600, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, btnPrint, 320, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, btnPrint, 340, SpringLayout.NORTH, container);
+		
+		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lPrint, 600, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lPrint, 380, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnBack, 100, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, btnBack, 500, SpringLayout.NORTH, container);
@@ -77,7 +86,9 @@ public class GeneratePlan extends JFrame {
 		container.add(title);
 		container.add(subtitle);
 		container.add(btnGenerate);
+		container.add(lGenerate);
 		container.add(btnPrint);
+		container.add(lPrint);
 		container.add(btnBack);
 		
 		title.setFont(new Font("Arial", Font.BOLD, 40));
@@ -89,9 +100,15 @@ public class GeneratePlan extends JFrame {
 		btnGenerate.setFont(new Font("Arial", Font.BOLD, 20));
 		btnGenerate.setForeground(new Color (116, 128, 148));
 		
+		lGenerate.setFont(new Font("Arial", Font.BOLD, 12));
+		lGenerate.setForeground(new Color (116, 128, 148));
+		
 		btnPrint.setFont(new Font("Arial", Font.BOLD, 20));
 		btnPrint.setForeground(Color.WHITE);
 		btnPrint.setBackground(new Color (119, 204, 116));
+		
+		lPrint.setFont(new Font("Arial", Font.BOLD, 12));
+		lPrint.setForeground(new Color (116, 128, 148));
 		
 		btnBack.setFont(new Font("Arial", Font.BOLD, 14));
 		btnBack.setForeground(Color.WHITE);
@@ -108,6 +125,7 @@ public class GeneratePlan extends JFrame {
 				
 				if(confirm) {
 					JOptionPane.showMessageDialog(null, "Rodamiento generado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+					lPrint.setVisible(true);
 					btnPrint.setVisible(true);
 				} else {
 					JOptionPane.showMessageDialog(null, "Ha ocurrido un error, por favor vuelve a generar el rodamiento", "Error", JOptionPane.ERROR_MESSAGE);
@@ -161,7 +179,7 @@ public class GeneratePlan extends JFrame {
 		int iterations = 0;
 		
 		while(sizeTours != alPlan.size()) {
-			System.out.println("iteration: " + iterations);
+//			System.out.println("iteration: " + iterations);
 			
 			if(iterations > 10) {
 				iterations = 0;
