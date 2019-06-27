@@ -19,7 +19,7 @@ public class DataPlan {
 	public ArrayList<ArrayList<String>> getActiveMobiles() {
 		ArrayList<ArrayList<String>> alMobiles = new ArrayList<ArrayList<String>>();		
 		
-		sql = "SELECT id_movil, tipo_movil FROM moviles WHERE activo_movil = 1 ORDER BY id_movil ASC";
+		sql = "SELECT numero_movil, tipo_movil FROM moviles WHERE activo_movil = 1 ORDER BY id_movil ASC";
 		
 		try {
 			connection = conBD.connection();
@@ -29,7 +29,7 @@ public class DataPlan {
 			while(res.next()) {
 				ArrayList<String> current = new ArrayList<>();
 				
-				current.add(res.getString("id_movil"));
+				current.add(res.getString("numero_movil"));
 				current.add(res.getString("tipo_movil"));
 				
 				alMobiles.add(current);
@@ -95,5 +95,32 @@ public class DataPlan {
 		}
 		
 		return alType;
+	}
+	
+	public String getCompleteNameOwner(String numMobile) {
+		String request = "";
+		
+		Connection connection = conBD.connection();
+		String sql = "SELECT propietario_movil FROM moviles WHERE numero_movil = '" + numMobile + "'";
+		try {
+			PreparedStatement prep = (PreparedStatement) connection.prepareStatement(sql);
+			ResultSet res = (ResultSet) prep.executeQuery();
+			
+			while(res.next()) {
+				String sql1 = "SELECT nombre_propietario, apellido_propietario FROM propietarios WHERE id_propietario = '" + res.getString("propietario_movil") + "'";
+				
+				PreparedStatement prep1 = (PreparedStatement) connection.prepareStatement(sql1);
+				ResultSet res1 = (ResultSet) prep1.executeQuery();
+				
+				while(res1.next()) {
+					request = res1.getString("apellido_propietario") + " " + res1.getString("nombre_propietario");
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return request;
 	}
 }

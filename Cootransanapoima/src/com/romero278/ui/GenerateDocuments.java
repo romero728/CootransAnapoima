@@ -24,8 +24,11 @@ import javax.swing.border.EmptyBorder;
 
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -33,12 +36,16 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.romero278.kernel.connection.SQLTour;
+import com.romero278.kernel.plan.DataPlan;
 
 public class GenerateDocuments extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
 	String nameCompany;
+	
+	DataPlan plan = new DataPlan();
+	ArrayList<ArrayList<String>> alActiveMobiles = new ArrayList<>();
 	ArrayList<ArrayList<String>> alPlan = new ArrayList<>();
 	ArrayList<ArrayList<String>> alTours = new ArrayList<>();
 	ArrayList<ArrayList<String>> alToursMonday = new ArrayList<>();
@@ -124,24 +131,30 @@ public class GenerateDocuments extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				getData();
 				separatePerDays();
+				
 				try {
 					modifyDocumentGeneral();
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				
 				JOptionPane.showMessageDialog(null, "Documento generado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+		
+		btnEach.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				getData();
+				separatePerDays();
 				
-//				System.out.println(alMobiles.size() + " " + alTours.size());
+				try {
+					modifyDocumentEachMobile();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 				
-//				for(int i = 0; i < alMobiles.size(); i++) {
-//					System.out.println(alTours.get(i).get(1) + " " + alTours.get(i).get(2) + ":" + alTours.get(i).get(3) + " " + alMobiles.get(i) + " Anapoima - " + alTours.get(i).get(0));
-//				}
-				
-//				for(int i = 0; i < alToursMonday.size(); i++) {
-//					System.out.println(alToursMonday.get(i).get(0) + " " + alToursMonday.get(i).get(1) + ":" + alToursMonday.get(i).get(2) + " " + alToursMonday.get(i).get(3) + " Anapoima - " + alToursMonday.get(i).get(4));
-//				}
+				JOptionPane.showMessageDialog(null, "Documento generado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		
@@ -227,7 +240,7 @@ public class GenerateDocuments extends JFrame {
 		}
 	}
 	
-	void modifyDocumentGeneral() throws IOException { 
+	void modifyDocumentGeneral() throws IOException {		
 		FileInputStream file = new FileInputStream(new File("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\PlantillaTestJava.xlsx"));
 		
 		XSSFWorkbook wb = new XSSFWorkbook(file);
@@ -552,6 +565,615 @@ public class GenerateDocuments extends JFrame {
 		file.close();
 		
 		FileOutputStream output = new FileOutputStream("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\PlantillaTestJava.xlsx");
+		wb.write(output);
+		output.close();
+		wb.close();
+	}
+	
+	void modifyDocumentEachMobile() throws IOException {
+		alActiveMobiles = plan.getActiveMobiles();
+		
+		FileInputStream file = new FileInputStream(new File("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\PlantillaPlanIndividual.xlsx"));
+		
+		XSSFWorkbook wb = new XSSFWorkbook(file);
+		XSSFSheet sheet;
+		XSSFRow row;
+		XSSFCell cell;
+		
+		int numRow = 0;
+		int numColumn = 0;
+		String ownerName = "";
+		
+		XSSFFont fontOwner = wb.createFont();
+		fontOwner.setFontHeightInPoints((short) 20);
+		fontOwner.setFontName("Arial");
+		
+		XSSFFont fontMobile = wb.createFont();
+		fontMobile.setFontHeightInPoints((short) 20);
+		fontMobile.setFontName("Arial");
+		fontMobile.setBold(true);
+		
+		XSSFFont fontTitle = wb.createFont();
+		fontTitle.setFontHeightInPoints((short) 14);
+		fontTitle.setFontName("Arial");
+		
+		XSSFFont fontNormal = wb.createFont();
+		fontNormal.setFontHeightInPoints((short) 14);
+		
+		CellStyle styleOwner = wb.createCellStyle();
+		styleOwner.setAlignment(HorizontalAlignment.CENTER);
+		styleOwner.setVerticalAlignment(VerticalAlignment.CENTER);
+		styleOwner.setFont(fontOwner);
+		
+		CellStyle styleMobile = wb.createCellStyle();
+		styleMobile.setAlignment(HorizontalAlignment.CENTER);
+		styleMobile.setVerticalAlignment(VerticalAlignment.CENTER);
+		styleMobile.setFont(fontMobile);
+		
+		CellStyle styleTitle = wb.createCellStyle();
+		styleTitle.setAlignment(HorizontalAlignment.CENTER);
+		styleTitle.setVerticalAlignment(VerticalAlignment.CENTER);
+		styleTitle.setBorderBottom(BorderStyle.THIN);
+		styleTitle.setBorderLeft(BorderStyle.THIN);
+		styleTitle.setBorderRight(BorderStyle.THIN);
+		styleTitle.setBorderTop(BorderStyle.THIN);
+		styleTitle.setFont(fontTitle);
+		styleTitle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+	    styleTitle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+	    
+	    CellStyle styleHour = wb.createCellStyle();
+		styleHour.setAlignment(HorizontalAlignment.CENTER);
+		styleHour.setVerticalAlignment(VerticalAlignment.CENTER);
+		styleHour.setBorderBottom(BorderStyle.THIN);
+		styleHour.setBorderLeft(BorderStyle.THIN);
+		styleHour.setBorderRight(BorderStyle.THIN);
+		styleHour.setBorderTop(BorderStyle.THIN);
+		styleHour.setFont(fontNormal);
+		
+		CellStyle styleRouteOne = wb.createCellStyle();
+		styleRouteOne.setAlignment(HorizontalAlignment.RIGHT);
+		styleRouteOne.setVerticalAlignment(VerticalAlignment.CENTER);
+		styleRouteOne.setBorderBottom(BorderStyle.THIN);
+		styleRouteOne.setBorderLeft(BorderStyle.THIN);
+		styleRouteOne.setBorderTop(BorderStyle.THIN);
+		styleRouteOne.setFont(fontNormal);
+		
+		CellStyle styleRouteTwo = wb.createCellStyle();
+		styleRouteTwo.setAlignment(HorizontalAlignment.LEFT);
+		styleRouteTwo.setVerticalAlignment(VerticalAlignment.CENTER);
+		styleRouteTwo.setBorderBottom(BorderStyle.THIN);
+		styleRouteTwo.setBorderRight(BorderStyle.THIN);
+		styleRouteTwo.setBorderTop(BorderStyle.THIN);
+		styleRouteTwo.setFont(fontNormal);
+		
+		for(int i = 0; i < alActiveMobiles.size(); i++) {
+			sheet = wb.getSheet(alActiveMobiles.get(i).get(0));
+			
+			if(sheet == null) {
+				sheet = wb.createSheet(alActiveMobiles.get(i).get(0));
+			}
+			
+			ownerName = plan.getCompleteNameOwner(alActiveMobiles.get(i).get(0)); 
+			
+			numRow = 4;
+			
+			row = sheet.getRow(numRow);			
+			cell = row.createCell(0);
+			cell.setCellValue(ownerName.toUpperCase());
+			cell.setCellStyle(styleOwner);
+			numRow++;
+			
+			row = sheet.getRow(numRow);			
+			cell = row.createCell(0);
+			cell.setCellValue("Móvil " + alActiveMobiles.get(i).get(0));
+			cell.setCellStyle(styleMobile);
+			numRow++;
+			
+			// --- LUNES
+			
+			numColumn = 0;
+			row = sheet.getRow(numRow);
+			cell = row.createCell(numColumn);
+			cell.setCellValue("hh");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("mm");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("Lunes");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			sheet.addMergedRegionUnsafe(new CellRangeAddress(numRow, numRow, 2, 3));
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("Ok");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("Observaciones");
+			cell.setCellStyle(styleTitle);
+			
+			for(int j = 0; j < alToursMonday.size(); j++) {
+				if(alToursMonday.get(j).get(3).equals(alActiveMobiles.get(i).get(0))) {
+					numRow++;
+					row = sheet.getRow(numRow);
+					
+					for(int k = 0; k < 6; k++) {
+						cell = row.createCell(k);
+						
+						switch (k) {
+							case 0:
+								cell.setCellValue(Integer.parseInt(alToursMonday.get(j).get(1)));
+								cell.setCellStyle(styleHour);
+								break;
+							case 1:
+								cell.setCellValue(Integer.parseInt(alToursMonday.get(j).get(2)));
+								cell.setCellStyle(styleHour);
+								break;
+							case 2:
+								cell.setCellValue(alToursMonday.get(j).get(4));
+								cell.setCellStyle(styleRouteOne);
+								break;
+							case 3:
+								cell.setCellValue(alToursMonday.get(j).get(5));
+								cell.setCellStyle(styleRouteTwo);
+								break;
+							default:
+								cell.setCellValue("");
+								cell.setCellStyle(styleHour);
+								break;
+						}
+					}
+				}
+			}
+			
+			// --- MARTES
+			
+			numRow++;
+			numRow++;
+			
+			numColumn = 0;
+			row = sheet.getRow(numRow);
+			cell = row.createCell(numColumn);
+			cell.setCellValue("hh");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("mm");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("Martes");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			sheet.addMergedRegionUnsafe(new CellRangeAddress(numRow, numRow, 2, 3));
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("Ok");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("Observaciones");
+			cell.setCellStyle(styleTitle);
+			
+			for(int j = 0; j < alToursTuesday.size(); j++) {
+				if(alToursTuesday.get(j).get(3).equals(alActiveMobiles.get(i).get(0))) {
+					numRow++;
+					row = sheet.getRow(numRow);
+					
+					for(int k = 0; k < 6; k++) {
+						cell = row.createCell(k);
+						
+						switch (k) {
+							case 0:
+								cell.setCellValue(Integer.parseInt(alToursTuesday.get(j).get(1)));
+								cell.setCellStyle(styleHour);
+								break;
+							case 1:
+								cell.setCellValue(Integer.parseInt(alToursTuesday.get(j).get(2)));
+								cell.setCellStyle(styleHour);
+								break;
+							case 2:
+								cell.setCellValue(alToursTuesday.get(j).get(4));
+								cell.setCellStyle(styleRouteOne);
+								break;
+							case 3:
+								cell.setCellValue(alToursTuesday.get(j).get(5));
+								cell.setCellStyle(styleRouteTwo);
+								break;
+							default:
+								cell.setCellValue("");
+								cell.setCellStyle(styleHour);
+								break;
+						}
+					}
+				}
+			}	
+			
+			// --- MIERCOLES
+			
+			numRow++;
+			numRow++;
+			
+			numColumn = 0;
+			row = sheet.getRow(numRow);
+			cell = row.createCell(numColumn);
+			cell.setCellValue("hh");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("mm");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("Miércoles");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			sheet.addMergedRegionUnsafe(new CellRangeAddress(numRow, numRow, 2, 3));
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("Ok");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("Observaciones");
+			cell.setCellStyle(styleTitle);
+			
+			for(int j = 0; j < alToursWednesday.size(); j++) {
+				if(alToursWednesday.get(j).get(3).equals(alActiveMobiles.get(i).get(0))) {
+					numRow++;
+					row = sheet.getRow(numRow);
+					
+					for(int k = 0; k < 6; k++) {
+						cell = row.createCell(k);
+						
+						switch (k) {
+							case 0:
+								cell.setCellValue(Integer.parseInt(alToursWednesday.get(j).get(1)));
+								cell.setCellStyle(styleHour);
+								break;
+							case 1:
+								cell.setCellValue(Integer.parseInt(alToursWednesday.get(j).get(2)));
+								cell.setCellStyle(styleHour);
+								break;
+							case 2:
+								cell.setCellValue(alToursWednesday.get(j).get(4));
+								cell.setCellStyle(styleRouteOne);
+								break;
+							case 3:
+								cell.setCellValue(alToursWednesday.get(j).get(5));
+								cell.setCellStyle(styleRouteTwo);
+								break;
+							default:
+								cell.setCellValue("");
+								cell.setCellStyle(styleHour);
+								break;
+						}
+					}
+				}
+			}
+			
+			// --- JUEVES
+			
+			numRow++;
+			numRow++;
+			
+			numColumn = 0;
+			row = sheet.getRow(numRow);
+			cell = row.createCell(numColumn);
+			cell.setCellValue("hh");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("mm");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("Jueves");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			sheet.addMergedRegionUnsafe(new CellRangeAddress(numRow, numRow, 2, 3));
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("Ok");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("Observaciones");
+			cell.setCellStyle(styleTitle);
+			
+			for(int j = 0; j < alToursThursday.size(); j++) {
+				if(alToursThursday.get(j).get(3).equals(alActiveMobiles.get(i).get(0))) {
+					numRow++;
+					row = sheet.getRow(numRow);
+					
+					for(int k = 0; k < 6; k++) {
+						cell = row.createCell(k);
+						
+						switch (k) {
+							case 0:
+								cell.setCellValue(Integer.parseInt(alToursThursday.get(j).get(1)));
+								cell.setCellStyle(styleHour);
+								break;
+							case 1:
+								cell.setCellValue(Integer.parseInt(alToursThursday.get(j).get(2)));
+								cell.setCellStyle(styleHour);
+								break;
+							case 2:
+								cell.setCellValue(alToursThursday.get(j).get(4));
+								cell.setCellStyle(styleRouteOne);
+								break;
+							case 3:
+								cell.setCellValue(alToursThursday.get(j).get(5));
+								cell.setCellStyle(styleRouteTwo);
+								break;
+							default:
+								cell.setCellValue("");
+								cell.setCellStyle(styleHour);
+								break;
+						}
+					}
+				}
+			}
+			
+			// --- VIERNES
+			
+			numRow++;
+			numRow++;
+			
+			numColumn = 0;
+			row = sheet.getRow(numRow);
+			cell = row.createCell(numColumn);
+			cell.setCellValue("hh");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("mm");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("Viernes");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			sheet.addMergedRegionUnsafe(new CellRangeAddress(numRow, numRow, 2, 3));
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("Ok");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("Observaciones");
+			cell.setCellStyle(styleTitle);
+			
+			for(int j = 0; j < alToursFriday.size(); j++) {
+				if(alToursFriday.get(j).get(3).equals(alActiveMobiles.get(i).get(0))) {
+					numRow++;
+					row = sheet.getRow(numRow);
+					
+					for(int k = 0; k < 6; k++) {
+						cell = row.createCell(k);
+						
+						switch (k) {
+							case 0:
+								cell.setCellValue(Integer.parseInt(alToursFriday.get(j).get(1)));
+								cell.setCellStyle(styleHour);
+								break;
+							case 1:
+								cell.setCellValue(Integer.parseInt(alToursFriday.get(j).get(2)));
+								cell.setCellStyle(styleHour);
+								break;
+							case 2:
+								cell.setCellValue(alToursFriday.get(j).get(4));
+								cell.setCellStyle(styleRouteOne);
+								break;
+							case 3:
+								cell.setCellValue(alToursFriday.get(j).get(5));
+								cell.setCellStyle(styleRouteTwo);
+								break;
+							default:
+								cell.setCellValue("");
+								cell.setCellStyle(styleHour);
+								break;
+						}
+					}
+				}
+			}
+			
+			// --- SABADO
+			
+			numRow++;
+			numRow++;
+			
+			numColumn = 0;
+			row = sheet.getRow(numRow);
+			cell = row.createCell(numColumn);
+			cell.setCellValue("hh");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("mm");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("Sábado");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			sheet.addMergedRegionUnsafe(new CellRangeAddress(numRow, numRow, 2, 3));
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("Ok");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("Observaciones");
+			cell.setCellStyle(styleTitle);
+			
+			for(int j = 0; j < alToursSaturday.size(); j++) {
+				if(alToursSaturday.get(j).get(3).equals(alActiveMobiles.get(i).get(0))) {
+					numRow++;
+					row = sheet.getRow(numRow);
+					
+					for(int k = 0; k < 6; k++) {
+						cell = row.createCell(k);
+						
+						switch (k) {
+							case 0:
+								cell.setCellValue(Integer.parseInt(alToursSaturday.get(j).get(1)));
+								cell.setCellStyle(styleHour);
+								break;
+							case 1:
+								cell.setCellValue(Integer.parseInt(alToursSaturday.get(j).get(2)));
+								cell.setCellStyle(styleHour);
+								break;
+							case 2:
+								cell.setCellValue(alToursSaturday.get(j).get(4));
+								cell.setCellStyle(styleRouteOne);
+								break;
+							case 3:
+								cell.setCellValue(alToursSaturday.get(j).get(5));
+								cell.setCellStyle(styleRouteTwo);
+								break;
+							default:
+								cell.setCellValue("");
+								cell.setCellStyle(styleHour);
+								break;
+						}
+					}
+				}
+			}
+			
+			// --- DOMINGO
+			
+			numRow++;
+			numRow++;
+			
+			numColumn = 0;
+			row = sheet.getRow(numRow);
+			cell = row.createCell(numColumn);
+			cell.setCellValue("hh");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("mm");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("Domingo");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			sheet.addMergedRegionUnsafe(new CellRangeAddress(numRow, numRow, 2, 3));
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("Ok");
+			cell.setCellStyle(styleTitle);
+			numColumn++;
+			
+			cell = row.createCell(numColumn);
+			cell.setCellValue("Observaciones");
+			cell.setCellStyle(styleTitle);
+			
+			for(int j = 0; j < alToursSunday.size(); j++) {
+				if(alToursSunday.get(j).get(3).equals(alActiveMobiles.get(i).get(0))) {
+					numRow++;
+					row = sheet.getRow(numRow);
+					
+					for(int k = 0; k < 6; k++) {
+						cell = row.createCell(k);
+						
+						switch (k) {
+							case 0:
+								cell.setCellValue(Integer.parseInt(alToursSunday.get(j).get(1)));
+								cell.setCellStyle(styleHour);
+								break;
+							case 1:
+								cell.setCellValue(Integer.parseInt(alToursSunday.get(j).get(2)));
+								cell.setCellStyle(styleHour);
+								break;
+							case 2:
+								cell.setCellValue(alToursSunday.get(j).get(4));
+								cell.setCellStyle(styleRouteOne);
+								break;
+							case 3:
+								cell.setCellValue(alToursSunday.get(j).get(5));
+								cell.setCellStyle(styleRouteTwo);
+								break;
+							default:
+								cell.setCellValue("");
+								cell.setCellStyle(styleHour);
+								break;
+						}
+					}
+				}
+			}
+		}
+		
+		file.close();
+		
+		FileOutputStream output = new FileOutputStream("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\PlantillaTestIndJava.xlsx");
 		wb.write(output);
 		output.close();
 		wb.close();
