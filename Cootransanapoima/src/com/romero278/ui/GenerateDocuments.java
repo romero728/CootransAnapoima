@@ -294,7 +294,7 @@ public class GenerateDocuments extends JFrame {
 		for(int i = 0; i < alToursMonday.size(); i++) {
 			row = sheet.getRow(i+7);
 			
-			for(int j = 0; j < 6; j++) {
+			for(int j = 0; j < 8; j++) {
 				cell = row.createCell(j);;
 				
 				switch(j) {
@@ -323,6 +323,8 @@ public class GenerateDocuments extends JFrame {
 						cell.setCellValue(alToursMonday.get(i).get(j));
 						break;
 					default:
+						cell.setCellStyle(styleDayHour);
+						cell.setCellValue("");
 						break;
 				}
 			}
@@ -333,7 +335,7 @@ public class GenerateDocuments extends JFrame {
 		for(int i = 0; i < alToursTuesday.size(); i++) {
 			row = sheet.getRow(i+7);
 			
-			for(int j = 0; j < 6; j++) {
+			for(int j = 0; j < 8; j++) {
 				cell = row.createCell(j);;
 				
 				switch(j) {
@@ -362,6 +364,8 @@ public class GenerateDocuments extends JFrame {
 						cell.setCellValue(alToursTuesday.get(i).get(j));
 						break;
 					default:
+						cell.setCellStyle(styleDayHour);
+						cell.setCellValue("");
 						break;
 				}
 			}
@@ -372,7 +376,7 @@ public class GenerateDocuments extends JFrame {
 		for(int i = 0; i < alToursWednesday.size(); i++) {
 			row = sheet.getRow(i+7);
 			
-			for(int j = 0; j < 6; j++) {
+			for(int j = 0; j < 8; j++) {
 				cell = row.createCell(j);;
 				
 				switch(j) {
@@ -401,6 +405,8 @@ public class GenerateDocuments extends JFrame {
 						cell.setCellValue(alToursWednesday.get(i).get(j));
 						break;
 					default:
+						cell.setCellStyle(styleDayHour);
+						cell.setCellValue("");
 						break;
 				}
 			}
@@ -411,7 +417,7 @@ public class GenerateDocuments extends JFrame {
 		for(int i = 0; i < alToursThursday.size(); i++) {
 			row = sheet.getRow(i+7);
 			
-			for(int j = 0; j < 6; j++) {
+			for(int j = 0; j < 8; j++) {
 				cell = row.createCell(j);;
 				
 				switch(j) {
@@ -440,6 +446,8 @@ public class GenerateDocuments extends JFrame {
 						cell.setCellValue(alToursThursday.get(i).get(j));
 						break;
 					default:
+						cell.setCellStyle(styleDayHour);
+						cell.setCellValue("");
 						break;
 				}
 			}
@@ -450,7 +458,7 @@ public class GenerateDocuments extends JFrame {
 		for(int i = 0; i < alToursFriday.size(); i++) {
 			row = sheet.getRow(i+7);
 			
-			for(int j = 0; j < 6; j++) {
+			for(int j = 0; j < 8; j++) {
 				cell = row.createCell(j);;
 				
 				switch(j) {
@@ -479,6 +487,8 @@ public class GenerateDocuments extends JFrame {
 						cell.setCellValue(alToursFriday.get(i).get(j));
 						break;
 					default:
+						cell.setCellStyle(styleDayHour);
+						cell.setCellValue("");
 						break;
 				}
 			}
@@ -489,7 +499,7 @@ public class GenerateDocuments extends JFrame {
 		for(int i = 0; i < alToursSaturday.size(); i++) {
 			row = sheet.getRow(i+7);
 			
-			for(int j = 0; j < 6; j++) {
+			for(int j = 0; j < 9; j++) {
 				cell = row.createCell(j);;
 				
 				switch(j) {
@@ -518,6 +528,8 @@ public class GenerateDocuments extends JFrame {
 						cell.setCellValue(alToursSaturday.get(i).get(j));
 						break;
 					default:
+						cell.setCellStyle(styleDayHour);
+						cell.setCellValue("");
 						break;
 				}
 			}
@@ -528,7 +540,7 @@ public class GenerateDocuments extends JFrame {
 		for(int i = 0; i < alToursSunday.size(); i++) {
 			row = sheet.getRow(i+7);
 			
-			for(int j = 0; j < 6; j++) {
+			for(int j = 0; j < 8; j++) {
 				cell = row.createCell(j);;
 				
 				switch(j) {
@@ -557,6 +569,8 @@ public class GenerateDocuments extends JFrame {
 						cell.setCellValue(alToursSunday.get(i).get(j));
 						break;
 					default:
+						cell.setCellStyle(styleDayHour);
+						cell.setCellValue("");
 						break;
 				}
 			}

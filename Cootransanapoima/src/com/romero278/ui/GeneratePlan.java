@@ -24,6 +24,7 @@ public class GeneratePlan extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
+	boolean confirm = false;
 	String nameCompany;
 	ArrayList<ArrayList<String>> alPlan = new ArrayList<>();
 	
@@ -100,8 +101,12 @@ public class GeneratePlan extends JFrame {
 		
 		btnGenerate.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(newPlan()) {
+			public void actionPerformed(ActionEvent e) {				
+				do {
+					 newPlan();
+				} while (confirm == false);
+				
+				if(confirm) {
 					JOptionPane.showMessageDialog(null, "Rodamiento generado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
 					btnPrint.setVisible(true);
 				} else {
@@ -128,9 +133,7 @@ public class GeneratePlan extends JFrame {
 		});
 	}
 	
-	boolean newPlan() {
-		boolean request = false;
-		
+	void newPlan() {		
 		alPlan = new ArrayList<>();
 		
 		DataPlan plan = new DataPlan();
@@ -158,16 +161,14 @@ public class GeneratePlan extends JFrame {
 		int iterations = 0;
 		
 		while(sizeTours != alPlan.size()) {
-//			System.out.println("iteration: " + iterations);
+			System.out.println("iteration: " + iterations);
 			
 			if(iterations > 10) {
 				iterations = 0;
-				request = false;
+				confirm = false;
 				break;
 			} else {
 				randomBegin = (int) (Math.random() * sizeMobiles);
-				
-				randomBegin = 15;
 				
 				for(int i = 0; i < sizeMobiles; i++) {
 					if(i >= randomBegin) {
@@ -322,10 +323,8 @@ public class GeneratePlan extends JFrame {
 //		System.out.println("Plan size: " + alPlan.size());
 		
 		if(sizeTours == alPlan.size() && alPlan.get(alPlan.size()-1).get(1).equals(alTours.get(alTours.size()-1).get(0))) {
-			request = true;
+			confirm = true;
 		}
-		
-		return request;
 	}
 	
 	void goBack() {
