@@ -153,12 +153,12 @@ public class GenerateDocuments extends JFrame {
 					
 					try {
 						modifyDocumentGeneral();
+						JOptionPane.showMessageDialog(null, "Documento generado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+						repeatDocGen = true;
 					} catch (IOException e1) {
+						JOptionPane.showMessageDialog(null, "Ha ocurrido un error generando este documento", "Error", JOptionPane.ERROR_MESSAGE);
 						e1.printStackTrace();
 					}
-					
-					JOptionPane.showMessageDialog(null, "Documento generado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
-					repeatDocGen = true;
 				} else {
 					JOptionPane.showMessageDialog(null, "Ya has generado este documento", "Error", JOptionPane.ERROR_MESSAGE);
 				}
@@ -174,12 +174,14 @@ public class GenerateDocuments extends JFrame {
 					
 					try {
 						modifyDocumentEachMobile();
+						JOptionPane.showMessageDialog(null, "Documento generado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+						repeatDocEach = true;
 					} catch (IOException e1) {
+						JOptionPane.showMessageDialog(null, "Ha ocurrido un error generando este documento", "Error", JOptionPane.ERROR_MESSAGE);
 						e1.printStackTrace();
 					}
 					
-					JOptionPane.showMessageDialog(null, "Documento generado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
-					repeatDocEach = true;
+					
 				} else {
 					JOptionPane.showMessageDialog(null, "Ya has generado este documento", "Error", JOptionPane.ERROR_MESSAGE);
 				}
@@ -269,7 +271,7 @@ public class GenerateDocuments extends JFrame {
 	}
 	
 	void modifyDocumentGeneral() throws IOException {		
-		FileInputStream file = new FileInputStream(new File("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\PlantillaTestJava.xlsx"));
+		FileInputStream file = new FileInputStream(new File("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\Java\\PlantillaPlanGeneral.xlsx"));
 		
 		XSSFWorkbook wb = new XSSFWorkbook(file);
 		XSSFSheet sheet;
@@ -527,7 +529,7 @@ public class GenerateDocuments extends JFrame {
 		for(int i = 0; i < alToursSaturday.size(); i++) {
 			row = sheet.getRow(i+7);
 			
-			for(int j = 0; j < 9; j++) {
+			for(int j = 0; j < 8; j++) {
 				cell = row.createCell(j);;
 				
 				switch(j) {
@@ -606,7 +608,7 @@ public class GenerateDocuments extends JFrame {
 		
 		file.close();
 		
-		FileOutputStream output = new FileOutputStream("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\PlantillaTestJava.xlsx");
+		FileOutputStream output = new FileOutputStream("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\Java\\Resultados\\RodamientoGeneral.xlsx");
 		wb.write(output);
 		output.close();
 		wb.close();
@@ -615,7 +617,7 @@ public class GenerateDocuments extends JFrame {
 	void modifyDocumentEachMobile() throws IOException {
 		alActiveMobiles = plan.getActiveMobiles();
 		
-		FileInputStream file = new FileInputStream(new File("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\PlantillaPlanIndividual.xlsx"));
+		FileInputStream file = new FileInputStream(new File("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\Java\\PlantillaPlanIndividual.xlsx"));
 		
 		XSSFWorkbook wb = new XSSFWorkbook(file);
 		XSSFSheet sheet;
@@ -627,20 +629,21 @@ public class GenerateDocuments extends JFrame {
 		String ownerName = "";
 		
 		XSSFFont fontOwner = wb.createFont();
-		fontOwner.setFontHeightInPoints((short) 20);
+		fontOwner.setFontHeightInPoints((short) 18);
 		fontOwner.setFontName("Arial");
 		
 		XSSFFont fontMobile = wb.createFont();
-		fontMobile.setFontHeightInPoints((short) 20);
+		fontMobile.setFontHeightInPoints((short) 18);
 		fontMobile.setFontName("Arial");
 		fontMobile.setBold(true);
 		
 		XSSFFont fontTitle = wb.createFont();
-		fontTitle.setFontHeightInPoints((short) 14);
+		fontTitle.setFontHeightInPoints((short) 13);
 		fontTitle.setFontName("Arial");
+		fontTitle.setBold(true);
 		
 		XSSFFont fontNormal = wb.createFont();
-		fontNormal.setFontHeightInPoints((short) 14);
+		fontNormal.setFontHeightInPoints((short) 13);
 		
 		CellStyle styleOwner = wb.createCellStyle();
 		styleOwner.setAlignment(HorizontalAlignment.CENTER);
@@ -697,7 +700,7 @@ public class GenerateDocuments extends JFrame {
 			
 			ownerName = plan.getCompleteNameOwner(alActiveMobiles.get(i).get(0)); 
 			
-			numRow = 4;
+			numRow = 3;
 			
 			row = sheet.getRow(numRow);			
 			cell = row.createCell(0);
@@ -783,7 +786,6 @@ public class GenerateDocuments extends JFrame {
 			// --- MARTES
 			
 			numRow++;
-			numRow++;
 			
 			numColumn = 0;
 			row = sheet.getRow(numRow);
@@ -854,7 +856,6 @@ public class GenerateDocuments extends JFrame {
 			
 			// --- MIERCOLES
 			
-			numRow++;
 			numRow++;
 			
 			numColumn = 0;
@@ -927,7 +928,6 @@ public class GenerateDocuments extends JFrame {
 			// --- JUEVES
 			
 			numRow++;
-			numRow++;
 			
 			numColumn = 0;
 			row = sheet.getRow(numRow);
@@ -998,7 +998,6 @@ public class GenerateDocuments extends JFrame {
 			
 			// --- VIERNES
 			
-			numRow++;
 			numRow++;
 			
 			numColumn = 0;
@@ -1071,7 +1070,6 @@ public class GenerateDocuments extends JFrame {
 			// --- SABADO
 			
 			numRow++;
-			numRow++;
 			
 			numColumn = 0;
 			row = sheet.getRow(numRow);
@@ -1142,7 +1140,6 @@ public class GenerateDocuments extends JFrame {
 			
 			// --- DOMINGO
 			
-			numRow++;
 			numRow++;
 			
 			numColumn = 0;
@@ -1215,7 +1212,7 @@ public class GenerateDocuments extends JFrame {
 		
 		file.close();
 		
-		FileOutputStream output = new FileOutputStream("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\PlantillaTestIndJava.xlsx");
+		FileOutputStream output = new FileOutputStream("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\Java\\Resultados\\RodamientoIndividual.xlsx");
 		wb.write(output);
 		output.close();
 		wb.close();
