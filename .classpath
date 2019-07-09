@@ -3,13 +3,13 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="Cootransanapoima/src"/>
 	<classpathentry kind="src" path="img"/>
-	<classpathentry kind="lib" path="C:/Users/DAVID  ROMERO M/eclipse-workspace/Libraries/jcalendar-1.4.jar"/>
-	<classpathentry kind="lib" path="C:/Users/DAVID  ROMERO M/eclipse-workspace/Libraries/mysql-connector-java-5.1.18-bin.jar"/>
 	<classpathentry kind="lib" path="C:/Users/DAVID  ROMERO M/Documents/Java/Librerias/Excel/poi-4.1.0/lib/commons-collections4-4.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/DAVID  ROMERO M/Documents/Java/Librerias/Excel/poi-4.1.0/lib/commons-compress-1.18.jar"/>
 	<classpathentry kind="lib" path="C:/Users/DAVID  ROMERO M/Documents/Java/Librerias/Excel/poi-4.1.0/poi-4.1.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/DAVID  ROMERO M/Documents/Java/Librerias/Excel/poi-4.1.0/poi-ooxml-4.1.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/DAVID  ROMERO M/Documents/Java/Librerias/Excel/poi-4.1.0/poi-ooxml-schemas-4.1.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/DAVID  ROMERO M/Documents/Java/Librerias/Excel/poi-4.1.0/ooxml-lib/xmlbeans-3.1.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/DAVID  ROMERO M/Documents/Java/Librerias/Calendar/jcalendar-1.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/DAVID  ROMERO M/Documents/Java/Librerias/MySQL/mysql-connector-java-5.1.18-bin.jar"/>
 	<classpathentry kind="output" path="Cootransanapoima/bin"/>
 </classpath>

@@ -54,7 +54,7 @@ public class MainMenu extends JFrame {
 		        }
 		};
 		
-		setIconImage(Toolkit.getDefaultToolkit().getImage("img/logo_anapoima.png").getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("logo_anapoima.png")).getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
 
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -65,10 +65,10 @@ public class MainMenu extends JFrame {
 		JLabel subtitle = new JLabel("Elige una opción");
 		JLabel lGenerate = new JLabel("Puedes generar el plan de rodamiento semanal");
 		JLabel lEdit = new JLabel("Puedes configurar las rutas, los móviles, entre otros aspectos");
-		JButton btnGenerate = new JButton("Generar plan", new ImageIcon("img/start.png"));
-		JButton btnEdit = new JButton("Configuración", new ImageIcon("img/config.png"));
+		JButton btnGenerate = new JButton("Generar plan", new ImageIcon(getClass().getClassLoader().getResource("start.png")));
+		JButton btnEdit = new JButton("Configuración", new ImageIcon(getClass().getClassLoader().getResource("config.png")));
 		
-		ImageIcon logo = new ImageIcon(new ImageIcon("img/logo_anapoima.png").getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_AREA_AVERAGING));
+		ImageIcon logo = new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("logo_anapoima.png")).getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_AREA_AVERAGING));
 		lImageLogo.setIcon(logo);
 		
 		btnGenerate.setPreferredSize(new Dimension(200, 36));

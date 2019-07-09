@@ -66,7 +66,7 @@ public class ModifyRoute extends JFrame {
 		        }
 		};
 		
-		setIconImage(Toolkit.getDefaultToolkit().getImage("img/logo_anapoima.png").getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("logo_anapoima.png")).getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
 		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -86,10 +86,10 @@ public class ModifyRoute extends JFrame {
 		JCheckBox chTypeMicro = new JCheckBox("Microbus");
 		JCheckBox chTypeCamp = new JCheckBox("Campero / Camioneta");
 		JCheckBox chTypeWag = new JCheckBox("Wagon");
-		JButton btnModify = new JButton("Modificar", new ImageIcon("img/modify.png"));
-		JButton btnBack = new JButton("Atrás", new ImageIcon("img/back.png"));
+		JButton btnModify = new JButton("Modificar", new ImageIcon(getClass().getClassLoader().getResource("modify.png")));
+		JButton btnBack = new JButton("Atrás", new ImageIcon(getClass().getClassLoader().getResource("back.png")));
 		
-		ImageIcon logo = new ImageIcon(new ImageIcon("img/logo_anapoima.png").getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_AREA_AVERAGING));
+		ImageIcon logo = new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("logo_anapoima.png")).getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_AREA_AVERAGING));
 		lImageLogo.setIcon(logo);
 		
 		btnModify.setPreferredSize(new Dimension(200, 36));

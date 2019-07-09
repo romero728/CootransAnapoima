@@ -54,7 +54,7 @@ public class ConfigMenu extends JFrame {
 		        }
 		};
 		
-		setIconImage(Toolkit.getDefaultToolkit().getImage("img/logo_anapoima.png").getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("logo_anapoima.png")).getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
 		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -68,14 +68,14 @@ public class ConfigMenu extends JFrame {
 		JLabel lPlaces = new JLabel("Lugares a los que se accede por medio de las rutas");
 		JLabel lRoutes = new JLabel("Rutas que realizan los móviles");
 		JLabel lTours = new JLabel("Día y hora en el que se realizan las rutas");
-		JButton btnOwners = new JButton("Propietarios", new ImageIcon("img/owner.png"));
-		JButton btnMobile = new JButton("Móviles", new ImageIcon("img/mobile.png"));
-		JButton btnPlaces = new JButton("Lugares", new ImageIcon("img/place.png"));
-		JButton btnRoutes = new JButton("Rutas", new ImageIcon("img/route.png"));
-		JButton btnTours = new JButton("Recorridos", new ImageIcon("img/tour.png"));
-		JButton btnBack = new JButton("Atrás", new ImageIcon("img/back.png"));
+		JButton btnOwners = new JButton("Propietarios", new ImageIcon(getClass().getClassLoader().getResource("owner.png")));
+		JButton btnMobile = new JButton("Móviles", new ImageIcon(getClass().getClassLoader().getResource("mobile.png")));
+		JButton btnPlaces = new JButton("Lugares", new ImageIcon(getClass().getClassLoader().getResource("place.png")));
+		JButton btnRoutes = new JButton("Rutas", new ImageIcon(getClass().getClassLoader().getResource("route.png")));
+		JButton btnTours = new JButton("Recorridos", new ImageIcon(getClass().getClassLoader().getResource("tour.png")));
+		JButton btnBack = new JButton("Atrás", new ImageIcon(getClass().getClassLoader().getResource("back.png")));
 		
-		ImageIcon logo = new ImageIcon(new ImageIcon("img/logo_anapoima.png").getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_AREA_AVERAGING));
+		ImageIcon logo = new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("logo_anapoima.png")).getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_AREA_AVERAGING));
 		lImageLogo.setIcon(logo);
 		
 		btnOwners.setPreferredSize(new Dimension(200, 36));

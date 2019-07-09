@@ -55,7 +55,7 @@ public class ConfigOptions extends JFrame {
 		        }
 		};
 		
-		setIconImage(Toolkit.getDefaultToolkit().getImage("img/logo_anapoima.png").getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("logo_anapoima.png")).getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
 		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -84,11 +84,11 @@ public class ConfigOptions extends JFrame {
 		JLabel subtitle = new JLabel("Elige una opción");
 		JLabel lAdd = new JLabel("Puedes agregar un nuevo " + option.toLowerCase());
 		JLabel lList = new JLabel("Puedes ver, modificar o borrar un " + option.toLowerCase());
-		JButton btnAdd = new JButton("Agregar " + option.toLowerCase(), new ImageIcon("img/add.png"));
-		JButton btnList = new JButton("Ver todos los " + flag.toLowerCase(), new ImageIcon("img/list.png"));
-		JButton btnBack = new JButton("Atrás", new ImageIcon("img/back.png"));
+		JButton btnList = new JButton("Ver todos los " + flag.toLowerCase(), new ImageIcon(getClass().getClassLoader().getResource("list.png")));
+		JButton btnAdd = new JButton("Agregar " + option.toLowerCase(), new ImageIcon(getClass().getClassLoader().getResource("add.png")));
+		JButton btnBack = new JButton("Atrás", new ImageIcon(getClass().getClassLoader().getResource("back.png")));
 		
-		ImageIcon logo = new ImageIcon(new ImageIcon("img/logo_anapoima.png").getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_AREA_AVERAGING));
+		ImageIcon logo = new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("logo_anapoima.png")).getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_AREA_AVERAGING));
 		lImageLogo.setIcon(logo);
 		
 		btnAdd.setPreferredSize(new Dimension(350, 36));

@@ -66,7 +66,7 @@ public class ListRoutes extends JFrame {
 		        }
 		};
 		
-		setIconImage(Toolkit.getDefaultToolkit().getImage("img/logo_anapoima.png").getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("logo_anapoima.png")).getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
 		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -89,11 +89,11 @@ public class ListRoutes extends JFrame {
 		JScrollPane scrollType = new JScrollPane(taType);
 		JComboBox<String> cbRoute = new JComboBox<String>();
 		JButton btnSelect = new JButton("Seleccionar");
-		JButton btnModify = new JButton("Modificar", new ImageIcon("img/modify.png"));
-		JButton btnDelete = new JButton("Eliminar", new ImageIcon("img/delete.png"));
-		JButton btnBack = new JButton("Atrás", new ImageIcon("img/back.png"));
+		JButton btnModify = new JButton("Modificar", new ImageIcon(getClass().getClassLoader().getResource("modify.png")));
+		JButton btnDelete = new JButton("Eliminar", new ImageIcon(getClass().getClassLoader().getResource("delete.png")));
+		JButton btnBack = new JButton("Atrás", new ImageIcon(getClass().getClassLoader().getResource("back.png")));
 		
-		ImageIcon logo = new ImageIcon(new ImageIcon("img/logo_anapoima.png").getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_AREA_AVERAGING));
+		ImageIcon logo = new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("logo_anapoima.png")).getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_AREA_AVERAGING));
 		lImageLogo.setIcon(logo);
 		
 		tfPlaceEnd.setEditable(false);

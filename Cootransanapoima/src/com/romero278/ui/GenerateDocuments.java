@@ -97,7 +97,7 @@ public class GenerateDocuments extends JFrame {
 		        }
 		};
 		
-		setIconImage(Toolkit.getDefaultToolkit().getImage("img/logo_anapoima.png").getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("logo_anapoima.png")).getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
 		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -108,11 +108,11 @@ public class GenerateDocuments extends JFrame {
 		JLabel subtitle = new JLabel("Elige una opción");
 		JLabel lGeneral = new JLabel("Se genera documento para los despachadores");
 		JLabel lEach = new JLabel("Se genera documento para los conductores");
-		JButton btnGeneral = new JButton("Documento general", new ImageIcon("img/excel-dark.png"));
-		JButton btnEach = new JButton("Documento de cada móvil", new ImageIcon("img/excel.png"));
-		JButton btnBack = new JButton("Atrás", new ImageIcon("img/back.png"));
+		JButton btnGeneral = new JButton("Documento general", new ImageIcon(getClass().getClassLoader().getResource("excel-dark.png")));
+		JButton btnEach = new JButton("Documento de cada móvil", new ImageIcon(getClass().getClassLoader().getResource("excel.png")));
+		JButton btnBack = new JButton("Atrás", new ImageIcon(getClass().getClassLoader().getResource("back.png")));
 		
-		ImageIcon logo = new ImageIcon(new ImageIcon("img/logo_anapoima.png").getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_AREA_AVERAGING));
+		ImageIcon logo = new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("logo_anapoima.png")).getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_AREA_AVERAGING));
 		lImageLogo.setIcon(logo);
 		
 		btnGeneral.setPreferredSize(new Dimension(320, 36));

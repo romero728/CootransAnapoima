@@ -62,7 +62,7 @@ public class GeneratePlan extends JFrame {
 		        }
 		};
 		
-		setIconImage(Toolkit.getDefaultToolkit().getImage("img/logo_anapoima.png").getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("logo_anapoima.png")).getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
 		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -76,11 +76,11 @@ public class GeneratePlan extends JFrame {
 		JLabel progress = new JLabel("Este proceso durará 20 segundos aprox.");
 //		JProgressBar progress = new JProgressBar();
 		JTextField tfDate = new JTextField(30);
-		JButton btnGenerate = new JButton("Generar plan", new ImageIcon("img/start.png"));
-		JButton btnPrint = new JButton("Generar documento de Excel", new ImageIcon("img/excel.png"));
-		JButton btnBack = new JButton("Atrás", new ImageIcon("img/back.png"));
+		JButton btnGenerate = new JButton("Generar plan", new ImageIcon(getClass().getClassLoader().getResource("start.png")));
+		JButton btnPrint = new JButton("Generar documento de Excel", new ImageIcon(getClass().getClassLoader().getResource("excel.png")));
+		JButton btnBack = new JButton("Atrás", new ImageIcon(getClass().getClassLoader().getResource("back.png")));
 		
-		ImageIcon logo = new ImageIcon(new ImageIcon("img/logo_anapoima.png").getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_AREA_AVERAGING));
+		ImageIcon logo = new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("logo_anapoima.png")).getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_AREA_AVERAGING));
 		lImageLogo.setIcon(logo);
 		
 		lPrint.setVisible(false);
