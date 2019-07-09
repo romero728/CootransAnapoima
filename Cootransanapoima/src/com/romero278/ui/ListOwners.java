@@ -3,13 +3,23 @@ package com.romero278.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -31,6 +41,7 @@ public class ListOwners extends JFrame {
 	String flag, option, idOwner, completeNameOwner, documentOwner, birthdayOwner, addressOwner, cityOwner, phoneOwner, emailOwner;
 	String[] dataOwner;
 	
+	@SuppressWarnings("serial")
 	public ListOwners(String fg, String op) {
 		flag = fg;
 		option = op;
@@ -42,11 +53,26 @@ public class ListOwners extends JFrame {
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		contentPane = new JPanel();
+		contentPane = new JPanel() {
+			 protected void paintComponent(Graphics g) {
+		            super.paintComponent(g);
+		            Color color1 = new Color(250, 244, 207);
+		            Color color2 = new Color(200, 235, 208);
+		            Graphics2D g2d = (Graphics2D) g;
+		            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		            GradientPaint gp = new GradientPaint(0, 0, color1, 0, getHeight(), color2);
+		            g2d.setPaint(gp);
+		            g2d.fillRect(0, 0, getWidth(), getHeight());
+		        }
+		};
+		
+		setIconImage(Toolkit.getDefaultToolkit().getImage("img/logo_anapoima.png").getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
+		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
+		JLabel lImageLogo = new JLabel();
 		JLabel title = new JLabel("Listado de " + flag.toLowerCase());
 		JLabel lSelectOwner1 = new JLabel("Selecciona un " + option.toLowerCase());
 		JLabel lSelectOwner2 = new JLabel("para ver su información");
@@ -68,9 +94,12 @@ public class ListOwners extends JFrame {
 		JScrollPane scroll = new JScrollPane(taList);
 		JComboBox<String> cbOwner = new JComboBox<String>();
 		JButton btnSelect = new JButton("Seleccionar");
-		JButton btnModify = new JButton("Modificar");
-		JButton btnDelete = new JButton("Eliminar");
-		JButton btnBack = new JButton("Atrás");
+		JButton btnModify = new JButton("Modificar", new ImageIcon("img/modify.png"));
+		JButton btnDelete = new JButton("Eliminar", new ImageIcon("img/delete.png"));
+		JButton btnBack = new JButton("Atrás", new ImageIcon("img/back.png"));
+		
+		ImageIcon logo = new ImageIcon(new ImageIcon("img/logo_anapoima.png").getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_AREA_AVERAGING));
+		lImageLogo.setIcon(logo);
 		
 		tfName.setEditable(false);
 		tfDocument.setEditable(false);
@@ -111,6 +140,7 @@ public class ListOwners extends JFrame {
 		tfPhone.setBorder(null);
 		tfEmail.setBorder(null);
 		
+		cbOwner.setPreferredSize(new Dimension(250, 30));		
 		btnModify.setPreferredSize(new Dimension(150, 30));
 		btnDelete.setPreferredSize(new Dimension(150, 30));
 		btnBack.setPreferredSize(new Dimension(100, 30));
@@ -122,68 +152,71 @@ public class ListOwners extends JFrame {
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, title, 600, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, title, 100, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, scroll, 150, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.WEST, scroll, 80, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, scroll, 180, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lSelectOwner1, 600, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lSelectOwner1, 580, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, lSelectOwner1, 250, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lSelectOwner2, 600, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lSelectOwner2, 580, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, lSelectOwner2, 270, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, cbOwner, 600, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, cbOwner, 580, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, cbOwner, 320, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnSelect, 600, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnSelect, 580, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, btnSelect, 350, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, lName, 700, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.WEST, lName, 720, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, lName, 180, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, tfName, 790, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.WEST, tfName, 810, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, tfName, 180, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, lDocument, 700, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.WEST, lDocument, 720, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, lDocument, 220, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, tfDocument, 820, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.WEST, tfDocument, 840, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, tfDocument, 220, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, lBirthdate, 700, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.WEST, lBirthdate, 720, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, lBirthdate, 260, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, tfBirthdate, 910, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.WEST, tfBirthdate, 930, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, tfBirthdate, 260, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, lAddress, 700, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.WEST, lAddress, 720, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, lAddress, 300, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, tfAddress, 800, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.WEST, tfAddress, 820, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, tfAddress, 300, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, lCity, 700, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.WEST, lCity, 720, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, lCity, 340, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, tfCity, 780, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.WEST, tfCity, 800, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, tfCity, 340, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, lPhone, 700, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.WEST, lPhone, 720, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, lPhone, 380, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, tfPhone, 795, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.WEST, tfPhone, 815, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, tfPhone, 380, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, lEmail, 700, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.WEST, lEmail, 720, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, lEmail, 420, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, tfEmail, 780, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.WEST, tfEmail, 800, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, tfEmail, 420, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, btnModify, 720, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.WEST, btnModify, 740, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, btnModify, 500, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, btnDelete, 890, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.WEST, btnDelete, 910, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, btnDelete, 500, SpringLayout.NORTH, container);
+		
+		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lImageLogo, 600, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lImageLogo, 500, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnBack, 100, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, btnBack, 500, SpringLayout.NORTH, container);
@@ -210,6 +243,7 @@ public class ListOwners extends JFrame {
 		container.add(tfEmail);
 		container.add(btnModify);
 		container.add(btnDelete);
+		container.add(lImageLogo);
 		container.add(btnBack);
 		
 		title.setFont(new Font("Arial", Font.BOLD, 40));
@@ -217,7 +251,9 @@ public class ListOwners extends JFrame {
 		
 		taList.setFont(new Font("Arial", Font.BOLD, 16));
 		taList.setForeground(new Color (116, 128, 148));
-		taList.setBackground(new Color (238, 238, 238));
+		taList.setOpaque(false);
+		scroll.setOpaque(false);
+		scroll.getViewport().setOpaque(false);
 		
 		lSelectOwner1.setFont(new Font("Arial", Font.BOLD, 12));
 		lSelectOwner1.setForeground(new Color (116, 128, 148));
@@ -227,77 +263,191 @@ public class ListOwners extends JFrame {
 		
 		cbOwner.setFont(new Font("Arial", Font.PLAIN, 20));
 		cbOwner.setForeground(new Color (116, 128, 148));
+		cbOwner.setBackground(new Color(250, 244, 207));
 		
-		btnSelect.setFont(new Font("Arial", Font.PLAIN, 20));
-		btnSelect.setForeground(new Color (116, 128, 148));
+		btnSelect.setFont(new Font("Arial", Font.BOLD, 20));
+		btnSelect.setForeground(Color.WHITE);
+		btnSelect.setBackground(new Color(136, 212, 152));
+		btnSelect.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		lName.setFont(new Font("Arial", Font.BOLD, 20));
 		lName.setForeground(new Color (116, 128, 148));
 		
 		tfName.setFont(new Font("Arial", Font.PLAIN, 20));
 		tfName.setForeground(new Color (116, 128, 148));
+		tfName.setOpaque(false);
 		
 		lDocument.setFont(new Font("Arial", Font.BOLD, 20));
 		lDocument.setForeground(new Color (116, 128, 148));
 		
 		tfDocument.setFont(new Font("Arial", Font.PLAIN, 20));
 		tfDocument.setForeground(new Color (116, 128, 148));
+		tfDocument.setOpaque(false);
 		
 		lBirthdate.setFont(new Font("Arial", Font.BOLD, 20));
 		lBirthdate.setForeground(new Color (116, 128, 148));
 		
 		tfBirthdate.setFont(new Font("Arial", Font.PLAIN, 20));
 		tfBirthdate.setForeground(new Color (116, 128, 148));
+		tfBirthdate.setOpaque(false);
 		
 		lAddress.setFont(new Font("Arial", Font.BOLD, 20));
 		lAddress.setForeground(new Color (116, 128, 148));
 		
 		tfAddress.setFont(new Font("Arial", Font.PLAIN, 20));
 		tfAddress.setForeground(new Color (116, 128, 148));
+		tfAddress.setOpaque(false);
 		
 		lCity.setFont(new Font("Arial", Font.BOLD, 20));
 		lCity.setForeground(new Color (116, 128, 148));
 		
 		tfCity.setFont(new Font("Arial", Font.PLAIN, 20));
 		tfCity.setForeground(new Color (116, 128, 148));
+		tfCity.setOpaque(false);
 		
 		lPhone.setFont(new Font("Arial", Font.BOLD, 20));
 		lPhone.setForeground(new Color (116, 128, 148));
 		
 		tfPhone.setFont(new Font("Arial", Font.PLAIN, 20));
 		tfPhone.setForeground(new Color (116, 128, 148));
+		tfPhone.setOpaque(false);
 		
 		lEmail.setFont(new Font("Arial", Font.BOLD, 20));
 		lEmail.setForeground(new Color (116, 128, 148));
 		
 		tfEmail.setFont(new Font("Arial", Font.PLAIN, 20));
 		tfEmail.setForeground(new Color (116, 128, 148));
+		tfEmail.setOpaque(false);
 		
 		btnModify.setFont(new Font("Arial", Font.BOLD, 20));
 		btnModify.setForeground(Color.WHITE);
 		btnModify.setBackground(new Color (25, 127, 210));
+		btnModify.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		btnDelete.setFont(new Font("Arial", Font.BOLD, 20));
 		btnDelete.setForeground(Color.WHITE);
 		btnDelete.setBackground(new Color (235, 132, 20));
+		btnDelete.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		btnBack.setFont(new Font("Arial", Font.BOLD, 14));
 		btnBack.setForeground(Color.WHITE);
 		btnBack.setBackground(new Color (196, 69, 59));
 		
+		btnSelect.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnSelect.setBackground(new Color(136, 212, 152));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnSelect.setBackground(new Color(136, 212, 152));
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnSelect.setBackground(new Color(109, 186, 163));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+
+		btnModify.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnModify.setBackground(new Color (25, 127, 210));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnModify.setBackground(new Color (25, 127, 210));
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnModify.setBackground(new Color(35, 81, 152));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+
+		btnDelete.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnDelete.setBackground(new Color (235, 132, 20));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnDelete.setBackground(new Color (235, 132, 20));
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnDelete.setBackground(new Color(177, 122, 41));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 		/* --- Logic Part --- */
 		
+		SQLOwner ow = new SQLOwner();
+		ArrayList<String> alOwners = new ArrayList<String>();
+		ArrayList<String> alIdOwner = new ArrayList<String>();
 		String acumList = "", replaceOwner;
 		String[] split;
-		SQLOwner ow = new SQLOwner();
-		ArrayList<String> alOwners = new ArrayList<String>();		
+		
 		alOwners = ow.listOwners();
 		
 		for(int i = 0; i < alOwners.size(); i++) {
 			replaceOwner = alOwners.get(i).replace('.', '|');
-			split = replaceOwner.split("|");
-			cbOwner.addItem(split[0] + ".");
-			acumList += alOwners.get(i) + "\n";
+			split = replaceOwner.split(Pattern.quote("|"));
+			alIdOwner.add(split[0]);
+			cbOwner.addItem(split[1]);
+			acumList += split[1] + "\n";
 		}
 		
 		taList.setText(acumList);
@@ -311,8 +461,8 @@ public class ListOwners extends JFrame {
 		btnSelect.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String infoOwner = ow.selectOwner(cbOwner.getSelectedItem().toString());
-				dataOwner = infoOwner.split(java.util.regex.Pattern.quote("|"));
+				String infoOwner = ow.selectOwner(alIdOwner.get(cbOwner.getSelectedIndex()));
+				dataOwner = infoOwner.split(Pattern.quote("|"));
 				
 				idOwner = dataOwner[0];
 				completeNameOwner = dataOwner[1] + " " + dataOwner[2];
@@ -359,7 +509,6 @@ public class ListOwners extends JFrame {
 				try {
 					mod = new ModifyOwner(flag, option, dataOwner);
 				} catch (ParseException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				

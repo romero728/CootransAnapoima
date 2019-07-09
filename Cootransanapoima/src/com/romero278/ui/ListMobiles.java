@@ -3,13 +3,22 @@ package com.romero278.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -31,6 +40,7 @@ public class ListMobiles extends JFrame {
 	String flag, option, idMobile;
 	String[] dataMobile;
 	
+	@SuppressWarnings("serial")
 	public ListMobiles(String fg, String op) {
 		flag = fg;
 		option = op;
@@ -42,11 +52,26 @@ public class ListMobiles extends JFrame {
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		contentPane = new JPanel();
+		contentPane = new JPanel() {
+			 protected void paintComponent(Graphics g) {
+		            super.paintComponent(g);
+		            Color color1 = new Color(250, 244, 207);
+		            Color color2 = new Color(200, 235, 208);
+		            Graphics2D g2d = (Graphics2D) g;
+		            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		            GradientPaint gp = new GradientPaint(0, 0, color1, 0, getHeight(), color2);
+		            g2d.setPaint(gp);
+		            g2d.fillRect(0, 0, getWidth(), getHeight());
+		        }
+		};
+		
+		setIconImage(Toolkit.getDefaultToolkit().getImage("img/logo_anapoima.png").getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
+		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
+		JLabel lImageLogo = new JLabel();
 		JLabel title = new JLabel("Listado de " + flag.toLowerCase());
 		JLabel lSelectMobile1 = new JLabel("Selecciona un " + option.toLowerCase());
 		JLabel lSelectMobile2 = new JLabel("para ver su información");
@@ -67,14 +92,17 @@ public class ListMobiles extends JFrame {
 		JTextField tfModel = new JTextField(12);
 		JTextField tfLicensePlate = new JTextField(8);
 		JTextField tfCapacity = new JTextField(4);
-		JTextField tfType = new JTextField(8);
+		JTextField tfType = new JTextField(14);
 		JTextField tfActive = new JTextField(4);
 		JScrollPane scroll = new JScrollPane(taList);
 		JComboBox<String> cbMobile = new JComboBox<String>();
 		JButton btnSelect = new JButton("Seleccionar");
-		JButton btnModify = new JButton("Modificar");
-		JButton btnDelete = new JButton("Eliminar");
-		JButton btnBack = new JButton("Atrás");
+		JButton btnModify = new JButton("Modificar", new ImageIcon("img/modify.png"));
+		JButton btnDelete = new JButton("Eliminar", new ImageIcon("img/delete.png"));
+		JButton btnBack = new JButton("Atrás", new ImageIcon("img/back.png"));
+		
+		ImageIcon logo = new ImageIcon(new ImageIcon("img/logo_anapoima.png").getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_AREA_AVERAGING));
+		lImageLogo.setIcon(logo);
 		
 		tfNumber.setEditable(false);
 		tfCompany.setEditable(false);
@@ -194,13 +222,13 @@ public class ListMobiles extends JFrame {
 		springLayout.putConstraint(SpringLayout.WEST, lType, 600, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, lType, 380, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, tfType, 680, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.WEST, tfType, 660, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, tfType, 380, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, lActive, 830, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.WEST, lActive, 900, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, lActive, 380, SpringLayout.NORTH, container);
 		
-		springLayout.putConstraint(SpringLayout.WEST, tfActive, 910, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.WEST, tfActive, 980, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, tfActive, 380, SpringLayout.NORTH, container);
 				
 		springLayout.putConstraint(SpringLayout.WEST, btnModify, 720, SpringLayout.WEST, container);
@@ -208,6 +236,9 @@ public class ListMobiles extends JFrame {
 		
 		springLayout.putConstraint(SpringLayout.WEST, btnDelete, 890, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, btnDelete, 450, SpringLayout.NORTH, container);
+		
+		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lImageLogo, 600, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lImageLogo, 500, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnBack, 100, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, btnBack, 500, SpringLayout.NORTH, container);
@@ -238,6 +269,7 @@ public class ListMobiles extends JFrame {
 		container.add(tfActive);
 		container.add(btnModify);
 		container.add(btnDelete);
+		container.add(lImageLogo);
 		container.add(btnBack);
 		
 		title.setFont(new Font("Arial", Font.BOLD, 40));
@@ -246,6 +278,9 @@ public class ListMobiles extends JFrame {
 		taList.setFont(new Font("Arial", Font.BOLD, 20));
 		taList.setForeground(new Color (116, 128, 148));
 		taList.setBackground(new Color (238, 238, 238));
+		taList.setOpaque(false);
+		scroll.setOpaque(false);
+		scroll.getViewport().setOpaque(false);
 		
 		lSelectMobile1.setFont(new Font("Arial", Font.BOLD, 12));
 		lSelectMobile1.setForeground(new Color (116, 128, 148));
@@ -255,75 +290,188 @@ public class ListMobiles extends JFrame {
 		
 		cbMobile.setFont(new Font("Arial", Font.PLAIN, 20));
 		cbMobile.setForeground(new Color (116, 128, 148));
+		cbMobile.setBackground(new Color(250, 244, 207));
 		
-		btnSelect.setFont(new Font("Arial", Font.PLAIN, 20));
-		btnSelect.setForeground(new Color (116, 128, 148));
+		btnSelect.setFont(new Font("Arial", Font.BOLD, 20));
+		btnSelect.setForeground(Color.WHITE);
+		btnSelect.setBackground(new Color(136, 212, 152));
+		btnSelect.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));	
 		
 		lNumber.setFont(new Font("Arial", Font.BOLD, 20));
 		lNumber.setForeground(new Color (116, 128, 148));
 		
 		tfNumber.setFont(new Font("Arial", Font.PLAIN, 20));
 		tfNumber.setForeground(new Color (116, 128, 148));
+		tfNumber.setOpaque(false);
 		
 		lCompany.setFont(new Font("Arial", Font.BOLD, 20));
 		lCompany.setForeground(new Color (116, 128, 148));
 		
 		tfCompany.setFont(new Font("Arial", Font.PLAIN, 20));
 		tfCompany.setForeground(new Color (116, 128, 148));
+		tfCompany.setOpaque(false);
 		
 		lOwner.setFont(new Font("Arial", Font.BOLD, 20));
 		lOwner.setForeground(new Color (116, 128, 148));
 		
 		tfOwner.setFont(new Font("Arial", Font.PLAIN, 20));
 		tfOwner.setForeground(new Color (116, 128, 148));
+		tfOwner.setOpaque(false);
 		
 		lBrand.setFont(new Font("Arial", Font.BOLD, 20));
 		lBrand.setForeground(new Color (116, 128, 148));
 		
 		tfBrand.setFont(new Font("Arial", Font.PLAIN, 20));
 		tfBrand.setForeground(new Color (116, 128, 148));
+		tfBrand.setOpaque(false);
 		
 		lModel.setFont(new Font("Arial", Font.BOLD, 20));
 		lModel.setForeground(new Color (116, 128, 148));
 		
 		tfModel.setFont(new Font("Arial", Font.PLAIN, 20));
 		tfModel.setForeground(new Color (116, 128, 148));
+		tfModel.setOpaque(false);
 		
 		lLicensePlate.setFont(new Font("Arial", Font.BOLD, 20));
 		lLicensePlate.setForeground(new Color (116, 128, 148));
 		
 		tfLicensePlate.setFont(new Font("Arial", Font.PLAIN, 20));
 		tfLicensePlate.setForeground(new Color (116, 128, 148));
+		tfLicensePlate.setOpaque(false);
 		
 		lCapacity.setFont(new Font("Arial", Font.BOLD, 20));
 		lCapacity.setForeground(new Color (116, 128, 148));
 		
 		tfCapacity.setFont(new Font("Arial", Font.PLAIN, 20));
 		tfCapacity.setForeground(new Color (116, 128, 148));
+		tfCapacity.setOpaque(false);
 		
 		lType.setFont(new Font("Arial", Font.BOLD, 20));
 		lType.setForeground(new Color (116, 128, 148));
 		
 		tfType.setFont(new Font("Arial", Font.PLAIN, 20));
 		tfType.setForeground(new Color (116, 128, 148));
+		tfType.setOpaque(false);
 		
 		lActive.setFont(new Font("Arial", Font.BOLD, 20));
 		lActive.setForeground(new Color (116, 128, 148));
 		
 		tfActive.setFont(new Font("Arial", Font.PLAIN, 20));
 		tfActive.setForeground(new Color (116, 128, 148));
+		tfActive.setOpaque(false);
 		
 		btnModify.setFont(new Font("Arial", Font.BOLD, 20));
 		btnModify.setForeground(Color.WHITE);
 		btnModify.setBackground(new Color (25, 127, 210));
+		btnModify.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		btnDelete.setFont(new Font("Arial", Font.BOLD, 20));
 		btnDelete.setForeground(Color.WHITE);
 		btnDelete.setBackground(new Color (235, 132, 20));
+		btnDelete.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		btnBack.setFont(new Font("Arial", Font.BOLD, 14));
 		btnBack.setForeground(Color.WHITE);
 		btnBack.setBackground(new Color (196, 69, 59));
+		
+		btnSelect.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnSelect.setBackground(new Color(136, 212, 152));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnSelect.setBackground(new Color(136, 212, 152));
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnSelect.setBackground(new Color(109, 186, 163));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+
+		btnModify.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnModify.setBackground(new Color (25, 127, 210));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnModify.setBackground(new Color (25, 127, 210));
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnModify.setBackground(new Color(35, 81, 152));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+
+		btnDelete.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnDelete.setBackground(new Color (235, 132, 20));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnDelete.setBackground(new Color (235, 132, 20));
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnDelete.setBackground(new Color(177, 122, 41));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		
 		/* --- Logic Part --- */
 		

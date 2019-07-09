@@ -3,10 +3,19 @@ package com.romero278.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Cursor;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -14,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -42,7 +52,9 @@ public class GenerateDocuments extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
-	String nameCompany;
+	String nameCompany, rangeDate, nameGeneral, nameEach;
+	boolean repeatData = false;
+	boolean repeatDays = false;
 	boolean repeatDocGen = false;
 	boolean repeatDocEach = false;
 	
@@ -59,8 +71,10 @@ public class GenerateDocuments extends JFrame {
 	ArrayList<ArrayList<String>> alToursSunday = new ArrayList<>();
 	ArrayList<String> alMobiles = new ArrayList<>();
 	
-	public GenerateDocuments(String comp, ArrayList<ArrayList<String>> ap) {
+	@SuppressWarnings("serial")
+	public GenerateDocuments(String comp, String rngDate, ArrayList<ArrayList<String>> ap) {
 		nameCompany = comp;
+		rangeDate = rngDate;
 		alPlan = ap;
 		
 		setTitle("Generar documentos");
@@ -70,21 +84,39 @@ public class GenerateDocuments extends JFrame {
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		contentPane = new JPanel();
+		contentPane = new JPanel() {
+			 protected void paintComponent(Graphics g) {
+		            super.paintComponent(g);
+		            Color color1 = new Color(250, 244, 207);
+		            Color color2 = new Color(200, 235, 208);
+		            Graphics2D g2d = (Graphics2D) g;
+		            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		            GradientPaint gp = new GradientPaint(0, 0, color1, 0, getHeight(), color2);
+		            g2d.setPaint(gp);
+		            g2d.fillRect(0, 0, getWidth(), getHeight());
+		        }
+		};
+		
+		setIconImage(Toolkit.getDefaultToolkit().getImage("img/logo_anapoima.png").getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
+		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
+		JLabel lImageLogo = new JLabel();
 		JLabel title = new JLabel("GENERAR DOCUMENTOS");
 		JLabel subtitle = new JLabel("Elige una opción");
 		JLabel lGeneral = new JLabel("Se genera documento para los despachadores");
 		JLabel lEach = new JLabel("Se genera documento para los conductores");
-		JButton btnGeneral = new JButton("Documento general");
-		JButton btnEach = new JButton("Documento de cada móvil");
-		JButton btnBack = new JButton("Atrás");
+		JButton btnGeneral = new JButton("Documento general", new ImageIcon("img/excel-dark.png"));
+		JButton btnEach = new JButton("Documento de cada móvil", new ImageIcon("img/excel.png"));
+		JButton btnBack = new JButton("Atrás", new ImageIcon("img/back.png"));
 		
-		btnGeneral.setPreferredSize(new Dimension(300, 36));
-		btnEach.setPreferredSize(new Dimension(300, 36));
+		ImageIcon logo = new ImageIcon(new ImageIcon("img/logo_anapoima.png").getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_AREA_AVERAGING));
+		lImageLogo.setIcon(logo);
+		
+		btnGeneral.setPreferredSize(new Dimension(320, 36));
+		btnEach.setPreferredSize(new Dimension(320, 36));
 		btnBack.setPreferredSize(new Dimension(100, 30));
 		
 		Container container = getContentPane();
@@ -92,22 +124,25 @@ public class GenerateDocuments extends JFrame {
 		container.setLayout(springLayout);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, title, 600, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, title, 150, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, title, 120, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, subtitle, 600, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, subtitle, 220, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, subtitle, 190, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnGeneral, 600, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, btnGeneral, 260, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, btnGeneral, 250, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lGeneral, 600, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, lGeneral, 300, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lGeneral, 290, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnEach, 600, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, btnEach, 340, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lEach, 600, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, lEach, 380, SpringLayout.NORTH, container);
+		
+		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lImageLogo, 600, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lImageLogo, 500, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnBack, 100, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, btnBack, 500, SpringLayout.NORTH, container);
@@ -118,6 +153,7 @@ public class GenerateDocuments extends JFrame {
 		container.add(lGeneral);
 		container.add(btnEach);
 		container.add(lEach);
+		container.add(lImageLogo);
 		container.add(btnBack);
 		
 		title.setFont(new Font("Arial", Font.BOLD, 40));
@@ -128,12 +164,16 @@ public class GenerateDocuments extends JFrame {
 		
 		btnGeneral.setFont(new Font("Arial", Font.BOLD, 20));
 		btnGeneral.setForeground(new Color (116, 128, 148));
+		btnGeneral.setBackground(new Color(243, 227, 124));
+		btnGeneral.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		lGeneral.setFont(new Font("Arial", Font.BOLD, 12));
 		lGeneral.setForeground(new Color (116, 128, 148));
 		
 		btnEach.setFont(new Font("Arial", Font.BOLD, 20));
-		btnEach.setForeground(new Color (116, 128, 148));
+		btnEach.setForeground(Color.WHITE);
+		btnEach.setBackground(new Color(136, 212, 152));
+		btnEach.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		lEach.setFont(new Font("Arial", Font.BOLD, 12));
 		lEach.setForeground(new Color (116, 128, 148));
@@ -142,25 +182,109 @@ public class GenerateDocuments extends JFrame {
 		btnBack.setForeground(Color.WHITE);
 		btnBack.setBackground(new Color (196, 69, 59));
 		
+		btnGeneral.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnGeneral.setBackground(new Color(243, 227, 124));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnGeneral.setBackground(new Color(243, 227, 124));
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnGeneral.setBackground(new Color(243, 211, 74));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+
+		btnEach.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnEach.setBackground(new Color(136, 212, 152));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnEach.setBackground(new Color(136, 212, 152));
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnEach.setBackground(new Color(109, 186, 163));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+
 		/* --- Logic part --- */
 		
 		btnGeneral.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(!repeatDocGen) {
-					getData();
-					separatePerDays();
+				int ans = JOptionPane.showConfirmDialog(null, "¿Deseas iniciar el proceso?", "Confirmar", JOptionPane.YES_NO_OPTION);
+				
+				if(ans == JOptionPane.YES_OPTION) {
+					contentPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 					
-					try {
-						modifyDocumentGeneral();
-						JOptionPane.showMessageDialog(null, "Documento generado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
-						repeatDocGen = true;
-					} catch (IOException e1) {
-						JOptionPane.showMessageDialog(null, "Ha ocurrido un error generando este documento", "Error", JOptionPane.ERROR_MESSAGE);
-						e1.printStackTrace();
+					if(!repeatDocGen) {
+						getInfo();
+						
+						try {
+							generateDocumentGeneral();
+//							JOptionPane.showMessageDialog(null, "Documento generado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+							repeatDocGen = true;
+							
+							contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+							try {
+								Desktop.getDesktop().open(new File("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\Java\\Resultados\\Generales\\" + nameGeneral));
+							} catch (IOException a) {
+								// TODO Auto-generated catch block
+								a.printStackTrace();
+								
+								JOptionPane.showMessageDialog(null, "El documento general no se ha podido visualizar", "Error", JOptionPane.ERROR_MESSAGE);
+							}
+						} catch (IOException e1) {
+							JOptionPane.showMessageDialog(null, "Ha ocurrido un error generando este documento", "Error", JOptionPane.ERROR_MESSAGE);
+							e1.printStackTrace();
+						}
+					} else {
+						JOptionPane.showMessageDialog(null, "Ya has generado este documento", "Error", JOptionPane.ERROR_MESSAGE);
+						contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 					}
 				} else {
-					JOptionPane.showMessageDialog(null, "Ya has generado este documento", "Error", JOptionPane.ERROR_MESSAGE);
+					contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				}
 			}
 		});
@@ -168,22 +292,40 @@ public class GenerateDocuments extends JFrame {
 		btnEach.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(!repeatDocEach) {
-					getData();
-					separatePerDays();
+				
+				int ans = JOptionPane.showConfirmDialog(null, "¿Deseas iniciar el proceso?", "Confirmar", JOptionPane.YES_NO_OPTION);
+				
+				if(ans == JOptionPane.YES_OPTION) {
+					contentPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 					
-					try {
-						modifyDocumentEachMobile();
-						JOptionPane.showMessageDialog(null, "Documento generado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
-						repeatDocEach = true;
-					} catch (IOException e1) {
-						JOptionPane.showMessageDialog(null, "Ha ocurrido un error generando este documento", "Error", JOptionPane.ERROR_MESSAGE);
-						e1.printStackTrace();
+					if(!repeatDocEach) {
+						getInfo();
+						
+						try {
+							generateDocumentEachMobile();
+//							JOptionPane.showMessageDialog(null, "Documento generado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+							repeatDocEach = true;
+							
+							contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+							
+							try {
+								Desktop.getDesktop().open(new File("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\Java\\Resultados\\Individuales\\" + nameEach));
+							} catch (IOException a) {
+								// TODO Auto-generated catch block
+								a.printStackTrace();
+								
+								JOptionPane.showMessageDialog(null, "El documento individual no se ha podido visualizar", "Error", JOptionPane.ERROR_MESSAGE);
+							}
+						} catch (IOException e1) {
+							JOptionPane.showMessageDialog(null, "Ha ocurrido un error generando este documento", "Error", JOptionPane.ERROR_MESSAGE);
+							e1.printStackTrace();
+						}
+					} else {
+						JOptionPane.showMessageDialog(null, "Ya has generado este documento", "Error", JOptionPane.ERROR_MESSAGE);
+						contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 					}
-					
-					
 				} else {
-					JOptionPane.showMessageDialog(null, "Ya has generado este documento", "Error", JOptionPane.ERROR_MESSAGE);
+					contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				}
 			}
 		});
@@ -198,6 +340,13 @@ public class GenerateDocuments extends JFrame {
 				}
 			}
 		});
+	}
+	
+	void getInfo() {
+		if(!repeatData && !repeatDays) {
+			getData();
+			separatePerDays();
+		}
 	}
 	
 	void getData() {
@@ -227,6 +376,8 @@ public class GenerateDocuments extends JFrame {
 			splitTour = null;
 			splitHour = null;
 		}
+		
+		repeatData = true;
 	}
 	
 	void separatePerDays() {
@@ -268,9 +419,11 @@ public class GenerateDocuments extends JFrame {
 			
 			alTourCurrent = new ArrayList<>();
 		}
+		
+		repeatDays = true;
 	}
 	
-	void modifyDocumentGeneral() throws IOException {		
+	void generateDocumentGeneral() throws IOException {		
 		FileInputStream file = new FileInputStream(new File("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\Java\\PlantillaPlanGeneral.xlsx"));
 		
 		XSSFWorkbook wb = new XSSFWorkbook(file);
@@ -284,6 +437,15 @@ public class GenerateDocuments extends JFrame {
 		XSSFFont fontMobile = wb.createFont();
 		fontMobile.setFontHeightInPoints((short) 14);
 		fontMobile.setBold(true);
+		
+		XSSFFont fontTitle = wb.createFont();
+		fontTitle.setFontName("Arial");
+		fontTitle.setFontHeightInPoints((short) 14);
+		
+		CellStyle styleTitle = wb.createCellStyle();
+		styleTitle.setAlignment(HorizontalAlignment.CENTER);
+		styleTitle.setVerticalAlignment(VerticalAlignment.CENTER);
+		styleTitle.setFont(fontTitle);
 		
 		CellStyle styleDayHour = wb.createCellStyle();
 		styleDayHour.setAlignment(HorizontalAlignment.CENTER);
@@ -320,6 +482,11 @@ public class GenerateDocuments extends JFrame {
 		styleRouteTwo.setFont(font);
 		
 		sheet = wb.getSheet("LUNES");
+		
+		row = sheet.getRow(3);
+		cell = row.createCell(0);
+		cell.setCellValue("Rodamiento semanal del " + rangeDate);
+		cell.setCellStyle(styleTitle);
 		
 		for(int i = 0; i < alToursMonday.size(); i++) {
 			row = sheet.getRow(i+7);
@@ -362,6 +529,11 @@ public class GenerateDocuments extends JFrame {
 		
 		sheet = wb.getSheet("MARTES");
 		
+		row = sheet.getRow(3);
+		cell = row.createCell(0);
+		cell.setCellValue("Rodamiento semanal del " + rangeDate);
+		cell.setCellStyle(styleTitle);
+		
 		for(int i = 0; i < alToursTuesday.size(); i++) {
 			row = sheet.getRow(i+7);
 			
@@ -402,6 +574,11 @@ public class GenerateDocuments extends JFrame {
 		}
 		
 		sheet = wb.getSheet("MIÉRCOLES");
+		
+		row = sheet.getRow(3);
+		cell = row.createCell(0);
+		cell.setCellValue("Rodamiento semanal del " + rangeDate);
+		cell.setCellStyle(styleTitle);
 		
 		for(int i = 0; i < alToursWednesday.size(); i++) {
 			row = sheet.getRow(i+7);
@@ -444,6 +621,11 @@ public class GenerateDocuments extends JFrame {
 		
 		sheet = wb.getSheet("JUEVES");
 		
+		row = sheet.getRow(3);
+		cell = row.createCell(0);
+		cell.setCellValue("Rodamiento semanal del " + rangeDate);
+		cell.setCellStyle(styleTitle);
+		
 		for(int i = 0; i < alToursThursday.size(); i++) {
 			row = sheet.getRow(i+7);
 			
@@ -484,6 +666,11 @@ public class GenerateDocuments extends JFrame {
 		}
 		
 		sheet = wb.getSheet("VIERNES");
+		
+		row = sheet.getRow(3);
+		cell = row.createCell(0);
+		cell.setCellValue("Rodamiento semanal del " + rangeDate);
+		cell.setCellStyle(styleTitle);
 		
 		for(int i = 0; i < alToursFriday.size(); i++) {
 			row = sheet.getRow(i+7);
@@ -526,6 +713,11 @@ public class GenerateDocuments extends JFrame {
 		
 		sheet = wb.getSheet("SÁBADO");
 		
+		row = sheet.getRow(3);
+		cell = row.createCell(0);
+		cell.setCellValue("Rodamiento semanal del " + rangeDate);
+		cell.setCellStyle(styleTitle);
+		
 		for(int i = 0; i < alToursSaturday.size(); i++) {
 			row = sheet.getRow(i+7);
 			
@@ -567,6 +759,11 @@ public class GenerateDocuments extends JFrame {
 		
 		sheet = wb.getSheet("DOMINGO");
 		
+		row = sheet.getRow(3);
+		cell = row.createCell(0);
+		cell.setCellValue("Rodamiento semanal del " + rangeDate);
+		cell.setCellStyle(styleTitle);
+		
 		for(int i = 0; i < alToursSunday.size(); i++) {
 			row = sheet.getRow(i+7);
 			
@@ -607,14 +804,21 @@ public class GenerateDocuments extends JFrame {
 		}
 		
 		file.close();
+		 		
+		String nameFile = rangeDate.replace(" ", "");
+		String nameFile2 = nameFile.replace("al", "-");
+		nameGeneral = "RodGen_" + nameFile2 + ".xlsx";
 		
-		FileOutputStream output = new FileOutputStream("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\Java\\Resultados\\RodamientoGeneral.xlsx");
+		FileOutputStream output = new FileOutputStream("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\Java\\Resultados\\Generales\\" + nameGeneral);
 		wb.write(output);
 		output.close();
 		wb.close();
+		
+		File myFile = new File("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\Java\\Resultados\\Generales\\" + nameGeneral);
+		myFile.setReadOnly();
 	}
 	
-	void modifyDocumentEachMobile() throws IOException {
+	void generateDocumentEachMobile() throws IOException {
 		alActiveMobiles = plan.getActiveMobiles();
 		
 		FileInputStream file = new FileInputStream(new File("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\Java\\PlantillaPlanIndividual.xlsx"));
@@ -644,6 +848,15 @@ public class GenerateDocuments extends JFrame {
 		
 		XSSFFont fontNormal = wb.createFont();
 		fontNormal.setFontHeightInPoints((short) 13);
+		
+		XSSFFont fontTitleWeek = wb.createFont();
+		fontTitleWeek.setFontName("Arial");
+		fontTitleWeek.setFontHeightInPoints((short) 14);
+		
+		CellStyle styleTitleWeek = wb.createCellStyle();
+		styleTitleWeek.setAlignment(HorizontalAlignment.CENTER);
+		styleTitleWeek.setVerticalAlignment(VerticalAlignment.CENTER);
+		styleTitleWeek.setFont(fontTitleWeek);
 		
 		CellStyle styleOwner = wb.createCellStyle();
 		styleOwner.setAlignment(HorizontalAlignment.CENTER);
@@ -698,11 +911,17 @@ public class GenerateDocuments extends JFrame {
 				sheet = wb.createSheet(alActiveMobiles.get(i).get(0));
 			}
 			
-			ownerName = plan.getCompleteNameOwner(alActiveMobiles.get(i).get(0)); 
-			
 			numRow = 3;
 			
-			row = sheet.getRow(numRow);			
+			row = sheet.getRow(numRow);
+			cell = row.createCell(0);
+			cell.setCellValue("Rodamiento semanal del " + rangeDate);
+			cell.setCellStyle(styleTitleWeek);
+			numRow++;
+			
+			ownerName = plan.getCompleteNameOwner(alActiveMobiles.get(i).get(0));
+			
+			row = sheet.getRow(numRow);
 			cell = row.createCell(0);
 			cell.setCellValue(ownerName.toUpperCase());
 			cell.setCellStyle(styleOwner);
@@ -1212,7 +1431,11 @@ public class GenerateDocuments extends JFrame {
 		
 		file.close();
 		
-		FileOutputStream output = new FileOutputStream("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\Java\\Resultados\\RodamientoIndividual.xlsx");
+		String nameFile = rangeDate.replace(" ", "");
+		String nameFile2 = nameFile.replace("al", "-");
+		nameEach = "RodInd _" + nameFile2 + ".xlsx";
+		
+		FileOutputStream output = new FileOutputStream("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\Java\\Resultados\\Individuales\\" + nameEach);
 		wb.write(output);
 		output.close();
 		wb.close();

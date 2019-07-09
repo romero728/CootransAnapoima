@@ -3,13 +3,22 @@ package com.romero278.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -36,6 +45,7 @@ public class ListTours extends JFrame {
 	
 	ArrayList<String> alTours = new ArrayList<String>();
 	
+	@SuppressWarnings("serial")
 	public ListTours(String fg, String op) {
 		flag = fg;
 		option = op;
@@ -47,11 +57,26 @@ public class ListTours extends JFrame {
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		contentPane = new JPanel();
+		contentPane = new JPanel() {
+			 protected void paintComponent(Graphics g) {
+		            super.paintComponent(g);
+		            Color color1 = new Color(250, 244, 207);
+		            Color color2 = new Color(200, 235, 208);
+		            Graphics2D g2d = (Graphics2D) g;
+		            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		            GradientPaint gp = new GradientPaint(0, 0, color1, 0, getHeight(), color2);
+		            g2d.setPaint(gp);
+		            g2d.fillRect(0, 0, getWidth(), getHeight());
+		        }
+		};
+		
+		setIconImage(Toolkit.getDefaultToolkit().getImage("img/logo_anapoima.png").getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
+		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
+		JLabel lImageLogo = new JLabel();
 		JLabel title = new JLabel("Listado de " + flag.toLowerCase());
 		JLabel subtitle = new JLabel("Selecciona el día y la ruta para ver los recorridos");
 		JLabel lSelectTour1 = new JLabel("Selecciona un " + option.toLowerCase());
@@ -71,9 +96,12 @@ public class ListTours extends JFrame {
 		JComboBox<String> cbTour = new JComboBox<String>();
 		JButton btnSelectFilter = new JButton("Seleccionar");
 		JButton btnSelectRoute = new JButton("Seleccionar");
-		JButton btnModify = new JButton("Modificar");
-		JButton btnDelete = new JButton("Eliminar");
-		JButton btnBack = new JButton("Atrás");
+		JButton btnModify = new JButton("Modificar", new ImageIcon("img/modify.png"));
+		JButton btnDelete = new JButton("Eliminar", new ImageIcon("img/delete.png"));
+		JButton btnBack = new JButton("Atrás", new ImageIcon("img/back.png"));
+		
+		ImageIcon logo = new ImageIcon(new ImageIcon("img/logo_anapoima.png").getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_AREA_AVERAGING));
+		lImageLogo.setIcon(logo);
 		
 		scroll.setVisible(false);
 		lSelectTour1.setVisible(false);
@@ -171,6 +199,9 @@ public class ListTours extends JFrame {
 		springLayout.putConstraint(SpringLayout.WEST, btnDelete, 890, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, btnDelete, 420, SpringLayout.NORTH, container);
 		
+		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lImageLogo, 600, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lImageLogo, 500, SpringLayout.NORTH, container);
+		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnBack, 100, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, btnBack, 500, SpringLayout.NORTH, container);
 		
@@ -194,6 +225,7 @@ public class ListTours extends JFrame {
 		container.add(tfHour);
 		container.add(btnModify);
 		container.add(btnDelete);
+		container.add(lImageLogo);
 		container.add(btnBack);
 		
 		title.setFont(new Font("Arial", Font.BOLD, 40));
@@ -207,19 +239,26 @@ public class ListTours extends JFrame {
 		
 		cbSelectDay.setFont(new Font("Arial", Font.PLAIN, 20));
 		cbSelectDay.setForeground(new Color (116, 128, 148));
+		cbSelectDay.setBackground(new Color(250, 244, 207));
 		
 		lSelectRoute.setFont(new Font("Arial", Font.BOLD, 20));
 		lSelectRoute.setForeground(new Color (116, 128, 148));
 		
 		cbSelectRoute.setFont(new Font("Arial", Font.PLAIN, 20));
 		cbSelectRoute.setForeground(new Color (116, 128, 148));
+		cbSelectRoute.setBackground(new Color(250, 244, 207));
 		
-		btnSelectFilter.setFont(new Font("Arial", Font.PLAIN, 20));
-		btnSelectFilter.setForeground(new Color (116, 128, 148));
+		btnSelectFilter.setFont(new Font("Arial", Font.BOLD, 20));
+		btnSelectFilter.setForeground(new Color(116, 128, 148));
+		btnSelectFilter.setBackground(new Color(243, 227, 124));
+		btnSelectFilter.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		taList.setFont(new Font("Arial", Font.BOLD, 18));
 		taList.setForeground(new Color (116, 128, 148));
 		taList.setBackground(new Color (238, 238, 238));
+		taList.setOpaque(false);
+		scroll.setOpaque(false);
+		scroll.getViewport().setOpaque(false);
 		
 		lSelectTour1.setFont(new Font("Arial", Font.BOLD, 12));
 		lSelectTour1.setForeground(new Color (116, 128, 148));
@@ -229,39 +268,180 @@ public class ListTours extends JFrame {
 		
 		cbTour.setFont(new Font("Arial", Font.PLAIN, 20));
 		cbTour.setForeground(new Color (116, 128, 148));
+		cbTour.setBackground(new Color(250, 244, 207));
 		
-		btnSelectRoute.setFont(new Font("Arial", Font.PLAIN, 20));
-		btnSelectRoute.setForeground(new Color (116, 128, 148));
+		btnSelectRoute.setFont(new Font("Arial", Font.BOLD, 20));
+		btnSelectRoute.setForeground(Color.WHITE);
+		btnSelectRoute.setBackground(new Color(136, 212, 152));
+		btnSelectRoute.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		lRoute.setFont(new Font("Arial", Font.BOLD, 20));
 		lRoute.setForeground(new Color (116, 128, 148));
 		
 		tfRoute.setFont(new Font("Arial", Font.PLAIN, 20));
 		tfRoute.setForeground(new Color (116, 128, 148));
+		tfRoute.setOpaque(false);
 		
 		lDay.setFont(new Font("Arial", Font.BOLD, 20));
 		lDay.setForeground(new Color (116, 128, 148));
 		
 		tfDay.setFont(new Font("Arial", Font.PLAIN, 20));
 		tfDay.setForeground(new Color (116, 128, 148));
+		tfDay.setOpaque(false);
 		
 		lHour.setFont(new Font("Arial", Font.BOLD, 20));
 		lHour.setForeground(new Color (116, 128, 148));
 		
 		tfHour.setFont(new Font("Arial", Font.PLAIN, 20));
 		tfHour.setForeground(new Color (116, 128, 148));
+		tfHour.setOpaque(false);
 		
 		btnModify.setFont(new Font("Arial", Font.BOLD, 20));
 		btnModify.setForeground(Color.WHITE);
 		btnModify.setBackground(new Color (25, 127, 210));
+		btnModify.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		btnDelete.setFont(new Font("Arial", Font.BOLD, 20));
 		btnDelete.setForeground(Color.WHITE);
 		btnDelete.setBackground(new Color (235, 132, 20));
+		btnDelete.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		btnBack.setFont(new Font("Arial", Font.BOLD, 14));
 		btnBack.setForeground(Color.WHITE);
 		btnBack.setBackground(new Color (196, 69, 59));
+		
+		btnSelectFilter.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnSelectFilter.setBackground(new Color(243, 227, 124));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnSelectFilter.setBackground(new Color(243, 227, 124));
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnSelectFilter.setBackground(new Color(243, 211, 74));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		btnSelectRoute.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnSelectRoute.setBackground(new Color(136, 212, 152));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnSelectRoute.setBackground(new Color(136, 212, 152));
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnSelectRoute.setBackground(new Color(109, 186, 163));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+
+		btnModify.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnModify.setBackground(new Color (25, 127, 210));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnModify.setBackground(new Color (25, 127, 210));
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnModify.setBackground(new Color(35, 81, 152));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+
+		btnDelete.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnDelete.setBackground(new Color (235, 132, 20));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnDelete.setBackground(new Color (235, 132, 20));
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnDelete.setBackground(new Color(177, 122, 41));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 		
 		/* --- Logic Part --- */
 		
@@ -269,8 +449,8 @@ public class ListTours extends JFrame {
 		SQLRoute route = new SQLRoute();
 		SQLTour tour = new SQLTour();
 		
-		ArrayList<String> alDays = day.listDays();
-		
+		ArrayList<String> alIdTours = new ArrayList<>();		
+		ArrayList<String> alDays = day.listDays();		
 		ArrayList<String[]> alTourDay = new ArrayList<String[]>();
 		
 		for(int i = 0; i < alDays.size(); i++) {
@@ -295,6 +475,7 @@ public class ListTours extends JFrame {
 		btnSelectFilter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
 				String itemDay = cbSelectDay.getSelectedItem().toString();
 				String itemRoute = cbSelectRoute.getSelectedItem().toString();
 				String idDay = "", idRoute = "";
@@ -332,9 +513,10 @@ public class ListTours extends JFrame {
 				
 				for(int i = 0; i < alTours.size(); i++) {
 					split = alTours.get(i).split(Pattern.quote("|"));
-					cbTour.addItem(split[0]);
+					alIdTours.add(split[0]);
 					splHour = split[1].split(Pattern.quote(":"));
-					acumList += split[0] + ". " + splHour[0] + ":" + splHour[1] + "\n";
+					cbTour.addItem(splHour[0] + ":" + splHour[1]);
+					acumList += splHour[0] + ":" + splHour[1] + "\n";
 				}
 				
 				taList.setText(acumList);
@@ -349,7 +531,7 @@ public class ListTours extends JFrame {
 		btnSelectRoute.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String infoTour = tour.selectTour(cbTour.getSelectedItem().toString());
+				String infoTour = tour.selectTour(alIdTours.get(cbTour.getSelectedIndex()));
 				dataTour = infoTour.split(Pattern.quote("|"));
 				
 				idTour = cbTour.getSelectedItem().toString();

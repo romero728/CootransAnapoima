@@ -3,18 +3,28 @@ package com.romero278.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.border.EmptyBorder;
 
@@ -25,9 +35,10 @@ public class GeneratePlan extends JFrame {
 	private JPanel contentPane;
 	
 	boolean confirm = false;
-	String nameCompany;
+	String nameCompany, rangeDate;
 	ArrayList<ArrayList<String>> alPlan = new ArrayList<>();
 	
+	@SuppressWarnings("serial")
 	public GeneratePlan(String comp) {
 		nameCompany = comp;
 		
@@ -38,21 +49,47 @@ public class GeneratePlan extends JFrame {
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		contentPane = new JPanel();
+		contentPane = new JPanel() {
+			 protected void paintComponent(Graphics g) {
+		            super.paintComponent(g);
+		            Color color1 = new Color(250, 244, 207);
+		            Color color2 = new Color(200, 235, 208);
+		            Graphics2D g2d = (Graphics2D) g;
+		            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		            GradientPaint gp = new GradientPaint(0, 0, color1, 0, getHeight(), color2);
+		            g2d.setPaint(gp);
+		            g2d.fillRect(0, 0, getWidth(), getHeight());
+		        }
+		};
+		
+		setIconImage(Toolkit.getDefaultToolkit().getImage("img/logo_anapoima.png").getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
+		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
+		JLabel lImageLogo = new JLabel();
 		JLabel title = new JLabel("GENERAR RODAMIENTO");
-		JLabel subtitle = new JLabel("Elige una opción");
+		JLabel subtitle = new JLabel("Ingresa el rango de la fecha");
 		JLabel lGenerate = new JLabel("Se asignarán los móviles activos a los recorridos correspondientes");
 		JLabel lPrint = new JLabel("Podrás ver los resultados generales o de cada móvil en formato Excel");
-		JButton btnGenerate = new JButton("Generar plan");
-		JButton btnPrint = new JButton("Generar documento de Excel");
-		JButton btnBack = new JButton("Atrás");
+		JLabel progress = new JLabel("Este proceso durará 20 segundos aprox.");
+//		JProgressBar progress = new JProgressBar();
+		JTextField tfDate = new JTextField(30);
+		JButton btnGenerate = new JButton("Generar plan", new ImageIcon("img/start.png"));
+		JButton btnPrint = new JButton("Generar documento de Excel", new ImageIcon("img/excel.png"));
+		JButton btnBack = new JButton("Atrás", new ImageIcon("img/back.png"));
+		
+		ImageIcon logo = new ImageIcon(new ImageIcon("img/logo_anapoima.png").getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_AREA_AVERAGING));
+		lImageLogo.setIcon(logo);
 		
 		lPrint.setVisible(false);
 		btnPrint.setVisible(false);
+		progress.setVisible(false);
+		
+//		progress.setIndeterminate(true);
+		
+		tfDate.setHorizontalAlignment(JTextField.CENTER);
 		
 		btnGenerate.setPreferredSize(new Dimension(200, 36));
 		btnPrint.setPreferredSize(new Dimension(350, 36));
@@ -66,69 +103,181 @@ public class GeneratePlan extends JFrame {
 		springLayout.putConstraint(SpringLayout.NORTH, title, 150, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, subtitle, 600, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, subtitle, 220, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, subtitle, 230, SpringLayout.NORTH, container);
+		
+		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, tfDate, 600, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, tfDate, 260, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnGenerate, 600, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, btnGenerate, 260, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, btnGenerate, 320, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lGenerate, 600, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, lGenerate, 300, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lGenerate, 360, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnPrint, 600, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, btnPrint, 340, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, btnPrint, 400, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lPrint, 600, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, lPrint, 380, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lPrint, 440, SpringLayout.NORTH, container);
+		
+		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, progress, 600, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, progress, 450, SpringLayout.NORTH, container);
+		
+		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lImageLogo, 600, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lImageLogo, 500, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnBack, 100, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.VERTICAL_CENTER, btnBack, 500, SpringLayout.NORTH, container);
 		
 		container.add(title);
 		container.add(subtitle);
+		container.add(tfDate);
 		container.add(btnGenerate);
 		container.add(lGenerate);
 		container.add(btnPrint);
 		container.add(lPrint);
+		container.add(progress);
+		container.add(lImageLogo);
 		container.add(btnBack);
 		
 		title.setFont(new Font("Arial", Font.BOLD, 40));
 		title.setForeground(new Color (116, 128, 148));
 		
-		subtitle.setFont(new Font("Arial", Font.BOLD, 28));
+		subtitle.setFont(new Font("Arial", Font.BOLD, 24));
 		subtitle.setForeground(new Color (116, 128, 148));
+		
+		tfDate.setFont(new Font("Arial", Font.PLAIN, 18));
+		tfDate.setForeground(new Color (116, 128, 148));
 		
 		btnGenerate.setFont(new Font("Arial", Font.BOLD, 20));
 		btnGenerate.setForeground(new Color (116, 128, 148));
+		btnGenerate.setBackground(new Color(243, 227, 124));
+		btnGenerate.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		lGenerate.setFont(new Font("Arial", Font.BOLD, 12));
 		lGenerate.setForeground(new Color (116, 128, 148));
 		
 		btnPrint.setFont(new Font("Arial", Font.BOLD, 20));
 		btnPrint.setForeground(Color.WHITE);
-		btnPrint.setBackground(new Color (119, 204, 116));
+		btnPrint.setBackground(new Color(136, 212, 152));
+		btnPrint.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		lPrint.setFont(new Font("Arial", Font.BOLD, 12));
 		lPrint.setForeground(new Color (116, 128, 148));
+		
+		progress.setFont(new Font("Arial", Font.BOLD, 32));
+		progress.setForeground(new Color (116, 128, 148));
 		
 		btnBack.setFont(new Font("Arial", Font.BOLD, 14));
 		btnBack.setForeground(Color.WHITE);
 		btnBack.setBackground(new Color (196, 69, 59));
 		
+		btnGenerate.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnGenerate.setBackground(new Color(243, 227, 124));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnGenerate.setBackground(new Color(243, 227, 124));
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnGenerate.setBackground(new Color(243, 211, 74));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		btnPrint.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnPrint.setBackground(new Color(136, 212, 152));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnPrint.setBackground(new Color(136, 212, 152));
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnPrint.setBackground(new Color(109, 186, 163));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 		/* --- Logic part --- */
 		
-		btnGenerate.addActionListener(new ActionListener() {
+		btnGenerate.addActionListener(new ActionListener() {			
 			@Override
-			public void actionPerformed(ActionEvent e) {				
-				do {
-					 newPlan();
-				} while (confirm == false);
+			public void actionPerformed(ActionEvent e) {
+				contentPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 				
-				if(confirm) {
-					JOptionPane.showMessageDialog(null, "Rodamiento generado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
-					lPrint.setVisible(true);
-					btnPrint.setVisible(true);
+				progress.setVisible(true);
+				btnPrint.setVisible(false);
+				lPrint.setVisible(false);
+				
+				int ans = JOptionPane.showConfirmDialog(null, "¿Deseas iniciar el proceso?", "Confirmar", JOptionPane.YES_NO_OPTION);
+				
+				if(ans == JOptionPane.YES_OPTION) {
+					if(tfDate.getText().isEmpty()) {
+						JOptionPane.showMessageDialog(null, "Por favor ingresa la fecha", "Error", JOptionPane.ERROR_MESSAGE);
+						progress.setVisible(false);
+						contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+					} else {
+						rangeDate = tfDate.getText();
+						
+						do {
+							 newPlan();
+						} while (confirm == false);
+						
+						if(confirm) {
+							JOptionPane.showMessageDialog(null, "Rodamiento generado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+							lPrint.setVisible(true);
+							btnPrint.setVisible(true);
+							progress.setVisible(false);
+							contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+						} else {
+							JOptionPane.showMessageDialog(null, "Ha ocurrido un error, por favor vuelve a generar el rodamiento", "Error", JOptionPane.ERROR_MESSAGE);
+							progress.setVisible(false);
+							contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+						}
+					}
 				} else {
-					JOptionPane.showMessageDialog(null, "Ha ocurrido un error, por favor vuelve a generar el rodamiento", "Error", JOptionPane.ERROR_MESSAGE);
+					progress.setVisible(false);
+					contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				}
 			}
 		});
@@ -138,7 +287,7 @@ public class GeneratePlan extends JFrame {
 			public void actionPerformed(ActionEvent e) {				
 				setVisible(false);
 				
-				GenerateDocuments genDoc = new GenerateDocuments(nameCompany, alPlan);
+				GenerateDocuments genDoc = new GenerateDocuments(nameCompany, rangeDate, alPlan);
 				genDoc.setVisible(true);
 			}
 		});
@@ -151,7 +300,7 @@ public class GeneratePlan extends JFrame {
 		});
 	}
 	
-	void newPlan() {		
+	void newPlan() {
 		alPlan = new ArrayList<>();
 		
 		DataPlan plan = new DataPlan();
@@ -337,8 +486,10 @@ public class GeneratePlan extends JFrame {
 //			}
 //		}
 		
-//		System.out.println("All tours: " + sizeTours);
-//		System.out.println("Plan size: " + alPlan.size());
+		System.out.println("----------");
+		System.out.println("All tours: " + sizeTours);
+		System.out.println("Plan size: " + alPlan.size());
+		System.out.println("First mobile: " + alPlan.get(0).get(0));
 		
 		if(sizeTours == alPlan.size() && alPlan.get(alPlan.size()-1).get(1).equals(alTours.get(alTours.size()-1).get(0))) {
 			confirm = true;
