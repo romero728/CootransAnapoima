@@ -263,12 +263,10 @@ public class GenerateDocuments extends JFrame {
 						
 						try {
 							generateDocumentGeneral();
-//							JOptionPane.showMessageDialog(null, "Documento generado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
-							repeatDocGen = true;
-							
+							repeatDocGen = true;							
 							contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 							try {
-								Desktop.getDesktop().open(new File("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\Java\\Resultados\\Generales\\" + nameGeneral));
+								Desktop.getDesktop().open(new File("C:\\Users\\DAVID  ROMERO M\\Desktop\\Gestor de rutas\\Rutas\\Generales\\" + nameGeneral));
 							} catch (IOException a) {
 								// TODO Auto-generated catch block
 								a.printStackTrace();
@@ -303,13 +301,11 @@ public class GenerateDocuments extends JFrame {
 						
 						try {
 							generateDocumentEachMobile();
-//							JOptionPane.showMessageDialog(null, "Documento generado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
-							repeatDocEach = true;
-							
+							repeatDocEach = true;							
 							contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 							
 							try {
-								Desktop.getDesktop().open(new File("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\Java\\Resultados\\Individuales\\" + nameEach));
+								Desktop.getDesktop().open(new File("C:\\Users\\DAVID  ROMERO M\\Desktop\\Gestor de rutas\\Rutas\\Individuales\\" + nameEach));
 							} catch (IOException a) {
 								// TODO Auto-generated catch block
 								a.printStackTrace();
@@ -424,7 +420,7 @@ public class GenerateDocuments extends JFrame {
 	}
 	
 	void generateDocumentGeneral() throws IOException {		
-		FileInputStream file = new FileInputStream(new File("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\Java\\PlantillaPlanGeneral.xlsx"));
+		FileInputStream file = new FileInputStream(new File("C:\\Users\\DAVID  ROMERO M\\Desktop\\Gestor de rutas\\Plantillas\\PlantillaPlanGeneral.xlsx"));
 		
 		XSSFWorkbook wb = new XSSFWorkbook(file);
 		XSSFSheet sheet;
@@ -809,19 +805,16 @@ public class GenerateDocuments extends JFrame {
 		String nameFile2 = nameFile.replace("al", "-");
 		nameGeneral = "RodGen_" + nameFile2 + ".xlsx";
 		
-		FileOutputStream output = new FileOutputStream("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\Java\\Resultados\\Generales\\" + nameGeneral);
+		FileOutputStream output = new FileOutputStream("C:\\Users\\DAVID  ROMERO M\\Desktop\\Gestor de rutas\\Rutas\\Generales\\" + nameGeneral);
 		wb.write(output);
 		output.close();
 		wb.close();
-		
-		File myFile = new File("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\Java\\Resultados\\Generales\\" + nameGeneral);
-		myFile.setReadOnly();
 	}
 	
 	void generateDocumentEachMobile() throws IOException {
 		alActiveMobiles = plan.getActiveMobiles();
 		
-		FileInputStream file = new FileInputStream(new File("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\Java\\PlantillaPlanIndividual.xlsx"));
+		FileInputStream file = new FileInputStream(new File("C:\\Users\\DAVID  ROMERO M\\Desktop\\Gestor de rutas\\Plantillas\\PlantillaPlanIndividual.xlsx"));
 		
 		XSSFWorkbook wb = new XSSFWorkbook(file);
 		XSSFSheet sheet;
@@ -1435,7 +1428,7 @@ public class GenerateDocuments extends JFrame {
 		String nameFile2 = nameFile.replace("al", "-");
 		nameEach = "RodInd _" + nameFile2 + ".xlsx";
 		
-		FileOutputStream output = new FileOutputStream("C:\\Users\\DAVID  ROMERO M\\Google Drive\\David\\Profesional\\Independiente\\Cootransanapoima\\Documentación\\Rutas\\Java\\Resultados\\Individuales\\" + nameEach);
+		FileOutputStream output = new FileOutputStream("C:\\Users\\DAVID  ROMERO M\\Desktop\\Gestor de rutas\\Rutas\\Individuales\\" + nameEach);
 		wb.write(output);
 		output.close();
 		wb.close();
