@@ -239,25 +239,16 @@ public class SQLRoute {
 	}
 	
 	public String deleteRoute(String id) {
-		String request = "";
-		sql = "DELETE FROM ruta_tipovehiculo WHERE idruta_rutatipovehiculo = '" + id + "'";
+		String request = "", request1 = "", request2 = "";
+		String sql = "DELETE FROM ruta_tipovehiculo WHERE idruta_rutatipovehiculo = '" + id + "'";
 		
 		try {
-			connection = conBD.connection();
-			prep = (PreparedStatement) connection.prepareStatement(sql);
+			Connection connection = conBD.connection();
+			PreparedStatement prep = (PreparedStatement) connection.prepareStatement(sql);
 			int i = prep.executeUpdate();
 			
 			if(i > 0) {
-				sql = "DELETE FROM rutas WHERE id_ruta = '" + id + "'";
-				
-				prep = (PreparedStatement) connection.prepareStatement(sql);
-				int j = prep.executeUpdate();
-				
-				if(j > 0) {
-					request = "success";
-				} else {
-					request = "error delete";
-				}
+				request = "success";
 			} else {
 				request = "error delete";
 			}
@@ -267,7 +258,47 @@ public class SQLRoute {
 			e1.printStackTrace();
 		}
 		
-		return request;
+		String sql1 = "DELETE FROM recorridos WHERE ruta_recorrido = '" + id + "'";
+		
+		try {
+			Connection connection = conBD.connection();
+			PreparedStatement prep = (PreparedStatement) connection.prepareStatement(sql1);
+			int i = prep.executeUpdate();
+			
+			if(i > 0) {
+				request1 = "success";
+			} else {
+				request1 = "error delete";
+			}
+			
+			connection.close();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		String sql2 = "DELETE FROM rutas WHERE id_ruta = '" + id + "'";
+		
+		try {
+			Connection connection = conBD.connection();
+			PreparedStatement prep = (PreparedStatement) connection.prepareStatement(sql2);
+			int i = prep.executeUpdate();
+			
+			if(i > 0) {
+				request2 = "success";
+			} else {
+				request2 = "error delete";
+			}
+			
+			connection.close();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		if(request.equals("success") && request1.equals("success") && request2.equals("success")) {
+			return "success";
+		} else {
+			return "error delete";
+		}
 	}
 	
 	public String[] getTypeVehicle(String id) {

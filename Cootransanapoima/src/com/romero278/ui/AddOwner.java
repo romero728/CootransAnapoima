@@ -38,14 +38,13 @@ public class AddOwner extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
-	String flag, option;
+	String nameCompany;
 	
 	@SuppressWarnings("serial")
-	public AddOwner(String fg, String op) {
-		flag = fg;
-		option = op;
+	public AddOwner(String nameComp) {
+		nameCompany = nameComp;
 		
-		setTitle(option + " - Agregar");
+		setTitle("Propietario - Agregar");
 		setBounds(0, 0, 1200, 600);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -72,7 +71,7 @@ public class AddOwner extends JFrame {
 		setContentPane(contentPane);
 		
 		JLabel lImageLogo = new JLabel();
-		JLabel title = new JLabel("Agregar " + option.toLowerCase());
+		JLabel title = new JLabel("Agregar propietario");
 		JLabel subtitle = new JLabel("Ingresa los datos");
 		JLabel lFirstName = new JLabel("Nombre(s):");
 		JLabel lLastName = new JLabel("Apellido(s):");
@@ -339,7 +338,7 @@ public class AddOwner extends JFrame {
 					
 					switch(request) {
 						case "success":
-							JOptionPane.showMessageDialog(null, option +  " agregado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);							
+							JOptionPane.showMessageDialog(null, "Propietario agregado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);							
 							goBack();							
 							break;
 						case "error insert":
@@ -363,8 +362,8 @@ public class AddOwner extends JFrame {
 	
 	void goBack() {
 		setVisible(false);
-		
-		ConfigOptions conOps = new ConfigOptions(flag, option);
-		conOps.setVisible(true);
+		ListOwners low = new ListOwners(nameCompany);
+		low.setVisible(true);
+
 	}
 }

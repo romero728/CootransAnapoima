@@ -37,16 +37,15 @@ public class ModifyMobile extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
-	String flag, option, idOwner;
+	String nameCompany, idOwner;
 	String[] dataMobile;
 	
 	@SuppressWarnings("serial")
-	public ModifyMobile(String fg, String op, String[] data) {
-		flag = fg;
-		option = op;
+	public ModifyMobile(String nameComp, String[] data) {
+		nameCompany = nameComp;
 		dataMobile = data;
 		
-		setTitle(option + " - Modificar");
+		setTitle("Móvil - Modificar");
 		setBounds(0, 0, 1200, 600);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -73,7 +72,7 @@ public class ModifyMobile extends JFrame {
 		setContentPane(contentPane);
 		
 		JLabel lImageLogo = new JLabel();
-		JLabel title = new JLabel("Modificar " + option.toLowerCase());
+		JLabel title = new JLabel("Modificar móvil");
 		JLabel subtitle = new JLabel("Ingresa los datos");
 		JLabel lNumber = new JLabel("Número: ");
 		JLabel lOwner = new JLabel("Propietario: ");
@@ -373,7 +372,7 @@ public class ModifyMobile extends JFrame {
 					request = mob.updateMobile(dataMobile[0], tfNumber.getText(), idOwner, tfBrand.getText(), tfModel.getText(), tfLicensePlate.getText(), tfCapacity.getText(), idType, cbActive.getSelectedItem().toString());
 					
 					if(request.equals("success")) {
-						JOptionPane.showMessageDialog(null, option +  " modificado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);							
+						JOptionPane.showMessageDialog(null, "Móvil modificado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);							
 						goBack();
 					} else {
 						JOptionPane.showMessageDialog(null, "Ha ocurrido un error, inténtalo de nuevo", "Error", JOptionPane.ERROR_MESSAGE);
@@ -393,7 +392,7 @@ public class ModifyMobile extends JFrame {
 	void goBack() {
 		setVisible(false);
 		
-		ListMobiles list = new ListMobiles(flag, option);
+		ListMobiles list = new ListMobiles(nameCompany);
 		list.setVisible(true);
 	}
 }

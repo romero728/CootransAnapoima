@@ -39,18 +39,17 @@ public class ListTours extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
-	String flag, option, idTour;
+	String nameCompany, idTour;
 	String[] dataTour;
 	String[] split = null;
 	
 	ArrayList<String> alTours = new ArrayList<String>();
 	
 	@SuppressWarnings("serial")
-	public ListTours(String fg, String op) {
-		flag = fg;
-		option = op;
+	public ListTours(String nameComp) {
+		nameCompany = nameComp;
 		
-		setTitle("Listado de " + flag.toLowerCase());
+		setTitle("Listado de recorridos");
 		setBounds(0, 0, 1200, 600);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -77,9 +76,9 @@ public class ListTours extends JFrame {
 		setContentPane(contentPane);
 		
 		JLabel lImageLogo = new JLabel();
-		JLabel title = new JLabel("Listado de " + flag.toLowerCase());
+		JLabel title = new JLabel("Listado de recorridos");
 		JLabel subtitle = new JLabel("Selecciona el día y la ruta para ver los recorridos");
-		JLabel lSelectTour1 = new JLabel("Selecciona un " + option.toLowerCase());
+		JLabel lSelectTour1 = new JLabel("Selecciona un recorrido");
 		JLabel lSelectTour2 = new JLabel("para ver su información");
 		JLabel lSelectDay = new JLabel("Día: ");
 		JLabel lSelectRoute = new JLabel("Ruta: ");
@@ -96,6 +95,7 @@ public class ListTours extends JFrame {
 		JComboBox<String> cbTour = new JComboBox<String>();
 		JButton btnSelectFilter = new JButton("Seleccionar");
 		JButton btnSelectRoute = new JButton("Seleccionar");
+		JButton btnAdd = new JButton("Agregar recorrido", new ImageIcon(getClass().getClassLoader().getResource("add-dark.png")));
 		JButton btnModify = new JButton("Modificar", new ImageIcon(getClass().getClassLoader().getResource("modify.png")));
 		JButton btnDelete = new JButton("Eliminar", new ImageIcon(getClass().getClassLoader().getResource("delete.png")));
 		JButton btnBack = new JButton("Atrás", new ImageIcon(getClass().getClassLoader().getResource("back.png")));
@@ -129,8 +129,9 @@ public class ListTours extends JFrame {
 		taList.setLineWrap(true);
 		
 		scroll.setPreferredSize(new Dimension(150, 280));
-		scroll.setBorder(null);
+//		scroll.setBorder(null);
 		
+		btnAdd.setPreferredSize(new Dimension(250, 36));
 		btnModify.setPreferredSize(new Dimension(150, 30));
 		btnDelete.setPreferredSize(new Dimension(150, 30));
 		btnBack.setPreferredSize(new Dimension(100, 30));
@@ -144,6 +145,9 @@ public class ListTours extends JFrame {
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, subtitle, 600, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, subtitle, 120, SpringLayout.NORTH, container);
+		
+		springLayout.putConstraint(SpringLayout.WEST, btnAdd, 125, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, btnAdd, 150, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.WEST, lSelectDay, 420, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, lSelectDay, 150, SpringLayout.NORTH, container);
@@ -207,6 +211,7 @@ public class ListTours extends JFrame {
 		
 		container.add(title);
 		container.add(subtitle);
+		container.add(btnAdd);
 		container.add(lSelectDay);
 		container.add(cbSelectDay);
 		container.add(lSelectRoute);
@@ -233,6 +238,11 @@ public class ListTours extends JFrame {
 		
 		subtitle.setFont(new Font("Arial", Font.BOLD, 16));
 		subtitle.setForeground(new Color (116, 128, 148));
+		
+		btnAdd.setFont(new Font("Arial", Font.BOLD, 20));
+		btnAdd.setForeground(new Color (116, 128, 148));
+		btnAdd.setBackground(new Color(243, 227, 124));
+		btnAdd.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		lSelectDay.setFont(new Font("Arial", Font.BOLD, 20));
 		lSelectDay.setForeground(new Color (116, 128, 148));
@@ -310,6 +320,39 @@ public class ListTours extends JFrame {
 		btnBack.setForeground(Color.WHITE);
 		btnBack.setBackground(new Color (196, 69, 59));
 		
+		btnAdd.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnAdd.setBackground(new Color(243, 227, 124));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnAdd.setBackground(new Color(243, 227, 124));
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnAdd.setBackground(new Color(243, 211, 74));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+
 		btnSelectFilter.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -555,12 +598,21 @@ public class ListTours extends JFrame {
 			}
 		});
 		
+		btnAdd.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+				AddTour addt = new AddTour(nameCompany);
+				addt.setVisible(true);
+			}
+		});
+		
 		btnModify.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 				
-				ModifyTour mod = new ModifyTour(flag, option, dataTour);
+				ModifyTour mod = new ModifyTour(nameCompany, dataTour);
 				mod.setVisible(true);
 			}
 		});
@@ -568,7 +620,7 @@ public class ListTours extends JFrame {
 		btnDelete.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int answer = JOptionPane.showConfirmDialog(null, "¿Deseas eliminar este " + option.toLowerCase() + "?", option + " - Eliminar", JOptionPane.YES_NO_OPTION);
+				int answer = JOptionPane.showConfirmDialog(null, "¿Deseas eliminar este recorrido?", "Recorrido - Eliminar", JOptionPane.YES_NO_OPTION);
 				
 				if(answer == JOptionPane.YES_OPTION) {
 					System.out.println(idTour);
@@ -577,7 +629,7 @@ public class ListTours extends JFrame {
 					
 					switch (request) {
 						case "success":
-							JOptionPane.showMessageDialog(null, option +  " eliminado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null, "Recorrido eliminado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
 							goBack();
 							break;
 						case "error delete":
@@ -598,8 +650,9 @@ public class ListTours extends JFrame {
 	
 	void goBack() {
 		setVisible(false);
-		
-		ConfigOptions conOps = new ConfigOptions(flag, option);
-		conOps.setVisible(true);
+		ConfigMenu conMenu = new ConfigMenu(nameCompany);
+		conMenu.setVisible(true);
+//		ConfigOptions conOps = new ConfigOptions(flag, option);
+//		conOps.setVisible(true);
 	}
 }

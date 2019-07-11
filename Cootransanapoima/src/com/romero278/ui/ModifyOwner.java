@@ -37,16 +37,15 @@ public class ModifyOwner extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
-	String flag, option, idOwner;
+	String nameCompany, idOwner;
 	String[] dataOwner;
 	
 	@SuppressWarnings("serial")
-	public ModifyOwner(String fg, String op, String[] data) throws ParseException {
-		flag = fg;
-		option = op;
+	public ModifyOwner(String nameComp, String[] data) throws ParseException {
+		nameCompany = nameComp;
 		dataOwner = data;
 		
-		setTitle(option + " - Modificar");
+		setTitle("Propietario - Modificar");
 		setBounds(0, 0, 1200, 600);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -73,7 +72,7 @@ public class ModifyOwner extends JFrame {
 		setContentPane(contentPane);
 		
 		JLabel lImageLogo = new JLabel();
-		JLabel title = new JLabel("Modificar " + option.toLowerCase());
+		JLabel title = new JLabel("Modificar propietario");
 		JLabel subtitle = new JLabel("Ingresa los datos");
 		JLabel lFirstName = new JLabel("Nombre(s):");
 		JLabel lLastName = new JLabel("Apellido(s):");
@@ -354,7 +353,7 @@ public class ModifyOwner extends JFrame {
 				
 				switch(request) {
 					case "success":
-						JOptionPane.showMessageDialog(null, option +  " modificado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);							
+						JOptionPane.showMessageDialog(null, "Propietario modificado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);							
 						goBack();							
 						break;
 					case "error update":
@@ -375,7 +374,7 @@ public class ModifyOwner extends JFrame {
 	void goBack() {
 		setVisible(false);
 		
-		ListOwners list = new ListOwners(flag, option);
+		ListOwners list = new ListOwners(nameCompany);
 		list.setVisible(true);
 	}
 }

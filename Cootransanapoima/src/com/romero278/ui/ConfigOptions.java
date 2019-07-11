@@ -234,26 +234,26 @@ public class ConfigOptions extends JFrame {
 				setVisible(false);
 				
 				switch (fOption) {
-					case "Propietario":
-						ListOwners listo = new ListOwners(flag, fOption);
-						listo.setVisible(true);
-						break;
-					case "Móvil":
-						ListMobiles listmob = new ListMobiles(flag, fOption);
-						listmob.setVisible(true);
-						break;
-					case "Lugar":
-						ListPlaces listpl = new ListPlaces(flag, fOption);
-						listpl.setVisible(true);
-						break;
-					case "Ruta":
-						ListRoutes listrou = new ListRoutes(flag, fOption);
-						listrou.setVisible(true);
-						break;
-					case "Recorrido":
-						ListTours listtou = new ListTours(flag, fOption);
-						listtou.setVisible(true);
-						break;
+//					case "Propietario":
+//						ListOwners listo = new ListOwners(flag, fOption);
+//						listo.setVisible(true);
+//						break;
+//					case "Móvil":
+//						ListMobiles listmob = new ListMobiles(flag, fOption);
+//						listmob.setVisible(true);
+//						break;
+//					case "Lugar":
+//						ListPlaces listpl = new ListPlaces(flag, fOption);
+//						listpl.setVisible(true);
+//						break;
+//					case "Ruta":
+//						ListRoutes listrou = new ListRoutes(flag, fOption);
+//						listrou.setVisible(true);
+//						break;
+//					case "Recorrido":
+//						ListTours listtou = new ListTours(flag, fOption);
+//						listtou.setVisible(true);
+//						break;
 				}
 			}
 		});
@@ -264,26 +264,26 @@ public class ConfigOptions extends JFrame {
 				setVisible(false);
 				
 				switch(fOption) {
-					case "Propietario":
-						AddOwner addo = new AddOwner(flag, fOption);
-						addo.setVisible(true);
-						break;
-					case "Móvil":
-						AddMobile addmo = new AddMobile(flag, fOption);
-						addmo.setVisible(true);
-						break;
-					case "Lugar":
-						AddPlace addpl = new AddPlace(flag, fOption);
-						addpl.setVisible(true);
-						break;
-					case "Ruta":
-						AddRoute addRou = new AddRoute(flag, fOption);
-						addRou.setVisible(true);
-						break;
-					case "Recorrido":
-						AddTour addTour = new AddTour(flag, fOption);
-						addTour.setVisible(true);
-						break;
+//					case "Propietario":
+//						AddOwner addo = new AddOwner(flag, fOption);
+//						addo.setVisible(true);
+//						break;
+//					case "Móvil":
+//						AddMobile addmo = new AddMobile(flag, fOption);
+//						addmo.setVisible(true);
+//						break;
+//					case "Lugar":
+//						AddPlace addpl = new AddPlace(flag, fOption);
+//						addpl.setVisible(true);
+//						break;
+//					case "Ruta":
+//						AddRoute addRou = new AddRoute(flag, fOption);
+//						addRou.setVisible(true);
+//						break;
+//					case "Recorrido":
+//						AddTour addTour = new AddTour(flag, fOption);
+//						addTour.setVisible(true);
+//						break;
 				}
 			}
 		});

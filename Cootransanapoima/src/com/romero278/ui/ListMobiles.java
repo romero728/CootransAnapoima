@@ -37,15 +37,14 @@ public class ListMobiles extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
-	String flag, option, idMobile;
+	String nameCompany, idMobile;
 	String[] dataMobile;
 	
 	@SuppressWarnings("serial")
-	public ListMobiles(String fg, String op) {
-		flag = fg;
-		option = op;
+	public ListMobiles(String nameComp) {
+		nameCompany = nameComp;
 		
-		setTitle("Listado de " + flag.toLowerCase());
+		setTitle("Listado de móviles");
 		setBounds(0, 0, 1200, 600);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -72,8 +71,8 @@ public class ListMobiles extends JFrame {
 		setContentPane(contentPane);
 		
 		JLabel lImageLogo = new JLabel();
-		JLabel title = new JLabel("Listado de " + flag.toLowerCase());
-		JLabel lSelectMobile1 = new JLabel("Selecciona un " + option.toLowerCase());
+		JLabel title = new JLabel("Listado de móviles");
+		JLabel lSelectMobile1 = new JLabel("Selecciona un móvil");
 		JLabel lSelectMobile2 = new JLabel("para ver su información");
 		JLabel lNumber = new JLabel("Número: ");
 		JLabel lCompany = new JLabel("Empresa: ");
@@ -97,6 +96,7 @@ public class ListMobiles extends JFrame {
 		JScrollPane scroll = new JScrollPane(taList);
 		JComboBox<String> cbMobile = new JComboBox<String>();
 		JButton btnSelect = new JButton("Seleccionar");
+		JButton btnAdd = new JButton("Agregar móvil", new ImageIcon(getClass().getClassLoader().getResource("add-dark.png")));
 		JButton btnModify = new JButton("Modificar", new ImageIcon(getClass().getClassLoader().getResource("modify.png")));
 		JButton btnDelete = new JButton("Eliminar", new ImageIcon(getClass().getClassLoader().getResource("delete.png")));
 		JButton btnBack = new JButton("Atrás", new ImageIcon(getClass().getClassLoader().getResource("back.png")));
@@ -127,8 +127,8 @@ public class ListMobiles extends JFrame {
 		taList.setEditable(false);
 		taList.setLineWrap(true);
 		
-		scroll.setPreferredSize(new Dimension(120, 300));
-		scroll.setBorder(null);
+		scroll.setPreferredSize(new Dimension(100, 240));
+//		scroll.setBorder(null);
 		
 		lNumber.setVisible(false);
 		tfNumber.setVisible(false);
@@ -151,6 +151,7 @@ public class ListMobiles extends JFrame {
 		btnModify.setVisible(false);
 		btnDelete.setVisible(false);
 		
+		btnAdd.setPreferredSize(new Dimension(250, 36));
 		btnModify.setPreferredSize(new Dimension(150, 30));
 		btnDelete.setPreferredSize(new Dimension(150, 30));
 		btnBack.setPreferredSize(new Dimension(100, 30));
@@ -164,6 +165,9 @@ public class ListMobiles extends JFrame {
 		
 		springLayout.putConstraint(SpringLayout.WEST, scroll, 250, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, scroll, 180, SpringLayout.NORTH, container);
+		
+		springLayout.putConstraint(SpringLayout.WEST, btnAdd, 175, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, btnAdd, 430, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lSelectMobile1, 500, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, lSelectMobile1, 250, SpringLayout.NORTH, container);
@@ -245,6 +249,7 @@ public class ListMobiles extends JFrame {
 		
 		container.add(title);
 		container.add(scroll);
+		container.add(btnAdd);
 		container.add(lSelectMobile1);
 		container.add(lSelectMobile2);
 		container.add(cbMobile);
@@ -281,6 +286,11 @@ public class ListMobiles extends JFrame {
 		taList.setOpaque(false);
 		scroll.setOpaque(false);
 		scroll.getViewport().setOpaque(false);
+		
+		btnAdd.setFont(new Font("Arial", Font.BOLD, 20));
+		btnAdd.setForeground(new Color (116, 128, 148));
+		btnAdd.setBackground(new Color(243, 227, 124));
+		btnAdd.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		lSelectMobile1.setFont(new Font("Arial", Font.BOLD, 12));
 		lSelectMobile1.setForeground(new Color (116, 128, 148));
@@ -373,6 +383,39 @@ public class ListMobiles extends JFrame {
 		btnBack.setFont(new Font("Arial", Font.BOLD, 14));
 		btnBack.setForeground(Color.WHITE);
 		btnBack.setBackground(new Color (196, 69, 59));
+		
+		btnAdd.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnAdd.setBackground(new Color(243, 227, 124));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnAdd.setBackground(new Color(243, 227, 124));
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnAdd.setBackground(new Color(243, 211, 74));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		
 		btnSelect.addMouseListener(new MouseListener() {
 			
@@ -494,6 +537,15 @@ public class ListMobiles extends JFrame {
 			btnSelect.setVisible(true);
 		}
 		
+		btnAdd.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+				AddMobile addMob = new AddMobile(nameCompany);
+				addMob.setVisible(true);
+			}
+		});
+		
 		btnSelect.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -539,7 +591,7 @@ public class ListMobiles extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 				
-				ModifyMobile modMob = new ModifyMobile(flag, option, dataMobile);
+				ModifyMobile modMob = new ModifyMobile(nameCompany, dataMobile);
 				modMob.setVisible(true);
 			}
 		});
@@ -547,14 +599,14 @@ public class ListMobiles extends JFrame {
 		btnDelete.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int answer = JOptionPane.showConfirmDialog(null, "¿Deseas eliminar este " + option.toLowerCase() + "?", option + " - Eliminar", JOptionPane.YES_NO_OPTION);
+				int answer = JOptionPane.showConfirmDialog(null, "¿Deseas eliminar este móvil?", "Móvil - Eliminar", JOptionPane.YES_NO_OPTION);
 				
 				if(answer == JOptionPane.YES_OPTION) {							
 					String request = mob.deleteMobile(dataMobile[0]);
 					
 					switch (request) {
 						case "success":
-							JOptionPane.showMessageDialog(null, option +  " eliminado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null, "Móvil eliminado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
 							goBack();
 							break;
 						case "error delete":
@@ -576,7 +628,9 @@ public class ListMobiles extends JFrame {
 	void goBack() {
 		setVisible(false);
 		
-		ConfigOptions conOps = new ConfigOptions(flag, option);
-		conOps.setVisible(true);
+		ConfigMenu conMenu = new ConfigMenu(nameCompany);
+		conMenu.setVisible(true);
+//		ConfigOptions conOps = new ConfigOptions(flag, option);
+//		conOps.setVisible(true);
 	}
 }

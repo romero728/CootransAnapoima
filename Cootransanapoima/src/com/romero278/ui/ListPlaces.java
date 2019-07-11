@@ -37,15 +37,14 @@ public class ListPlaces extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
-	String flag, option, idPlace;
+	String nameCompany, idPlace;
 	String[] dataPlace;
 	
 	@SuppressWarnings("serial")
-	public ListPlaces(String fg, String op) {
-		flag = fg;
-		option = op;
+	public ListPlaces(String nameComp) {
+		nameCompany = nameComp;
 		
-		setTitle("Listado de " + flag.toLowerCase());
+		setTitle("Listado de lugares");
 		setBounds(0, 0, 1200, 600);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -72,8 +71,8 @@ public class ListPlaces extends JFrame {
 		setContentPane(contentPane);
 		
 		JLabel lImageLogo = new JLabel();
-		JLabel title = new JLabel("Listado de " + flag.toLowerCase());
-		JLabel lSelectPlace1 = new JLabel("Selecciona un " + option.toLowerCase());
+		JLabel title = new JLabel("Listado de lugares");
+		JLabel lSelectPlace1 = new JLabel("Selecciona un lugar");
 		JLabel lSelectPlace2 = new JLabel("para ver su información");
 		JLabel lName = new JLabel("Nombre: ");
 		JTextArea taList = new JTextArea();
@@ -81,6 +80,7 @@ public class ListPlaces extends JFrame {
 		JScrollPane scroll = new JScrollPane(taList);
 		JComboBox<String> cbPlace = new JComboBox<String>();
 		JButton btnSelect = new JButton("Seleccionar");
+		JButton btnAdd = new JButton("Agregar lugar", new ImageIcon(getClass().getClassLoader().getResource("add-dark.png")));
 		JButton btnModify = new JButton("Modificar", new ImageIcon(getClass().getClassLoader().getResource("modify.png")));
 		JButton btnDelete = new JButton("Eliminar", new ImageIcon(getClass().getClassLoader().getResource("delete.png")));
 		JButton btnBack = new JButton("Atrás", new ImageIcon(getClass().getClassLoader().getResource("back.png")));
@@ -99,10 +99,11 @@ public class ListPlaces extends JFrame {
 		taList.setEditable(false);
 		taList.setLineWrap(true);
 		
-		scroll.setPreferredSize(new Dimension(300, 280));
-		scroll.setBorder(null);
+		scroll.setPreferredSize(new Dimension(300, 240));
+//		scroll.setBorder(null);
 		
 		cbPlace.setPreferredSize(new Dimension(250, 30));
+		btnAdd.setPreferredSize(new Dimension(250, 36));
 		btnModify.setPreferredSize(new Dimension(150, 30));
 		btnDelete.setPreferredSize(new Dimension(150, 30));
 		btnBack.setPreferredSize(new Dimension(100, 30));
@@ -116,6 +117,9 @@ public class ListPlaces extends JFrame {
 		
 		springLayout.putConstraint(SpringLayout.WEST, scroll, 150, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, scroll, 180, SpringLayout.NORTH, container);
+		
+		springLayout.putConstraint(SpringLayout.WEST, btnAdd, 175, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, btnAdd, 430, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lSelectPlace1, 600, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, lSelectPlace1, 250, SpringLayout.NORTH, container);
@@ -149,6 +153,7 @@ public class ListPlaces extends JFrame {
 		
 		container.add(title);
 		container.add(scroll);
+		container.add(btnAdd);
 		container.add(lSelectPlace1);
 		container.add(lSelectPlace2);
 		container.add(cbPlace);
@@ -169,6 +174,11 @@ public class ListPlaces extends JFrame {
 		taList.setOpaque(false);
 		scroll.setOpaque(false);
 		scroll.getViewport().setOpaque(false);
+		
+		btnAdd.setFont(new Font("Arial", Font.BOLD, 20));
+		btnAdd.setForeground(new Color (116, 128, 148));
+		btnAdd.setBackground(new Color(243, 227, 124));
+		btnAdd.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		
 		lSelectPlace1.setFont(new Font("Arial", Font.BOLD, 12));
 		lSelectPlace1.setForeground(new Color (116, 128, 148));
@@ -206,6 +216,39 @@ public class ListPlaces extends JFrame {
 		btnBack.setForeground(Color.WHITE);
 		btnBack.setBackground(new Color (196, 69, 59));
 		
+		btnAdd.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnAdd.setBackground(new Color(243, 227, 124));
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnAdd.setBackground(new Color(243, 227, 124));
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				btnAdd.setBackground(new Color(243, 211, 74));
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+
 		btnSelect.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -331,6 +374,15 @@ public class ListPlaces extends JFrame {
 			btnSelect.setVisible(true);
 		}
 		
+		btnAdd.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				setVisible(false);
+				AddPlace addPla = new AddPlace(nameCompany);
+				addPla.setVisible(true);
+			}
+		});
+		
 		btnSelect.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -351,7 +403,7 @@ public class ListPlaces extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 				
-				ModifyPlace mod = new ModifyPlace(flag, option, dataPlace);
+				ModifyPlace mod = new ModifyPlace(nameCompany, dataPlace);
 				mod.setVisible(true);
 			}
 		});
@@ -359,14 +411,14 @@ public class ListPlaces extends JFrame {
 		btnDelete.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int answer = JOptionPane.showConfirmDialog(null, "¿Deseas eliminar este " + option.toLowerCase() + "?", option + " - Eliminar", JOptionPane.YES_NO_OPTION);
+				int answer = JOptionPane.showConfirmDialog(null, "¿Deseas eliminar este lugar? Se eliminará la ruta y los recorridos que estén asociados", "Lugar - Eliminar", JOptionPane.YES_NO_OPTION);
 				
 				if(answer == JOptionPane.YES_OPTION) {
 					String request = place.deletePlace(dataPlace[0]);
 					
 					switch (request) {
 						case "success":
-							JOptionPane.showMessageDialog(null, option +  " eliminado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null, "Lugar eliminado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
 							goBack();
 							break;
 						case "error delete":
@@ -387,8 +439,9 @@ public class ListPlaces extends JFrame {
 	
 	void goBack() {
 		setVisible(false);
-		
-		ConfigOptions conOps = new ConfigOptions(flag, option);
-		conOps.setVisible(true);
+		ConfigMenu conMenu = new ConfigMenu(nameCompany);
+		conMenu.setVisible(true);
+//		ConfigOptions conOps = new ConfigOptions(flag, option);
+//		conOps.setVisible(true);
 	}
 }

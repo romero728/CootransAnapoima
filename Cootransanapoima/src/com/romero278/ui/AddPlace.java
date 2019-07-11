@@ -32,14 +32,13 @@ public class AddPlace extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
-	String flag, option;
+	String nameCompany;
 	
 	@SuppressWarnings("serial")
-	public AddPlace(String fg, String op) {
-		flag = fg;
-		option = op;
+	public AddPlace(String nameComp) {
+		nameCompany = nameComp;
 		
-		setTitle(option + " - Agregar");
+		setTitle("Lugar - Agregar");
 		setBounds(0, 0, 1200, 600);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -66,7 +65,7 @@ public class AddPlace extends JFrame {
 		setContentPane(contentPane);
 		
 		JLabel lImageLogo = new JLabel();
-		JLabel title = new JLabel("Agregar " + option.toLowerCase());
+		JLabel title = new JLabel("Agregar lugar");
 		JLabel subtitle = new JLabel("Ingresa los datos");
 		JLabel lName = new JLabel("Nombre: ");
 		JTextField tfName = new JTextField(16);
@@ -180,7 +179,7 @@ public class AddPlace extends JFrame {
 					
 					switch(request) {
 						case "success":
-							JOptionPane.showMessageDialog(null, option +  " agregado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);							
+							JOptionPane.showMessageDialog(null, "Lugar agregado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);							
 							goBack();
 							break;
 						case "name":
@@ -204,8 +203,9 @@ public class AddPlace extends JFrame {
 	
 	void goBack() {
 		setVisible(false);
-		
-		ConfigOptions conOps = new ConfigOptions(flag, option);
-		conOps.setVisible(true);
+		ListPlaces listPla = new ListPlaces(nameCompany);
+		listPla.setVisible(true);
+//		ConfigOptions conOps = new ConfigOptions(flag, option);
+//		conOps.setVisible(true);
 	}
 }

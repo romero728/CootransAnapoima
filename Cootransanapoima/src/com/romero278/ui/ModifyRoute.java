@@ -37,16 +37,15 @@ public class ModifyRoute extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
-	String flag, option, idRoute;
+	String nameCompany, idRoute;
 	String[] dataRoute;
 	
 	@SuppressWarnings("serial")
-	public ModifyRoute(String fg, String op, String[] data) {
-		flag = fg;
-		option = op;
+	public ModifyRoute(String nameComp, String[] data) {
+		nameCompany = nameComp;
 		dataRoute = data;
 		
-		setTitle(option + " - Modificar");
+		setTitle("Ruta - Modificar");
 		setBounds(0, 0, 1200, 600);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -73,7 +72,7 @@ public class ModifyRoute extends JFrame {
 		setContentPane(contentPane);
 		
 		JLabel lImageLogo = new JLabel();
-		JLabel title = new JLabel("Modificar " + option.toLowerCase());
+		JLabel title = new JLabel("Modificar ruta");
 		JLabel subtitle = new JLabel("Ingresa los datos");
 		JLabel lPlaceEnd = new JLabel("Destino: ");
 		JLabel lDuration = new JLabel("Duración: ");
@@ -334,7 +333,7 @@ public class ModifyRoute extends JFrame {
 					
 					switch(request) {
 						case "success":
-							JOptionPane.showMessageDialog(null, option +  " modificado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);							
+							JOptionPane.showMessageDialog(null, "Ruta modificada con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);							
 							goBack();
 							break;
 						case "end":
@@ -361,7 +360,7 @@ public class ModifyRoute extends JFrame {
 	void goBack() {
 		setVisible(false);
 		
-		ListRoutes list = new ListRoutes(flag, option);
+		ListRoutes list = new ListRoutes(nameCompany);
 		list.setVisible(true);
 	}
 }

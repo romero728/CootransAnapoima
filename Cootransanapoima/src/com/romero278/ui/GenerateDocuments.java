@@ -59,9 +59,9 @@ public class GenerateDocuments extends JFrame {
 	boolean repeatDocEach = false;
 	
 	DataPlan plan = new DataPlan();
-	ArrayList<ArrayList<String>> alActiveMobiles = new ArrayList<>();
+	ArrayList<ArrayList<String>> alActiveMobilesDoc = new ArrayList<>();
 	ArrayList<ArrayList<String>> alPlan = new ArrayList<>();
-	ArrayList<ArrayList<String>> alTours = new ArrayList<>();
+	ArrayList<ArrayList<String>> alToursDoc = new ArrayList<>();
 	ArrayList<ArrayList<String>> alToursMonday = new ArrayList<>();
 	ArrayList<ArrayList<String>> alToursTuesday = new ArrayList<>();
 	ArrayList<ArrayList<String>> alToursWednesday = new ArrayList<>();
@@ -69,7 +69,7 @@ public class GenerateDocuments extends JFrame {
 	ArrayList<ArrayList<String>> alToursFriday = new ArrayList<>();
 	ArrayList<ArrayList<String>> alToursSaturday = new ArrayList<>();
 	ArrayList<ArrayList<String>> alToursSunday = new ArrayList<>();
-	ArrayList<String> alMobiles = new ArrayList<>();
+	ArrayList<String> alMobilesDoc = new ArrayList<>();
 	
 	@SuppressWarnings("serial")
 	public GenerateDocuments(String comp, String rngDate, ArrayList<ArrayList<String>> ap) {
@@ -354,7 +354,7 @@ public class GenerateDocuments extends JFrame {
 		ArrayList<String> alTourCurrent = new ArrayList<>();
 		
 		for(int i = 0; i < alPlan.size(); i++) {
-			alMobiles.add(alPlan.get(i).get(0));
+			alMobilesDoc.add(alPlan.get(i).get(0));
 			
 			currentTour = tour.selectTour(alPlan.get(i).get(1));
 			splitTour = currentTour.split(Pattern.quote("|"));
@@ -365,7 +365,7 @@ public class GenerateDocuments extends JFrame {
 			alTourCurrent.add(splitHour[0]);
 			alTourCurrent.add(splitHour[1]);
 			
-			alTours.add(alTourCurrent);
+			alToursDoc.add(alTourCurrent);
 			
 			alTourCurrent = new ArrayList<>();
 			currentTour = "";
@@ -379,15 +379,15 @@ public class GenerateDocuments extends JFrame {
 	void separatePerDays() {
 		ArrayList<String> alTourCurrent = new ArrayList<>();
 		
-		for(int i = 0; i < alTours.size(); i++) {
-			alTourCurrent.add(alTours.get(i).get(1));
-			alTourCurrent.add(alTours.get(i).get(2));
-			alTourCurrent.add(alTours.get(i).get(3));
-			alTourCurrent.add(alMobiles.get(i));
+		for(int i = 0; i < alToursDoc.size(); i++) {
+			alTourCurrent.add(alToursDoc.get(i).get(1));
+			alTourCurrent.add(alToursDoc.get(i).get(2));
+			alTourCurrent.add(alToursDoc.get(i).get(3));
+			alTourCurrent.add(alMobilesDoc.get(i));
 			alTourCurrent.add("Anapoima -- ");
-			alTourCurrent.add(alTours.get(i).get(0));
+			alTourCurrent.add(alToursDoc.get(i).get(0));
 			
-			switch (alTours.get(i).get(1)) {
+			switch (alToursDoc.get(i).get(1)) {
 				case "Lunes":
 					alToursMonday.add(alTourCurrent);
 					break;
@@ -812,7 +812,7 @@ public class GenerateDocuments extends JFrame {
 	}
 	
 	void generateDocumentEachMobile() throws IOException {
-		alActiveMobiles = plan.getActiveMobiles();
+		alActiveMobilesDoc = plan.getActiveMobiles();
 		
 		FileInputStream file = new FileInputStream(new File("C:\\Users\\DAVID  ROMERO M\\Desktop\\Gestor de rutas\\Plantillas\\PlantillaPlanIndividual.xlsx"));
 		
@@ -897,11 +897,11 @@ public class GenerateDocuments extends JFrame {
 		styleRouteTwo.setBorderTop(BorderStyle.THIN);
 		styleRouteTwo.setFont(fontNormal);
 		
-		for(int i = 0; i < alActiveMobiles.size(); i++) {
-			sheet = wb.getSheet(alActiveMobiles.get(i).get(0));
+		for(int i = 0; i < alActiveMobilesDoc.size(); i++) {
+			sheet = wb.getSheet(alActiveMobilesDoc.get(i).get(0));
 			
 			if(sheet == null) {
-				sheet = wb.createSheet(alActiveMobiles.get(i).get(0));
+				sheet = wb.createSheet(alActiveMobilesDoc.get(i).get(0));
 			}
 			
 			numRow = 3;
@@ -912,7 +912,7 @@ public class GenerateDocuments extends JFrame {
 			cell.setCellStyle(styleTitleWeek);
 			numRow++;
 			
-			ownerName = plan.getCompleteNameOwner(alActiveMobiles.get(i).get(0));
+			ownerName = plan.getCompleteNameOwner(alActiveMobilesDoc.get(i).get(0));
 			
 			row = sheet.getRow(numRow);
 			cell = row.createCell(0);
@@ -922,7 +922,7 @@ public class GenerateDocuments extends JFrame {
 			
 			row = sheet.getRow(numRow);			
 			cell = row.createCell(0);
-			cell.setCellValue("Móvil " + alActiveMobiles.get(i).get(0));
+			cell.setCellValue("Móvil " + alActiveMobilesDoc.get(i).get(0));
 			cell.setCellStyle(styleMobile);
 			numRow++;
 			
@@ -962,7 +962,7 @@ public class GenerateDocuments extends JFrame {
 			cell.setCellStyle(styleTitle);
 			
 			for(int j = 0; j < alToursMonday.size(); j++) {
-				if(alToursMonday.get(j).get(3).equals(alActiveMobiles.get(i).get(0))) {
+				if(alToursMonday.get(j).get(3).equals(alActiveMobilesDoc.get(i).get(0))) {
 					numRow++;
 					row = sheet.getRow(numRow);
 					
@@ -1033,7 +1033,7 @@ public class GenerateDocuments extends JFrame {
 			cell.setCellStyle(styleTitle);
 			
 			for(int j = 0; j < alToursTuesday.size(); j++) {
-				if(alToursTuesday.get(j).get(3).equals(alActiveMobiles.get(i).get(0))) {
+				if(alToursTuesday.get(j).get(3).equals(alActiveMobilesDoc.get(i).get(0))) {
 					numRow++;
 					row = sheet.getRow(numRow);
 					
@@ -1104,7 +1104,7 @@ public class GenerateDocuments extends JFrame {
 			cell.setCellStyle(styleTitle);
 			
 			for(int j = 0; j < alToursWednesday.size(); j++) {
-				if(alToursWednesday.get(j).get(3).equals(alActiveMobiles.get(i).get(0))) {
+				if(alToursWednesday.get(j).get(3).equals(alActiveMobilesDoc.get(i).get(0))) {
 					numRow++;
 					row = sheet.getRow(numRow);
 					
@@ -1175,7 +1175,7 @@ public class GenerateDocuments extends JFrame {
 			cell.setCellStyle(styleTitle);
 			
 			for(int j = 0; j < alToursThursday.size(); j++) {
-				if(alToursThursday.get(j).get(3).equals(alActiveMobiles.get(i).get(0))) {
+				if(alToursThursday.get(j).get(3).equals(alActiveMobilesDoc.get(i).get(0))) {
 					numRow++;
 					row = sheet.getRow(numRow);
 					
@@ -1246,7 +1246,7 @@ public class GenerateDocuments extends JFrame {
 			cell.setCellStyle(styleTitle);
 			
 			for(int j = 0; j < alToursFriday.size(); j++) {
-				if(alToursFriday.get(j).get(3).equals(alActiveMobiles.get(i).get(0))) {
+				if(alToursFriday.get(j).get(3).equals(alActiveMobilesDoc.get(i).get(0))) {
 					numRow++;
 					row = sheet.getRow(numRow);
 					
@@ -1317,7 +1317,7 @@ public class GenerateDocuments extends JFrame {
 			cell.setCellStyle(styleTitle);
 			
 			for(int j = 0; j < alToursSaturday.size(); j++) {
-				if(alToursSaturday.get(j).get(3).equals(alActiveMobiles.get(i).get(0))) {
+				if(alToursSaturday.get(j).get(3).equals(alActiveMobilesDoc.get(i).get(0))) {
 					numRow++;
 					row = sheet.getRow(numRow);
 					
@@ -1388,7 +1388,7 @@ public class GenerateDocuments extends JFrame {
 			cell.setCellStyle(styleTitle);
 			
 			for(int j = 0; j < alToursSunday.size(); j++) {
-				if(alToursSunday.get(j).get(3).equals(alActiveMobiles.get(i).get(0))) {
+				if(alToursSunday.get(j).get(3).equals(alActiveMobilesDoc.get(i).get(0))) {
 					numRow++;
 					row = sheet.getRow(numRow);
 					
@@ -1432,6 +1432,34 @@ public class GenerateDocuments extends JFrame {
 		wb.write(output);
 		output.close();
 		wb.close();
+	}
+	
+	void showDocument(String option) {
+		if(option.equals("general")) {
+			repeatDocGen = true;							
+			contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			
+			try {
+				Desktop.getDesktop().open(new File("C:\\Users\\DAVID  ROMERO M\\Desktop\\Gestor de rutas\\Rutas\\Generales\\" + nameGeneral));
+			} catch (IOException a) {
+				// TODO Auto-generated catch block
+				a.printStackTrace();
+				
+				JOptionPane.showMessageDialog(null, "El documento general no se ha podido visualizar", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		} else {
+			repeatDocEach = true;							
+			contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+			
+			try {
+				Desktop.getDesktop().open(new File("C:\\Users\\DAVID  ROMERO M\\Desktop\\Gestor de rutas\\Rutas\\Individuales\\" + nameEach));
+			} catch (IOException a) {
+				// TODO Auto-generated catch block
+				a.printStackTrace();
+				
+				JOptionPane.showMessageDialog(null, "El documento individual no se ha podido visualizar", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
 	}
 	
 	void goBack() {

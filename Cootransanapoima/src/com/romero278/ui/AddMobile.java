@@ -37,14 +37,13 @@ public class AddMobile extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
-	String flag, option;
+	String nameCompany;
 	
 	@SuppressWarnings("serial")
-	public AddMobile(String fg, String op) {
-		flag = fg;
-		option = op;
+	public AddMobile(String nameComp) {
+		nameCompany = nameComp;
 		
-		setTitle(option + " - Agregar");
+		setTitle("Móvil - Agregar");
 		setBounds(0, 0, 1200, 600);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -71,7 +70,7 @@ public class AddMobile extends JFrame {
 		setContentPane(contentPane);
 		
 		JLabel lImageLogo = new JLabel();
-		JLabel title = new JLabel("Agregar " + option.toLowerCase());
+		JLabel title = new JLabel("Agregar móvil");
 		JLabel subtitle = new JLabel("Ingresa los datos");
 		JLabel lNumber = new JLabel("Número: ");
 		JLabel lOwner = new JLabel("Propietario: ");
@@ -362,7 +361,7 @@ public class AddMobile extends JFrame {
 					
 					switch (request) {
 						case "success":
-							JOptionPane.showMessageDialog(null, option +  " agregado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);							
+							JOptionPane.showMessageDialog(null,"Móvil agregado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);							
 							goBack();
 							break;
 						case "number":
@@ -386,8 +385,7 @@ public class AddMobile extends JFrame {
 	
 	void goBack() {
 		setVisible(false);
-		
-		ConfigOptions conOps = new ConfigOptions(flag, option);
-		conOps.setVisible(true);
+		ListMobiles listMob = new ListMobiles(nameCompany);
+		listMob.setVisible(true);
 	}
 }

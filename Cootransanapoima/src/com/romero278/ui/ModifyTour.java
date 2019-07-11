@@ -37,16 +37,15 @@ public class ModifyTour extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
-	String flag, option, idTour;
+	String nameCompany, idTour;
 	String[] dataTour;
 	
 	@SuppressWarnings("serial")
-	public ModifyTour(String fg, String op, String[] data) {
-		flag = fg;
-		option = op;
+	public ModifyTour(String nameComp, String[] data) {
+		nameCompany = nameComp;
 		dataTour = data;
 		
-		setTitle(option + " - Modificar");
+		setTitle("Recorrido - Modificar");
 		setBounds(0, 0, 1200, 600);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -73,11 +72,12 @@ public class ModifyTour extends JFrame {
 		setContentPane(contentPane);
 		
 		JLabel lImageLogo = new JLabel();
-		JLabel title = new JLabel("Modificar " + option.toLowerCase());
+		JLabel title = new JLabel("Modificar recorrido");
 		JLabel subtitle = new JLabel("Ingresa los datos");
 		JLabel lRoute = new JLabel("Ruta: ");
 		JLabel lDay = new JLabel("Día: ");
 		JLabel lHour = new JLabel("Hora: ");
+		JLabel lHour2 = new JLabel("(hh:mm)");
 		JTextField tfHour = new JTextField(6);
 		JComboBox<String> cbRoute = new JComboBox<String>();
 		JComboBox<String> cbDay = new JComboBox<String>();
@@ -107,16 +107,19 @@ public class ModifyTour extends JFrame {
 		springLayout.putConstraint(SpringLayout.NORTH, cbRoute, 250, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.WEST, lDay, 420, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, lDay, 300, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lDay, 310, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.WEST, cbDay, 470, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, cbDay, 300, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, cbDay, 310, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.WEST, lHour, 660, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, lHour, 300, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lHour, 310, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.WEST, tfHour, 720, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, tfHour, 300, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, tfHour, 310, SpringLayout.NORTH, container);
+		
+		springLayout.putConstraint(SpringLayout.WEST, lHour2, 735, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lHour2, 290, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnModify, 600, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, btnModify, 400, SpringLayout.NORTH, container);
@@ -135,6 +138,7 @@ public class ModifyTour extends JFrame {
 		container.add(cbDay);
 		container.add(lHour);
 		container.add(tfHour);
+		container.add(lHour2);
 		container.add(btnModify);
 		container.add(lImageLogo);
 		container.add(btnBack);
@@ -164,6 +168,9 @@ public class ModifyTour extends JFrame {
 		
 		tfHour.setFont(new Font("Arial", Font.PLAIN, 18));
 		tfHour.setForeground(new Color (116, 128, 148));
+		
+		lHour2.setFont(new Font("Arial", Font.BOLD, 14));
+		lHour2.setForeground(new Color (116, 128, 148));
 		
 		btnModify.setFont(new Font("Arial", Font.BOLD, 20));
 		btnModify.setForeground(Color.WHITE);
@@ -277,7 +284,7 @@ public class ModifyTour extends JFrame {
 					
 					switch (request) {
 						case "success":
-							JOptionPane.showMessageDialog(null, option +  " agregado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);							
+							JOptionPane.showMessageDialog(null, "Recorrido agregado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);							
 							goBack();
 							break;
 						case "equals":
@@ -302,7 +309,7 @@ public class ModifyTour extends JFrame {
 	void goBack() {
 		setVisible(false);
 		
-		ListTours list = new ListTours(flag, option);
+		ListTours list = new ListTours(nameCompany);
 		list.setVisible(true);
 	}
 }

@@ -37,14 +37,13 @@ public class AddRoute extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
-	String flag, option;
+	String nameCompany;
 	
 	@SuppressWarnings("serial")
-	public AddRoute(String fg, String op) {
-		flag = fg;
-		option = op;
+	public AddRoute(String nameComp) {
+		nameCompany = nameComp;
 		
-		setTitle(option + " - Agregar");
+		setTitle("Ruta - Agregar");
 		setBounds(0, 0, 1200, 600);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -71,7 +70,7 @@ public class AddRoute extends JFrame {
 		setContentPane(contentPane);
 		
 		JLabel lImageLogo = new JLabel();
-		JLabel title = new JLabel("Agregar " + option.toLowerCase());
+		JLabel title = new JLabel("Agregar ruta");
 		JLabel subtitle = new JLabel("Ingresa los datos");
 		JLabel lPlaceEnd = new JLabel("Destino: ");
 		JLabel lDuration = new JLabel("Duración: ");
@@ -309,7 +308,7 @@ public class AddRoute extends JFrame {
 					
 					switch(request) {
 						case "success":
-							JOptionPane.showMessageDialog(null, option +  " agregado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);							
+							JOptionPane.showMessageDialog(null, "Ruta agregada con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);							
 							goBack();
 							break;
 						case "end":
@@ -333,8 +332,9 @@ public class AddRoute extends JFrame {
 	
 	void goBack() {
 		setVisible(false);
-		
-		ConfigOptions conOps = new ConfigOptions(flag, option);
-		conOps.setVisible(true);
+		ListRoutes listRou = new ListRoutes(nameCompany);
+		listRou.setVisible(true);
+//		ConfigOptions conOps = new ConfigOptions(flag, option);
+//		conOps.setVisible(true);
 	}
 }

@@ -412,8 +412,32 @@ public class ConfigMenu extends JFrame {
 	void goToOptions(String flag) {
 		setVisible(false);
 		
-		ConfigOptions options = new ConfigOptions(flag, nameCompany);
-		options.setVisible(true);
+		switch (flag) {
+			case "Propietarios":
+				ListOwners low = new ListOwners(nameCompany);
+				low.setVisible(true);
+				break;
+			case "Móviles":
+				ListMobiles lmob = new ListMobiles(nameCompany);
+				lmob.setVisible(true);
+				break;
+			case "Lugares":
+				ListPlaces lpla = new ListPlaces(nameCompany);
+				lpla.setVisible(true);
+				break;
+			case "Rutas":
+				ListRoutes lrou = new ListRoutes(nameCompany);
+				lrou.setVisible(true);
+				break;
+			case "Recorridos":
+				ListTours ltou = new ListTours(nameCompany);
+				ltou.setVisible(true);
+			default:
+				break;
+		}
+		
+//		ConfigOptions options = new ConfigOptions(flag, nameCompany);
+//		options.setVisible(true);
 	}
 	
 	void goBack() {

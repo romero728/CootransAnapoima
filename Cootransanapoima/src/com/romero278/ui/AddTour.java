@@ -37,14 +37,13 @@ public class AddTour extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
-	String flag, option;
+	String nameCompany;
 	
 	@SuppressWarnings("serial")
-	public AddTour(String fg, String op) {
-		flag = fg;
-		option = op;
+	public AddTour(String nameComp) {
+		nameCompany = nameComp;
 		
-		setTitle(option + " - Agregar");
+		setTitle("Recorrido - Agregar");
 		setBounds(0, 0, 1200, 600);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -71,11 +70,12 @@ public class AddTour extends JFrame {
 		setContentPane(contentPane);
 		
 		JLabel lImageLogo = new JLabel();
-		JLabel title = new JLabel("Agregar " + option.toLowerCase());
+		JLabel title = new JLabel("Agregar recorrido");
 		JLabel subtitle = new JLabel("Ingresa los datos");
 		JLabel lRoute = new JLabel("Ruta: ");
 		JLabel lDay = new JLabel("Día: ");
 		JLabel lHour = new JLabel("Hora: ");
+		JLabel lHour2 = new JLabel("(hh:mm)");
 		JTextField tfHour = new JTextField(6);
 		JComboBox<String> cbRoute = new JComboBox<String>();
 		JComboBox<String> cbDay = new JComboBox<String>();
@@ -105,16 +105,19 @@ public class AddTour extends JFrame {
 		springLayout.putConstraint(SpringLayout.NORTH, cbRoute, 250, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.WEST, lDay, 420, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, lDay, 300, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lDay, 310, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.WEST, cbDay, 470, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, cbDay, 300, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, cbDay, 310, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.WEST, lHour, 660, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, lHour, 300, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lHour, 310, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.WEST, tfHour, 720, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, tfHour, 300, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, tfHour, 310, SpringLayout.NORTH, container);
+		
+		springLayout.putConstraint(SpringLayout.WEST, lHour2, 735, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lHour2, 290, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnAdd, 600, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, btnAdd, 400, SpringLayout.NORTH, container);
@@ -133,6 +136,7 @@ public class AddTour extends JFrame {
 		container.add(cbDay);
 		container.add(lHour);
 		container.add(tfHour);
+		container.add(lHour2);
 		container.add(btnAdd);
 		container.add(lImageLogo);
 		container.add(btnBack);
@@ -162,6 +166,9 @@ public class AddTour extends JFrame {
 		
 		tfHour.setFont(new Font("Arial", Font.PLAIN, 18));
 		tfHour.setForeground(new Color (116, 128, 148));
+		
+		lHour2.setFont(new Font("Arial", Font.BOLD, 14));
+		lHour2.setForeground(new Color (116, 128, 148));
 		
 		btnAdd.setFont(new Font("Arial", Font.BOLD, 20));
 		btnAdd.setForeground(Color.WHITE);
@@ -270,7 +277,7 @@ public class AddTour extends JFrame {
 					
 					switch (request) {
 						case "success":
-							JOptionPane.showMessageDialog(null, option +  " agregado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);							
+							JOptionPane.showMessageDialog(null, "Recorrido agregado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);							
 							goBack();
 							break;
 						case "equals":
@@ -294,8 +301,9 @@ public class AddTour extends JFrame {
 	
 	void goBack() {
 		setVisible(false);
-		
-		ConfigOptions conOps = new ConfigOptions(flag, option);
-		conOps.setVisible(true);
+		ListTours listt = new ListTours(nameCompany);
+		listt.setVisible(true);
+//		ConfigOptions conOps = new ConfigOptions(flag, option);
+//		conOps.setVisible(true);
 	}
 }

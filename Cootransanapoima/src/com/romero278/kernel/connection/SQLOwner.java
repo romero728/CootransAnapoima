@@ -127,7 +127,24 @@ public class SQLOwner {
 	}
 	
 	public String deleteOwner(String id) {
-		String request = "";
+		String request = "", request1 = "";
+		
+		String sql = "DELETE FROM moviles WHERE propietario_movil = '" + id + "'";
+		
+		try {
+			Connection connection = conBD.connection();
+			PreparedStatement prep = (PreparedStatement) connection.prepareStatement(sql);
+			int i = prep.executeUpdate();
+			
+			if(i > 0) {
+				request = "success";
+			} else {
+				request = "error delete";
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}	
+		
 		String sql1 = "DELETE FROM propietarios WHERE id_propietario = '" + id + "'";
 		
 		try {
@@ -136,9 +153,9 @@ public class SQLOwner {
 			int i = prep.executeUpdate();
 			
 			if(i > 0) {
-				request = "success";
+				request1 = "success";
 			} else {
-				request = "error delete";
+				request1 = "error delete";
 			}
 			
 			connection.close();
@@ -146,7 +163,11 @@ public class SQLOwner {
 			e1.printStackTrace();
 		}
 		
-		return request;
+		if(request.equals("success") && request1.equals("success")) {
+			return "success";
+		} else {
+			return "error delete";
+		}
 	}
 	
 	String getTypeDocument(String typeDoc) {

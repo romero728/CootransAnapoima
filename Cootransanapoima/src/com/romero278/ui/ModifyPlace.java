@@ -32,16 +32,15 @@ public class ModifyPlace extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
-	String flag, option, idOwner;
+	String nameCompany, idOwner;
 	String[] dataPlace;
 	
 	@SuppressWarnings("serial")
-	public ModifyPlace(String fg, String op, String[] data) {
-		flag = fg;
-		option = op;
+	public ModifyPlace(String nameComp, String[] data) {
+		nameCompany = nameComp;
 		dataPlace = data;
 		
-		setTitle(option + " - Modificar");
+		setTitle("Lugar - Modificar");
 		setBounds(0, 0, 1200, 600);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -68,7 +67,7 @@ public class ModifyPlace extends JFrame {
 		setContentPane(contentPane);
 		
 		JLabel lImageLogo = new JLabel();
-		JLabel title = new JLabel("Modificar " + option.toLowerCase());
+		JLabel title = new JLabel("Modificar lugar");
 		JLabel subtitle = new JLabel("Ingresa los datos");
 		JLabel lName = new JLabel("Nombre: ");
 		JTextField tfName = new JTextField(16);
@@ -184,7 +183,7 @@ public class ModifyPlace extends JFrame {
 					
 					switch(request) {
 						case "success":
-							JOptionPane.showMessageDialog(null, option +  " modificado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);							
+							JOptionPane.showMessageDialog(null, "Lugar modificado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);							
 							goBack();
 							break;
 						case "name":
@@ -209,7 +208,7 @@ public class ModifyPlace extends JFrame {
 	void goBack() {
 		setVisible(false);
 		
-		ListPlaces list = new ListPlaces(flag, option);
+		ListPlaces list = new ListPlaces(nameCompany);
 		list.setVisible(true);
 	}
 }
