@@ -76,6 +76,10 @@ public class Login extends JFrame {
 		setContentPane(contentPane);
 		
 		JLabel lImageLogo = new JLabel(); 
+		JLabel lInfo1 = new JLabel("Cooperativa integral de transportadores de Anapoima");
+		JLabel lInfo2 = new JLabel("COOTRANSANAPOIMA");
+		JLabel lInfo3 = new JLabel("RES: Personería jurídica No. 3340 del 04/11/94");
+		JLabel lInfo4 = new JLabel("NIT. 808.000.081-8");
 		JLabel title = new JLabel("Ingresa los datos para continuar ");
 		JLabel lUser = new JLabel("Usuario: ");
 		JLabel lPassword = new JLabel("Contraseña: ");
@@ -95,26 +99,37 @@ public class Login extends JFrame {
 		container.setLayout(springLayout);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lImageLogo, 600, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, lImageLogo, 50, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lImageLogo, 30, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, title, 600, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, title, 280, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, title, 240, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.WEST, lUser, 420, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, lUser, 340, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lUser, 310, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.WEST, tfUser, 545, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, tfUser, 340, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, tfUser, 310, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.WEST, lPassword, 420, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, lPassword, 380, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lPassword, 350, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.WEST, pfPassword, 545, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, pfPassword, 380, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, pfPassword, 350, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnNext, 600, SpringLayout.WEST, container);
-		springLayout.putConstraint(SpringLayout.NORTH, btnNext, 440, SpringLayout.NORTH, container);
+		springLayout.putConstraint(SpringLayout.NORTH, btnNext, 390, SpringLayout.NORTH, container);
 		
+		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lInfo1, 600, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lInfo1, 450, SpringLayout.NORTH, container);
+		
+		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lInfo2, 600, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lInfo2, 475, SpringLayout.NORTH, container);
+		
+		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lInfo3, 600, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lInfo3, 500, SpringLayout.NORTH, container);
+		
+		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lInfo4, 600, SpringLayout.WEST, container);
+		springLayout.putConstraint(SpringLayout.NORTH, lInfo4, 525, SpringLayout.NORTH, container);
 		container.add(title);
 		container.add(lImageLogo);
 		container.add(lUser);
@@ -122,6 +137,10 @@ public class Login extends JFrame {
 		container.add(lPassword);
 		container.add(pfPassword);
 		container.add(btnNext);
+		container.add(lInfo1);
+		container.add(lInfo2);
+		container.add(lInfo3);
+		container.add(lInfo4);
 		
 		title.setFont(new Font("Arial", Font.BOLD, 40));
 		title.setForeground(new Color (116, 128, 148));
@@ -142,6 +161,18 @@ public class Login extends JFrame {
 		btnNext.setForeground(new Color (116, 128, 148));
 		btnNext.setBackground(new Color(243, 227, 124));
 		btnNext.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		
+		lInfo1.setFont(new Font("Arial", Font.BOLD, 16));
+		lInfo1.setForeground(new Color (116, 128, 148));
+		
+		lInfo2.setFont(new Font("Arial", Font.BOLD, 16));
+		lInfo2.setForeground(new Color (116, 128, 148));
+		
+		lInfo3.setFont(new Font("Arial", Font.BOLD, 16));
+		lInfo3.setForeground(new Color (116, 128, 148));
+		
+		lInfo4.setFont(new Font("Arial", Font.BOLD, 16));
+		lInfo4.setForeground(new Color (116, 128, 148));
 		
 		btnNext.addMouseListener(new MouseListener() {
 			
