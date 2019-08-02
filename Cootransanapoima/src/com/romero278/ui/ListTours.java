@@ -44,6 +44,7 @@ public class ListTours extends JFrame {
 	String[] split = null;
 	
 	ArrayList<String> alTours = new ArrayList<String>();
+	ArrayList<String> alIdTours = new ArrayList<>();
 	
 	@SuppressWarnings("serial")
 	public ListTours(String nameComp) {
@@ -69,7 +70,7 @@ public class ListTours extends JFrame {
 		        }
 		};
 		
-		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("logo_anapoima.png")).getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("logo_cootransanapoima.png")).getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
 		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -100,8 +101,10 @@ public class ListTours extends JFrame {
 		JButton btnDelete = new JButton("Eliminar", new ImageIcon(getClass().getClassLoader().getResource("delete.png")));
 		JButton btnBack = new JButton("Atrás", new ImageIcon(getClass().getClassLoader().getResource("back.png")));
 		
-		ImageIcon logo = new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("logo_anapoima.png")).getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_AREA_AVERAGING));
+		ImageIcon logo = new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("logo_cootransanapoima.png")).getImage().getScaledInstance(70, 60, java.awt.Image.SCALE_AREA_AVERAGING));
 		lImageLogo.setIcon(logo);
+		
+		lImageLogo.setPreferredSize(new Dimension(70, 60));
 		
 		scroll.setVisible(false);
 		lSelectTour1.setVisible(false);
@@ -492,7 +495,7 @@ public class ListTours extends JFrame {
 		SQLRoute route = new SQLRoute();
 		SQLTour tour = new SQLTour();
 		
-		ArrayList<String> alIdTours = new ArrayList<>();		
+			
 		ArrayList<String> alDays = day.listDays();		
 		ArrayList<String[]> alTourDay = new ArrayList<String[]>();
 		
@@ -518,10 +521,15 @@ public class ListTours extends JFrame {
 		btnSelectFilter.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				alTours = new ArrayList<>();
+				alIdTours = new ArrayList<>();
 				
-				String itemDay = cbSelectDay.getSelectedItem().toString();
-				String itemRoute = cbSelectRoute.getSelectedItem().toString();
+				String itemDay = "";
+				String itemRoute = "";
 				String idDay = "", idRoute = "";
+				
+				itemDay = cbSelectDay.getSelectedItem().toString();
+				itemRoute = cbSelectRoute.getSelectedItem().toString();
 				String[] arAux = null;
 				
 				for(int i = 0; i < alTourDay.size(); i++) {

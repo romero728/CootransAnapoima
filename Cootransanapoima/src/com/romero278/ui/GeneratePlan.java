@@ -57,17 +57,23 @@ public class GeneratePlan extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	
-	boolean confirm = false;
+	String confirm = "";
 	boolean repeatData = false;
 	boolean repeatDays = false;
-//	boolean repeatDocGen = false;
-//	boolean repeatDocEach = false;
 	String nameCompany, rangeDate, nameGeneral, nameEach;
+	int iterations = 0;
 	
 	DataPlan plan = new DataPlan();
 	
 	ArrayList<ArrayList<String>> alActiveMobilesDoc = new ArrayList<>();
 	ArrayList<ArrayList<String>> alPlan = new ArrayList<>();
+	ArrayList<ArrayList<String>> alPlanMon = new ArrayList<>();
+	ArrayList<ArrayList<String>> alPlanTue = new ArrayList<>();
+	ArrayList<ArrayList<String>> alPlanWed = new ArrayList<>();
+	ArrayList<ArrayList<String>> alPlanThu = new ArrayList<>();
+	ArrayList<ArrayList<String>> alPlanFri = new ArrayList<>();
+	ArrayList<ArrayList<String>> alPlanSat = new ArrayList<>();
+	ArrayList<ArrayList<String>> alPlanSun = new ArrayList<>();
 	ArrayList<ArrayList<String>> alToursDoc = new ArrayList<>();
 	ArrayList<ArrayList<String>> alToursMonday = new ArrayList<>();
 	ArrayList<ArrayList<String>> alToursTuesday = new ArrayList<>();
@@ -102,7 +108,7 @@ public class GeneratePlan extends JFrame {
 		        }
 		};
 		
-		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("logo_anapoima.png")).getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("logo_cootransanapoima.png")).getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
 		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -112,37 +118,30 @@ public class GeneratePlan extends JFrame {
 		JLabel title = new JLabel("GENERAR RODAMIENTO");
 		JLabel subtitle = new JLabel("Ingresa la fecha inicial del rodamiento");
 		JLabel lGenerate = new JLabel("Se asignarán los móviles activos a los recorridos correspondientes");
-//		JLabel lPrint = new JLabel("Podrás ver los resultados generales o de cada móvil en formato Excel");
 		JLabel progress = new JLabel("Este proceso durará 20 segundos aprox.");
 		JLabel lGeneral = new JLabel("Se genera documento para los despachadores");
 		JLabel lEach = new JLabel("Se genera documento para los conductores");
-//		JTextField tfDate = new JTextField(30);
 		JDateChooser dcDate = new JDateChooser("dd/MM/yyyy", "##/##/####", '-');
 		JButton btnGenerate = new JButton("Generar plan", new ImageIcon(getClass().getClassLoader().getResource("start.png")));
 		JButton btnGeneral = new JButton("Documento general", new ImageIcon(getClass().getClassLoader().getResource("excel.png")));
 		JButton btnEach = new JButton("Documento de cada móvil", new ImageIcon(getClass().getClassLoader().getResource("excel.png")));
-//		JButton btnPrint = new JButton("Generar documento de Excel", new ImageIcon(getClass().getClassLoader().getResource("excel.png")));
 		JButton btnBack = new JButton("Atrás", new ImageIcon(getClass().getClassLoader().getResource("back.png")));
 		
-		ImageIcon logo = new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("logo_anapoima.png")).getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_AREA_AVERAGING));
+		ImageIcon logo = new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("logo_cootransanapoima.png")).getImage().getScaledInstance(70, 60, java.awt.Image.SCALE_AREA_AVERAGING));
 		lImageLogo.setIcon(logo);
 		
-//		lPrint.setVisible(false);
-//		btnPrint.setVisible(false);
+		lImageLogo.setPreferredSize(new Dimension(70, 60));
+		
 		lGeneral.setVisible(false);
 		lEach.setVisible(false);
 		btnGeneral.setVisible(false);
 		btnEach.setVisible(false);
-		progress.setVisible(false);
-		
-//		tfDate.setHorizontalAlignment(JTextField.CENTER);
-		
+		progress.setVisible(false);		
 		
 		dcDate.setPreferredSize(new Dimension(150, 30));
 		btnGeneral.setPreferredSize(new Dimension(320, 36));
 		btnEach.setPreferredSize(new Dimension(320, 36));
 		btnGenerate.setPreferredSize(new Dimension(200, 36));
-//		btnPrint.setPreferredSize(new Dimension(350, 36));
 		btnBack.setPreferredSize(new Dimension(100, 30));
 		
 		Container container = getContentPane();
@@ -163,12 +162,6 @@ public class GeneratePlan extends JFrame {
 		
 		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lGenerate, 600, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, lGenerate, 360, SpringLayout.NORTH, container);
-		
-//		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, btnPrint, 600, SpringLayout.WEST, container);
-//		springLayout.putConstraint(SpringLayout.NORTH, btnPrint, 400, SpringLayout.NORTH, container);
-//		
-//		springLayout.putConstraint(SpringLayout.HORIZONTAL_CENTER, lPrint, 600, SpringLayout.WEST, container);
-//		springLayout.putConstraint(SpringLayout.NORTH, lPrint, 440, SpringLayout.NORTH, container);
 		
 		springLayout.putConstraint(SpringLayout.WEST, btnGeneral, 230, SpringLayout.WEST, container);
 		springLayout.putConstraint(SpringLayout.NORTH, btnGeneral, 400, SpringLayout.NORTH, container);
@@ -200,8 +193,6 @@ public class GeneratePlan extends JFrame {
 		container.add(lGeneral);
 		container.add(btnEach);
 		container.add(lEach);
-//		container.add(btnPrint);
-//		container.add(lPrint);
 		container.add(progress);
 		container.add(lImageLogo);
 		container.add(btnBack);
@@ -211,9 +202,6 @@ public class GeneratePlan extends JFrame {
 		
 		subtitle.setFont(new Font("Arial", Font.BOLD, 24));
 		subtitle.setForeground(new Color (116, 128, 148));
-		
-//		tfDate.setFont(new Font("Arial", Font.PLAIN, 18));
-//		tfDate.setForeground(new Color (116, 128, 148));
 		
 		dcDate.setFont(new Font("Arial", Font.PLAIN, 18));
 		dcDate.setForeground(new Color (116, 128, 148));
@@ -225,14 +213,6 @@ public class GeneratePlan extends JFrame {
 		
 		lGenerate.setFont(new Font("Arial", Font.BOLD, 12));
 		lGenerate.setForeground(new Color (116, 128, 148));
-		
-//		btnPrint.setFont(new Font("Arial", Font.BOLD, 20));
-//		btnPrint.setForeground(Color.WHITE);
-//		btnPrint.setBackground(new Color(136, 212, 152));
-//		btnPrint.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-//		
-//		lPrint.setFont(new Font("Arial", Font.BOLD, 12));
-//		lPrint.setForeground(new Color (116, 128, 148));
 		
 		btnGeneral.setFont(new Font("Arial", Font.BOLD, 20));
 		btnGeneral.setForeground(Color.WHITE);
@@ -289,40 +269,7 @@ public class GeneratePlan extends JFrame {
 				
 			}
 		});
-		
-//		btnPrint.addMouseListener(new MouseListener() {
-//			
-//			@Override
-//			public void mouseReleased(MouseEvent e) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//			
-//			@Override
-//			public void mousePressed(MouseEvent e) {
-//				// TODO Auto-generated method stub
-//				btnPrint.setBackground(new Color(136, 212, 152));
-//			}
-//			
-//			@Override
-//			public void mouseExited(MouseEvent e) {
-//				// TODO Auto-generated method stub
-//				btnPrint.setBackground(new Color(136, 212, 152));
-//			}
-//			
-//			@Override
-//			public void mouseEntered(MouseEvent e) {
-//				// TODO Auto-generated method stub
-//				btnPrint.setBackground(new Color(109, 186, 163));
-//			}
-//			
-//			@Override
-//			public void mouseClicked(MouseEvent e) {
-//				// TODO Auto-generated method stub
-//				
-//			}
-//		});
-		
+				
 		btnGeneral.addMouseListener(new MouseListener() {
 			
 			@Override
@@ -396,8 +343,6 @@ public class GeneratePlan extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				contentPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 				
-//				btnPrint.setVisible(false);
-//				lPrint.setVisible(false);
 				btnGeneral.setVisible(false);
 				lGeneral.setVisible(false);
 				btnEach.setVisible(false);
@@ -426,15 +371,20 @@ public class GeneratePlan extends JFrame {
 					
 					if(ans == JOptionPane.YES_OPTION) {
 						do {
-							 newPlan();
-						} while (confirm == false);
+							if(iterations > 9) {
+								confirm = "error";
+								iterations = 0;
+							} else {
+								confirm = "en proceso";
+								newPlan();
+							}
+							 
+						} while (confirm.equals("en proceso"));
 						
-						if(confirm) {
+						if(confirm.equals("hecho")) {
 							progress.setVisible(false);
 							
 							JOptionPane.showMessageDialog(null, "Rodamiento generado con éxito", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
-//							lPrint.setVisible(true);
-//							btnPrint.setVisible(true);
 							
 							btnGeneral.setVisible(true);
 							lGeneral.setVisible(true);
@@ -458,16 +408,6 @@ public class GeneratePlan extends JFrame {
 			}
 		});
 		
-//		btnPrint.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {				
-//				setVisible(false);
-//				
-//				GenerateDocuments genDoc = new GenerateDocuments(nameCompany, rangeDate, alPlan);
-//				genDoc.setVisible(true);
-//			}
-//		});
-		
 		btnGeneral.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -476,30 +416,24 @@ public class GeneratePlan extends JFrame {
 				if(ans == JOptionPane.YES_OPTION) {
 					contentPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 					
-//					if(!repeatDocGen) {
-						getInfo();
+					getInfo();
 						
+					try {
+						generateDocumentGeneral();
+						contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 						try {
-							generateDocumentGeneral();
-//							repeatDocGen = true;
-							contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-							try {
-								Desktop.getDesktop().open(new File("C:\\Users\\DAVID  ROMERO M\\Desktop\\Gestor de rutas\\Rutas\\Generales\\" + nameGeneral));
-							} catch (IOException a) {
-								// TODO Auto-generated catch block
-								a.printStackTrace();
-								
-								JOptionPane.showMessageDialog(null, "El documento general no se ha podido visualizar", "Error", JOptionPane.ERROR_MESSAGE);
-							}
-						} catch (IOException e1) {
-							JOptionPane.showMessageDialog(null, "Ha ocurrido un error generando este documento", "Error", JOptionPane.ERROR_MESSAGE);
-							contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-							e1.printStackTrace();
+							Desktop.getDesktop().open(new File("C:\\Users\\DAVID  ROMERO M\\Desktop\\Gestor de rutas\\Rutas\\Generales\\" + nameGeneral));
+						} catch (IOException a) {
+							// TODO Auto-generated catch block
+							a.printStackTrace();
+							
+							JOptionPane.showMessageDialog(null, "El documento general no se ha podido visualizar", "Error", JOptionPane.ERROR_MESSAGE);
 						}
-//					} else {
-//						JOptionPane.showMessageDialog(null, "Ya has generado este documento", "Error", JOptionPane.ERROR_MESSAGE);
-//						contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-//					}
+					} catch (IOException e1) {
+						JOptionPane.showMessageDialog(null, "Ha ocurrido un error generando este documento", "Error", JOptionPane.ERROR_MESSAGE);
+						contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+						e1.printStackTrace();
+					}
 				} else {
 					contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				}
@@ -515,31 +449,25 @@ public class GeneratePlan extends JFrame {
 				if(ans == JOptionPane.YES_OPTION) {
 					contentPane.setCursor(new Cursor(Cursor.WAIT_CURSOR));
 					
-//					if(!repeatDocEach) {
-						getInfo();
+					getInfo();
+					
+					try {
+						generateDocumentEachMobile();						
+						contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 						
 						try {
-							generateDocumentEachMobile();
-//							repeatDocEach = true;						
-							contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+							Desktop.getDesktop().open(new File("C:\\Users\\DAVID  ROMERO M\\Desktop\\Gestor de rutas\\Rutas\\Individuales\\" + nameEach));
+						} catch (IOException a) {
+							// TODO Auto-generated catch block
+							a.printStackTrace();
 							
-							try {
-								Desktop.getDesktop().open(new File("C:\\Users\\DAVID  ROMERO M\\Desktop\\Gestor de rutas\\Rutas\\Individuales\\" + nameEach));
-							} catch (IOException a) {
-								// TODO Auto-generated catch block
-								a.printStackTrace();
-								
-								JOptionPane.showMessageDialog(null, "El documento individual no se ha podido visualizar", "Error", JOptionPane.ERROR_MESSAGE);
-							}
-						} catch (IOException e1) {
-							JOptionPane.showMessageDialog(null, "Ha ocurrido un error generando este documento", "Error", JOptionPane.ERROR_MESSAGE);
-							contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-							e1.printStackTrace();
+							JOptionPane.showMessageDialog(null, "El documento individual no se ha podido visualizar", "Error", JOptionPane.ERROR_MESSAGE);
 						}
-//					} else {
-//						JOptionPane.showMessageDialog(null, "Ya has generado este documento", "Error", JOptionPane.ERROR_MESSAGE);
-//						contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-//					}
+					} catch (IOException e1) {
+						JOptionPane.showMessageDialog(null, "Ha ocurrido un error generando este documento", "Error", JOptionPane.ERROR_MESSAGE);
+						contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+						e1.printStackTrace();
+					}
 				} else {
 					contentPane.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 				}
@@ -556,14 +484,214 @@ public class GeneratePlan extends JFrame {
 	
 	void newPlan() {
 		alPlan = new ArrayList<>();
+		alPlanMon = new ArrayList<>();
+		alPlanTue = new ArrayList<>();
+		alPlanWed = new ArrayList<>();
+		alPlanThu = new ArrayList<>();
+		alPlanFri = new ArrayList<>();
+		alPlanSat = new ArrayList<>();
+		alPlanSun = new ArrayList<>();
 		
 		ArrayList<ArrayList<String>> alActiveMobiles = plan.getActiveMobiles();
 		ArrayList<ArrayList<String>> alActiveMobiles2 = new ArrayList<>();
 		ArrayList<ArrayList<String>> alTours = plan.getTours();
+		ArrayList<ArrayList<String>> alToursMon = new ArrayList<>();
+		ArrayList<ArrayList<String>> alToursTue = new ArrayList<>();
+		ArrayList<ArrayList<String>> alToursWed = new ArrayList<>();
+		ArrayList<ArrayList<String>> alToursThu = new ArrayList<>();
+		ArrayList<ArrayList<String>> alToursFri = new ArrayList<>();
+		ArrayList<ArrayList<String>> alToursSat = new ArrayList<>();
+		ArrayList<ArrayList<String>> alToursSun = new ArrayList<>();
 		ArrayList<String> alTypeRoute = new ArrayList<>();
+		ArrayList<Integer> alMobilesTour = plan.getNumberMobilesPerTour();
+		ArrayList<Double> alTotalTours = plan.getTotalToursInAWeek();
+		ArrayList<Double> alTotalToursMon = plan.getTotalToursPerDay("1");
+		ArrayList<Double> alTotalToursTue = plan.getTotalToursPerDay("2");
+		ArrayList<Double> alTotalToursWed = plan.getTotalToursPerDay("3");
+		ArrayList<Double> alTotalToursThu = plan.getTotalToursPerDay("4");
+		ArrayList<Double> alTotalToursFri = plan.getTotalToursPerDay("5");
+		ArrayList<Double> alTotalToursSat = plan.getTotalToursPerDay("6");
+		ArrayList<Double> alTotalToursSun = plan.getTotalToursPerDay("7");
+		ArrayList<String> alActiveRoutes = plan.getActiveRoutes();
+		HashMap<String, Integer> hashRoutes = new HashMap<>();
+		HashMap<String, Integer> hashRoutesMon = new HashMap<>();
+		HashMap<String, Integer> hashRoutesTue = new HashMap<>();
+		HashMap<String, Integer> hashRoutesWed = new HashMap<>();
+		HashMap<String, Integer> hashRoutesThu = new HashMap<>();
+		HashMap<String, Integer> hashRoutesFri = new HashMap<>();
+		HashMap<String, Integer> hashRoutesSat = new HashMap<>();
+		HashMap<String, Integer> hashRoutesSun = new HashMap<>();
+		HashMap<String, Integer> hashAverageMon = new HashMap<>();
+		HashMap<String, Integer> hashAverageTue = new HashMap<>();
+		HashMap<String, Integer> hashAverageWed = new HashMap<>();
+		HashMap<String, Integer> hashAverageThu = new HashMap<>();
+		HashMap<String, Integer> hashAverageFri = new HashMap<>();
+		HashMap<String, Integer> hashAverageSat = new HashMap<>();
+		HashMap<String, Integer> hashAverageSun = new HashMap<>();
+		HashMap<String, Integer> hashAverageMin = new HashMap<>();
+		HashMap<String, Integer> hashAverageMax = new HashMap<>();
 		
-		HashMap<String, Integer> hashBegin = new HashMap<String, Integer>();
-		HashMap<String, Integer> hashFinish = new HashMap<String, Integer>();
+		for(int i = 0; i < alTotalTours.size(); i++) {
+			double current = alTotalTours.get(i) / alMobilesTour.get(i);
+			hashAverageMin.put(alActiveRoutes.get(i), (int) Math.floor(current));
+		}
+		
+		for(int i = 0; i < alTotalTours.size(); i++) {
+			double current = alTotalTours.get(i) / alMobilesTour.get(i);
+			hashAverageMax.put(alActiveRoutes.get(i), (int) Math.ceil(current));
+		}
+		
+		alMobilesTour = new ArrayList<>();
+		alMobilesTour = plan.getNumberMobilesPerTourPerDay("1");
+		alActiveRoutes = plan.getActiveRoutesPerDay("1");
+		
+//		System.out.println("altotaltoursmon: " + alTotalToursMon.size());
+//		System.out.println("almobilestour: " + alMobilesTour.size());
+		
+		for(int i = 0; i < alTotalToursMon.size(); i++) {
+			double current = alTotalToursMon.get(i) / alMobilesTour.get(i);
+			hashAverageMon.put(alActiveRoutes.get(i), (int) Math.ceil(current));
+		}
+		
+		alMobilesTour = new ArrayList<>();
+		alMobilesTour = plan.getNumberMobilesPerTourPerDay("2");
+		alActiveRoutes = plan.getActiveRoutesPerDay("2");
+		
+//		System.out.println("altotaltourstue: " + alTotalToursTue.size());
+//		System.out.println("almobilestour: " + alMobilesTour.size());
+		
+		for(int i = 0; i < alTotalToursTue.size(); i++) {
+			double current = alTotalToursTue.get(i) / alMobilesTour.get(i);
+			hashAverageTue.put(alActiveRoutes.get(i), (int) Math.ceil(current));
+		}
+		
+		alMobilesTour = new ArrayList<>();
+		alMobilesTour = plan.getNumberMobilesPerTourPerDay("3");
+		alActiveRoutes = plan.getActiveRoutesPerDay("3");
+		
+//		System.out.println("altotaltourswed: " + alTotalToursWed.size());
+//		System.out.println("almobilestour: " + alMobilesTour.size());
+		
+		for(int i = 0; i < alTotalToursWed.size(); i++) {
+			double current = alTotalToursWed.get(i) / alMobilesTour.get(i);
+			hashAverageWed.put(alActiveRoutes.get(i), (int) Math.ceil(current));
+		}
+		
+		alMobilesTour = new ArrayList<>();
+		alMobilesTour = plan.getNumberMobilesPerTourPerDay("4");
+		alActiveRoutes = plan.getActiveRoutesPerDay("4");
+		
+//		System.out.println("altotaltoursthu: " + alTotalToursThu.size());
+//		System.out.println("almobilestour: " + alMobilesTour.size());
+		
+		for(int i = 0; i < alTotalToursThu.size(); i++) {
+			double current = alTotalToursThu.get(i) / alMobilesTour.get(i);
+			hashAverageThu.put(alActiveRoutes.get(i), (int) Math.ceil(current));
+		}
+		
+		alMobilesTour = new ArrayList<>();
+		alMobilesTour = plan.getNumberMobilesPerTourPerDay("5");
+		alActiveRoutes = plan.getActiveRoutesPerDay("5");
+		
+//		System.out.println("altotaltoursfri: " + alTotalToursFri.size());
+//		System.out.println("almobilestour: " + alMobilesTour.size());
+		
+		for(int i = 0; i < alTotalToursFri.size(); i++) {
+			double current = alTotalToursFri.get(i) / alMobilesTour.get(i);
+			hashAverageFri.put(alActiveRoutes.get(i), (int) Math.ceil(current));
+		}
+		
+		alMobilesTour = new ArrayList<>();
+		alMobilesTour = plan.getNumberMobilesPerTourPerDay("6");
+		alActiveRoutes = plan.getActiveRoutesPerDay("6");
+		
+//		System.out.println("altotaltourssat: " + alTotalToursSat.size());
+//		System.out.println("almobilestour: " + alMobilesTour.size());
+		
+		for(int i = 0; i < alTotalToursSat.size(); i++) {
+			double current = alTotalToursSat.get(i) / alMobilesTour.get(i);
+			hashAverageSat.put(alActiveRoutes.get(i), (int) Math.ceil(current));
+		}
+		
+		alMobilesTour = new ArrayList<>();
+		alMobilesTour = plan.getNumberMobilesPerTourPerDay("7");
+		alActiveRoutes = plan.getActiveRoutesPerDay("7");
+		
+//		System.out.println("altotaltourssun: " + alTotalToursSun.size());
+//		System.out.println("almobilestour: " + alMobilesTour.size());
+		
+		for(int i = 0; i < alTotalToursSun.size(); i++) {
+			double current = alTotalToursSun.get(i) / alMobilesTour.get(i);
+			hashAverageSun.put(alActiveRoutes.get(i), (int) Math.ceil(current));
+		}
+		
+		for(int i = 0; i < alTours.size(); i++) {
+			ArrayList<String> current = alTours.get(i);
+			
+			switch(alTours.get(i).get(2)) {
+				case "1":
+					alToursMon.add(current);
+					break;
+				case "2":
+					alToursTue.add(current);
+					break;
+				case "3":
+					alToursWed.add(current);
+					break;
+				case "4":
+					alToursThu.add(current);
+					break;
+				case "5":
+					alToursFri.add(current);
+					break;
+				case "6":
+					alToursSat.add(current);
+					break;
+				case "7":
+					alToursSun.add(current);
+					break;
+				default:
+					break;
+			}
+		}
+		
+//		for(int i = 0; i < alTotalTours.size(); i++) {
+//			System.out.println(alTotalTours.get(i));
+//		}
+//		
+//		System.out.println("----------");
+//		
+//		for(int i = 0; i < alMobilesTour.size(); i++) {
+//			System.out.println(alMobilesTour.get(i));
+//		}
+//		
+//		System.out.println("----------");
+//		
+//		for(int i = 0; i < alTotalTours.size(); i++) {
+//			System.out.println(hashAverageMin.get(alActiveRoutes.get(i)));
+//		}
+//		
+//		System.out.println("----------");
+//		
+//		for(int i = 0; i < alTotalTours.size(); i++) {
+//			System.out.println(hashAverageMax.get(alActiveRoutes.get(i)));
+//		}
+//		
+//		System.out.println("----------");
+		
+		
+//		System.out.println("martes: " + alToursTue.size());
+//		System.out.println("miercoles: " + alToursWed.size());
+//		System.out.println("jueves: " + alToursThu.size());
+//		System.out.println("viernes: " + alToursFri.size());
+//		System.out.println("sabado: " + alToursSat.size());
+//		System.out.println("domingo: " + alToursSun.size());
+		
+		HashMap<String, Integer> hashBegin = new HashMap<>();
+		HashMap<String, Integer> hashFinish = new HashMap<>();
+		
+		HashMap<String, Integer> hashBeginDay = new HashMap<>();
+		HashMap<String, Integer> hashFinishDay = new HashMap<>();
 		
 		for(int i = 0; i < alActiveMobiles.size(); i++) {
 			if(alActiveMobiles.get(i).get(1).equals("1")) {
@@ -572,192 +700,1506 @@ public class GeneratePlan extends JFrame {
 			}
 		}
 		
+		for(int i = 0; i < alActiveMobiles.size(); i++) {
+			if(alActiveMobiles.get(i).get(1).equals("1")) {
+				hashBeginDay.put(alActiveMobiles.get(i).get(0), 0);
+				hashFinishDay.put(alActiveMobiles.get(i).get(0), 0);
+			}
+		}
+		
 		int sizeMobiles = alActiveMobiles.size();
 		int sizeMobiles2 = 0;
 		int sizeTypeRoute = 0;
 		int sizeTours = alTours.size();
 		int randomBegin = 0;
-		int iterations = 0;
 		
-		while(sizeTours != alPlan.size()) {
-//			System.out.println("iteration: " + iterations);
+		randomBegin = (int) (Math.random() * sizeMobiles);
+		
+		for(int i = 0; i < sizeMobiles; i++) {
+			if(i >= randomBegin) {
+				alActiveMobiles2.add(alActiveMobiles.get(i));
+			}
+		}
+		
+		sizeMobiles2 = alActiveMobiles2.size();
+		
+		boolean bolBegin, bolFinish, bolBeginDay, bolFinishDay;
+		
+		
+		
+		
+		
+//		for(int i = 0; i < alToursMon.size(); i++) {
+//			System.out.println("id: " + alToursMon.get(i).get(0) + " -- ruta: " + alToursMon.get(i).get(1) + " -- dia: " + alToursMon.get(i).get(2) + " -- hora: " + alToursMon.get(i).get(3));
+//		}
+		
+		for(int i = 0; i < alToursMon.size(); i++) {
+//			System.out.println("i: " + i);
 			
-			if(iterations > 10) {
-				iterations = 0;
-				confirm = false;
-				break;
-			} else {
-				randomBegin = (int) (Math.random() * sizeMobiles);
-				
-				for(int i = 0; i < sizeMobiles; i++) {
-					if(i >= randomBegin) {
-						alActiveMobiles2.add(alActiveMobiles.get(i));
-					}
-				}
-				
+			alTypeRoute = plan.getTypeRoute(alToursMon.get(i).get(1));
+			sizeTypeRoute = alTypeRoute.size();
+			
+			if(alActiveMobiles2.isEmpty()) {
+				alActiveMobiles2.addAll(alActiveMobiles);
 				sizeMobiles2 = alActiveMobiles2.size();
+			}
+			
+			for(int j = 0; j < sizeMobiles2; j++) {
+//				System.out.println("j: " + j);
 				
-				boolean bolBegin, bolFinish;
-				
-				for(int i = 0; i < sizeTours; i++) {
-					alTypeRoute = plan.getTypeRoute(alTours.get(i).get(1));
-					sizeTypeRoute = alTypeRoute.size();
+				for(int k = 0; k < sizeTypeRoute; k++) {
+//					System.out.println("k: " + k);
+//					System.out.println("size mobiles2: " + alActiveMobiles2.size());
+//					System.out.println("current mobiles2: " + alActiveMobiles2.get(j).get(1));
+//					System.out.println("size typeRoute: " + alTypeRoute.size());
+//					System.out.println("current typeRoute: " + alTypeRoute.get(k));
 					
-					if(alActiveMobiles2.isEmpty()) {
-						alActiveMobiles2.addAll(alActiveMobiles);
-						sizeMobiles2 = alActiveMobiles2.size();
-					}
-					
-					for(int j = 0; j < sizeMobiles2; j++) {
-						for(int k = 0; k < sizeTypeRoute; k++) {
-							if(alActiveMobiles2.get(j).get(1).equals(alTypeRoute.get(k))) {
-								ArrayList<String> current = new ArrayList<>();
-								
-								if(alTours.get(i).get(3).equals("04:45:00") || alTours.get(i).get(3).equals("21:45:00")) {
-									bolBegin = false;
-									bolFinish = false;
+					if(alActiveMobiles2.get(j).get(1).equals(alTypeRoute.get(k))) {
+						ArrayList<String> current = new ArrayList<>();
+						
+						if(i == 0 || i == (alToursMon.size()-1)) {
+							bolBeginDay = false;
+							bolFinishDay = false;
+							
+							if(i == 0) {
+								if(hashBeginDay.get(alActiveMobiles2.get(j).get(0)) > 0) {
+									j++;
+									break;
+								} else {
+									hashBeginDay.put(alActiveMobiles2.get(j).get(0), Integer.parseInt(alToursMon.get(i).get(2)));
 									
-									if(alTours.get(i).get(3).equals("04:45:00")) {
-										if(hashBegin.get(alActiveMobiles2.get(j).get(0)) > 0) {
-											j++;
-											break;
-										} else {
-											hashBegin.put(alActiveMobiles2.get(j).get(0), Integer.parseInt(alTours.get(i).get(2)));
-											
-											current.add(alActiveMobiles2.get(j).get(0));
-											current.add(alTours.get(i).get(0));
-											
-											alPlan.add(current);
-											
-											alActiveMobiles2.remove(j);
-											
-											k = sizeTypeRoute;
-											j = sizeMobiles2;
-											
-											bolBegin = true;
-										}
-									}
-
-									if(alTours.get(i).get(3).equals("21:45:00")) {								
-										if(hashFinish.get(alActiveMobiles2.get(j).get(0)) > 0) {
-											j++;
-											break;
-										} else {
-											if(hashBegin.get(alActiveMobiles2.get(j).get(0)) != Integer.parseInt(alTours.get(i).get(2))) {
-												hashFinish.put(alActiveMobiles2.get(j).get(0), Integer.parseInt(alTours.get(i).get(2)));
-												
-												current.add(alActiveMobiles2.get(j).get(0));
-												current.add(alTours.get(i).get(0));
-												
-												alPlan.add(current);
-												
-												alActiveMobiles2.remove(j);
-												
-												k = sizeTypeRoute;
-												j = sizeMobiles2;
-												
-												bolFinish = true;
-											} else {
-												j++;									
-												break;
-											}
-										}
-									}
+									current.add(alActiveMobiles2.get(j).get(0));
+									current.add(alToursMon.get(i).get(0));
 									
-									if(bolBegin == false && bolFinish == false) {
-										alActiveMobiles2.addAll(alActiveMobiles);
-										i--;
+									alPlanMon.add(current);
+									
+//									System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursMon.get(i).get(0));
+									
+									alActiveMobiles2.remove(j);
+									
+									k = sizeTypeRoute;
+									j = sizeMobiles2;
+									
+									bolBeginDay = true;
+								}
+							}
+							
+							if(i == (alToursMon.size()-1)) {								
+								if(hashFinishDay.get(alActiveMobiles2.get(j).get(0)) > 0) {
+									j++;
+									break;
+								} else {
+									if(hashBeginDay.get(alActiveMobiles2.get(j).get(0)) != Integer.parseInt(alToursMon.get(i).get(2))) {
+										hashFinishDay.put(alActiveMobiles2.get(j).get(0), Integer.parseInt(alToursMon.get(i).get(2)));
+										
+										current.add(alActiveMobiles2.get(j).get(0));
+										current.add(alToursMon.get(i).get(0));
+										
+										alPlanMon.add(current);
+										
+//										System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursMon.get(i).get(0));
+										
+										alActiveMobiles2.remove(j);
+										
 										k = sizeTypeRoute;
 										j = sizeMobiles2;
+										
+										bolFinishDay = true;
+									} else {
+										j++;									
+										break;
 									}
-								} else {							
-									current.add(alActiveMobiles2.get(j).get(0));
-									current.add(alTours.get(i).get(0));
+								}
+							}
+							
+							if(bolBeginDay == false && bolFinishDay == false) {
+								alActiveMobiles2.addAll(alActiveMobiles);
+								
+								if(i == 0) {
+									i = 0;
+								} else {
+									i--;
+								}
+								
+								k = sizeTypeRoute;
+								j = sizeMobiles2;
+							}
+						} else {
+							if(hashRoutesMon.containsKey(alToursMon.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0))) {
+								int v = hashRoutesMon.get(alToursMon.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0));
+								
+								if(v < hashAverageMon.get(alToursMon.get(i).get(1))) {
+									hashRoutesMon.put(alToursMon.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0), v+1);
 									
-									alPlan.add(current);
+									current.add(alActiveMobiles2.get(j).get(0));
+									current.add(alToursMon.get(i).get(0));
+									
+									alPlanMon.add(current);
+									
+//									System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursMon.get(i).get(0));
 									
 									alActiveMobiles2.remove(j);
 									
 									k = sizeTypeRoute;
 									j = sizeMobiles2;
 								}
+								
 							} else {
-								if(j == sizeMobiles2-1 && k == sizeTypeRoute-1) {
-									alActiveMobiles2.addAll(alActiveMobiles);
-									i--;
-								}
+								hashRoutesMon.put(alToursMon.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0), 1);
+								
+								current.add(alActiveMobiles2.get(j).get(0));
+								current.add(alToursMon.get(i).get(0));
+								
+								alPlanMon.add(current);
+								
+//								System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursMon.get(i).get(0));
+								
+								alActiveMobiles2.remove(j);
+								
+								k = sizeTypeRoute;
+								j = sizeMobiles2;
 							}
 						}
-					}
-					
-					if(alPlan.get(alPlan.size()-1).get(1) != alTours.get(i).get(0)) {
-						alActiveMobiles2.addAll(alActiveMobiles);
-						i--;
-					}
-					
-					sizeMobiles2 = alActiveMobiles2.size();
-					
-					if(sizeMobiles2 > 50) {
-						i = sizeTours;
+					} else {
+						if(j == sizeMobiles2-1 && k == sizeTypeRoute-1) {
+							alActiveMobiles2.addAll(alActiveMobiles);
+							
+							if(i == 0) {
+								i = 0;
+							} else {
+								i--;
+							}
+						}
 					}
 				}
 			}
 			
-			iterations++;
-		}				
+			if(alPlanMon.size() == 0) {
+				alActiveMobiles2.addAll(alActiveMobiles);
+				
+				if(i == 0) {
+					i = 0;
+				} else {
+					i--;
+				}
+			} else {
+				if(alPlanMon.get(alPlanMon.size()-1).get(1) != alToursMon.get(i).get(0)) {
+					alActiveMobiles2.addAll(alActiveMobiles);
+					
+					if(i == 0) {
+						i = 0;
+					} else {
+						i--;
+					}
+				}
+			}
+			
+			sizeMobiles2 = alActiveMobiles2.size();
+			
+			if(sizeMobiles2 > (sizeMobiles * 5)) {
+				i = sizeTours;
+			}
+		}
 		
-//		for(String key:hashBegin.keySet()) {
-//			System.out.println("Mobile: " + key + ", day begin: " + hashBegin.get(key));
-//			System.out.println("Mobile: " + key + ", day finish: " + hashFinish.get(key));
+//		for(int i = 0; i < alPlanMon.size(); i++) {
+//			System.out.println("movil: " + alPlanMon.get(i).get(0) + " -- ruta: " + alPlanMon.get(i).get(1));
 //		}
+//		
+//		System.out.println("lunes: " + alToursMon.size());
+//		System.out.println("lunes plan: " + alPlanMon.size());
 		
-//		for(int j = 0; j < alPlan.size(); j++) {
-//			System.out.println(alPlan.get(j).get(0) + " - " + alPlan.get(j).get(1));
+		alActiveMobiles2.addAll(alActiveMobiles);
+		
+		for(int i = 0; i < alToursTue.size(); i++) {
+//			System.out.println("i: " + i);
+			
+			alTypeRoute = plan.getTypeRoute(alToursTue.get(i).get(1));
+			sizeTypeRoute = alTypeRoute.size();
+			
+			if(alActiveMobiles2.isEmpty()) {
+				alActiveMobiles2.addAll(alActiveMobiles);
+				sizeMobiles2 = alActiveMobiles2.size();
+			}
+			
+			for(int j = 0; j < sizeMobiles2; j++) {
+//				System.out.println("j: " + j);
+				
+				for(int k = 0; k < sizeTypeRoute; k++) {
+//					System.out.println("k: " + k);
+//					System.out.println("size mobiles2: " + alActiveMobiles2.size());
+//					System.out.println("current mobiles2: " + alActiveMobiles2.get(j).get(1));
+//					System.out.println("size typeRoute: " + alTypeRoute.size());
+//					System.out.println("current typeRoute: " + alTypeRoute.get(k));
+					
+					if(alActiveMobiles2.get(j).get(1).equals(alTypeRoute.get(k))) {
+						ArrayList<String> current = new ArrayList<>();
+						
+						if(i == 0 || i == (alToursTue.size()-1)) {
+							bolBeginDay = false;
+							bolFinishDay = false;
+							
+							if(i == 0) {
+								if(hashBeginDay.get(alActiveMobiles2.get(j).get(0)) > 0) {
+									j++;
+									break;
+								} else {
+									hashBeginDay.put(alActiveMobiles2.get(j).get(0), Integer.parseInt(alToursTue.get(i).get(2)));
+									
+									current.add(alActiveMobiles2.get(j).get(0));
+									current.add(alToursTue.get(i).get(0));
+									
+									alPlanTue.add(current);
+									
+//									System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursTue.get(i).get(0));
+									
+									alActiveMobiles2.remove(j);
+									
+									k = sizeTypeRoute;
+									j = sizeMobiles2;
+									
+									bolBeginDay = true;
+								}
+							}
+							
+							if(i == (alToursTue.size()-1)) {								
+								if(hashFinishDay.get(alActiveMobiles2.get(j).get(0)) > 0) {
+									j++;
+									break;
+								} else {
+									if(hashBeginDay.get(alActiveMobiles2.get(j).get(0)) != Integer.parseInt(alToursTue.get(i).get(2))) {
+										hashFinishDay.put(alActiveMobiles2.get(j).get(0), Integer.parseInt(alToursTue.get(i).get(2)));
+										
+										current.add(alActiveMobiles2.get(j).get(0));
+										current.add(alToursTue.get(i).get(0));
+										
+										alPlanTue.add(current);
+										
+//										System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursTue.get(i).get(0));
+										
+										alActiveMobiles2.remove(j);
+										
+										k = sizeTypeRoute;
+										j = sizeMobiles2;
+										
+										bolFinishDay = true;
+									} else {
+										j++;									
+										break;
+									}
+								}
+							}
+							
+							if(bolBeginDay == false && bolFinishDay == false) {
+								alActiveMobiles2.addAll(alActiveMobiles);
+
+								if(i == 0) {
+									i = 0;
+								} else {
+									i--;
+								}
+								
+								k = sizeTypeRoute;
+								j = sizeMobiles2;
+							}
+						} else {
+							if(hashRoutesTue.containsKey(alToursTue.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0))) {
+								
+								int v = hashRoutesTue.get(alToursTue.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0));
+								
+								if(v < hashAverageTue.get(alToursTue.get(i).get(1))) {
+									hashRoutesTue.put(alToursTue.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0), v+1);
+									
+									current.add(alActiveMobiles2.get(j).get(0));
+									current.add(alToursTue.get(i).get(0));
+									
+									alPlanTue.add(current);
+									
+//									System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursTue.get(i).get(0));
+									
+									alActiveMobiles2.remove(j);
+									
+									k = sizeTypeRoute;
+									j = sizeMobiles2;
+								}
+								
+							} else {
+								hashRoutesTue.put(alToursTue.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0), 1);
+								
+								current.add(alActiveMobiles2.get(j).get(0));
+								current.add(alToursTue.get(i).get(0));
+								
+								alPlanTue.add(current);
+								
+//								System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursTue.get(i).get(0));
+								
+								alActiveMobiles2.remove(j);
+								
+								k = sizeTypeRoute;
+								j = sizeMobiles2;
+							}
+						}
+					} else {
+						if(j == sizeMobiles2-1 && k == sizeTypeRoute-1) {
+							alActiveMobiles2.addAll(alActiveMobiles);
+							
+							if(i == 0) {
+								i = 0;
+							} else {
+								i--;
+							}
+						}
+					}
+				}
+			}
+			
+			if(alPlanTue.size() == 0) {
+				alActiveMobiles2.addAll(alActiveMobiles);
+				
+				if(i == 0) {
+					i = 0;
+				} else {
+					i--;
+				}
+			} else {
+				if(alPlanTue.get(alPlanTue.size()-1).get(1) != alToursTue.get(i).get(0)) {
+					alActiveMobiles2.addAll(alActiveMobiles);
+
+					if(i == 0) {
+						i = 0;
+					} else {
+						i--;
+					}
+				}
+			}
+			
+			sizeMobiles2 = alActiveMobiles2.size();
+			
+			if(sizeMobiles2 > (sizeMobiles * 5)) {
+				i = sizeTours;
+			}
+		}
+		
+//		System.out.println("martes: " + alToursTue.size());
+//		System.out.println("martes plan: " + alPlanTue.size());
+		
+		alActiveMobiles2.addAll(alActiveMobiles);
+		
+		for(int i = 0; i < alToursWed.size(); i++) {
+//			System.out.println("i: " + i);
+			
+			alTypeRoute = plan.getTypeRoute(alToursWed.get(i).get(1));
+			sizeTypeRoute = alTypeRoute.size();
+			
+			if(alActiveMobiles2.isEmpty()) {
+				alActiveMobiles2.addAll(alActiveMobiles);
+				sizeMobiles2 = alActiveMobiles2.size();
+			}
+			
+			for(int j = 0; j < sizeMobiles2; j++) {
+//				System.out.println("j: " + j);
+				
+				for(int k = 0; k < sizeTypeRoute; k++) {
+//					System.out.println("k: " + k);
+//					System.out.println("size mobiles2: " + alActiveMobiles2.size());
+//					System.out.println("current mobiles2: " + alActiveMobiles2.get(j).get(1));
+//					System.out.println("size typeRoute: " + alTypeRoute.size());
+//					System.out.println("current typeRoute: " + alTypeRoute.get(k));
+					
+					if(alActiveMobiles2.get(j).get(1).equals(alTypeRoute.get(k))) {
+						ArrayList<String> current = new ArrayList<>();
+						
+						if(i == 0 || i == (alToursWed.size()-1)) {
+							bolBeginDay = false;
+							bolFinishDay = false;
+							
+							if(i == 0) {
+								if(hashBeginDay.get(alActiveMobiles2.get(j).get(0)) > 0) {
+									j++;
+									break;
+								} else {
+									hashBeginDay.put(alActiveMobiles2.get(j).get(0), Integer.parseInt(alToursWed.get(i).get(2)));
+									
+									current.add(alActiveMobiles2.get(j).get(0));
+									current.add(alToursWed.get(i).get(0));
+									
+									alPlanWed.add(current);
+									
+//									System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursWed.get(i).get(0));
+									
+									alActiveMobiles2.remove(j);
+									
+									k = sizeTypeRoute;
+									j = sizeMobiles2;
+									
+									bolBeginDay = true;
+								}
+							}
+							
+							if(i == (alToursWed.size()-1)) {								
+								if(hashFinishDay.get(alActiveMobiles2.get(j).get(0)) > 0) {
+									j++;
+									break;
+								} else {
+									if(hashBeginDay.get(alActiveMobiles2.get(j).get(0)) != Integer.parseInt(alToursWed.get(i).get(2))) {
+										hashFinishDay.put(alActiveMobiles2.get(j).get(0), Integer.parseInt(alToursWed.get(i).get(2)));
+										
+										current.add(alActiveMobiles2.get(j).get(0));
+										current.add(alToursWed.get(i).get(0));
+										
+										alPlanWed.add(current);
+										
+//										System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursWed.get(i).get(0));
+										
+										alActiveMobiles2.remove(j);
+										
+										k = sizeTypeRoute;
+										j = sizeMobiles2;
+										
+										bolFinishDay = true;
+									} else {
+										j++;									
+										break;
+									}
+								}
+							}
+							
+							if(bolBeginDay == false && bolFinishDay == false) {
+								alActiveMobiles2.addAll(alActiveMobiles);
+
+								if(i == 0) {
+									i = 0;
+								} else {
+									i--;
+								}
+								
+								k = sizeTypeRoute;
+								j = sizeMobiles2;
+							}
+						} else {
+							if(hashRoutesWed.containsKey(alToursWed.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0))) {
+								int v = hashRoutesWed.get(alToursWed.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0));
+								
+								if(v < hashAverageWed.get(alToursWed.get(i).get(1))) {
+									hashRoutesWed.put(alToursWed.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0), v+1);
+									
+									current.add(alActiveMobiles2.get(j).get(0));
+									current.add(alToursWed.get(i).get(0));
+									
+									alPlanWed.add(current);
+									
+//									System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursWed.get(i).get(0));
+									
+									alActiveMobiles2.remove(j);
+									
+									k = sizeTypeRoute;
+									j = sizeMobiles2;
+								}
+								
+							} else {
+								hashRoutesWed.put(alToursWed.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0), 1);
+								
+								current.add(alActiveMobiles2.get(j).get(0));
+								current.add(alToursWed.get(i).get(0));
+								
+								alPlanWed.add(current);
+								
+//								System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursWed.get(i).get(0));
+								
+								alActiveMobiles2.remove(j);
+								
+								k = sizeTypeRoute;
+								j = sizeMobiles2;
+							}
+						}
+					} else {
+						if(j == sizeMobiles2-1 && k == sizeTypeRoute-1) {
+							alActiveMobiles2.addAll(alActiveMobiles);
+							if(i == 0) {
+								i = 0;
+							} else {
+								i--;
+							}
+						}
+					}
+				}
+			}
+			
+			if(alPlanWed.size() == 0) {
+				alActiveMobiles2.addAll(alActiveMobiles);
+				
+				if(i == 0) {
+					i = 0;
+				} else {
+					i--;
+				}
+			} else {
+				if(alPlanWed.get(alPlanWed.size()-1).get(1) != alToursWed.get(i).get(0)) {
+					alActiveMobiles2.addAll(alActiveMobiles);
+
+					if(i == 0) {
+						i = 0;
+					} else {
+						i--;
+					}
+				}
+			}
+			
+			sizeMobiles2 = alActiveMobiles2.size();
+			
+			if(sizeMobiles2 > (sizeMobiles * 5)) {
+				i = sizeTours;
+			}
+		}
+		
+//		System.out.println("miercoles: " + alToursWed.size());
+//		System.out.println("miercoles plan: " + alPlanWed.size());
+		
+		alActiveMobiles2.addAll(alActiveMobiles);
+		
+		for(int i = 0; i < alToursThu.size(); i++) {
+//			System.out.println("i: " + i);
+			
+			alTypeRoute = plan.getTypeRoute(alToursThu.get(i).get(1));
+			sizeTypeRoute = alTypeRoute.size();
+			
+			if(alActiveMobiles2.isEmpty()) {
+				alActiveMobiles2.addAll(alActiveMobiles);
+				sizeMobiles2 = alActiveMobiles2.size();
+			}
+			
+			for(int j = 0; j < sizeMobiles2; j++) {
+//				System.out.println("j: " + j);
+				
+				for(int k = 0; k < sizeTypeRoute; k++) {
+//					System.out.println("k: " + k);
+//					System.out.println("size mobiles2: " + alActiveMobiles2.size());
+//					System.out.println("current mobiles2: " + alActiveMobiles2.get(j).get(1));
+//					System.out.println("size typeRoute: " + alTypeRoute.size());
+//					System.out.println("current typeRoute: " + alTypeRoute.get(k));
+					
+					if(alActiveMobiles2.get(j).get(1).equals(alTypeRoute.get(k))) {
+						ArrayList<String> current = new ArrayList<>();
+						
+						if(i == 0 || i == (alToursThu.size()-1)) {
+							bolBeginDay = false;
+							bolFinishDay = false;
+							
+							if(i == 0) {
+								if(hashBeginDay.get(alActiveMobiles2.get(j).get(0)) > 0) {
+									j++;
+									break;
+								} else {
+									hashBeginDay.put(alActiveMobiles2.get(j).get(0), Integer.parseInt(alToursThu.get(i).get(2)));
+									
+									current.add(alActiveMobiles2.get(j).get(0));
+									current.add(alToursThu.get(i).get(0));
+									
+									alPlanThu.add(current);
+									
+//									System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alTours.get(i).get(0));
+									
+									alActiveMobiles2.remove(j);
+									
+									k = sizeTypeRoute;
+									j = sizeMobiles2;
+									
+									bolBeginDay = true;
+								}
+							}
+							
+							if(i == (alToursThu.size()-1)) {								
+								if(hashFinishDay.get(alActiveMobiles2.get(j).get(0)) > 0) {
+									j++;
+									break;
+								} else {
+									if(hashBeginDay.get(alActiveMobiles2.get(j).get(0)) != Integer.parseInt(alToursThu.get(i).get(2))) {
+										hashFinishDay.put(alActiveMobiles2.get(j).get(0), Integer.parseInt(alToursThu.get(i).get(2)));
+										
+										current.add(alActiveMobiles2.get(j).get(0));
+										current.add(alToursThu.get(i).get(0));
+										
+										alPlanThu.add(current);
+										
+//										System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursThu.get(i).get(0));
+										
+										alActiveMobiles2.remove(j);
+										
+										k = sizeTypeRoute;
+										j = sizeMobiles2;
+										
+										bolFinishDay = true;
+									} else {
+										j++;									
+										break;
+									}
+								}
+							}
+							
+							if(bolBeginDay == false && bolFinishDay == false) {
+								alActiveMobiles2.addAll(alActiveMobiles);
+
+								if(i == 0) {
+									i = 0;
+								} else {
+									i--;
+								}
+								
+								k = sizeTypeRoute;
+								j = sizeMobiles2;
+							}
+						} else {
+							if(hashRoutesThu.containsKey(alToursThu.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0))) {
+								int v = hashRoutesThu.get(alToursThu.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0));
+								
+								if(v < hashAverageThu.get(alToursThu.get(i).get(1))) {
+									hashRoutesThu.put(alToursThu.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0), v+1);
+									
+									current.add(alActiveMobiles2.get(j).get(0));
+									current.add(alToursThu.get(i).get(0));
+									
+									alPlanThu.add(current);
+									
+//									System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursThu.get(i).get(0));
+									
+									alActiveMobiles2.remove(j);
+									
+									k = sizeTypeRoute;
+									j = sizeMobiles2;
+								}
+								
+							} else {
+								hashRoutesThu.put(alToursThu.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0), 1);
+								
+								current.add(alActiveMobiles2.get(j).get(0));
+								current.add(alToursThu.get(i).get(0));
+								
+								alPlanThu.add(current);
+								
+//								System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursThu.get(i).get(0));
+								
+								alActiveMobiles2.remove(j);
+								
+								k = sizeTypeRoute;
+								j = sizeMobiles2;
+							}
+						}
+					} else {
+						if(j == sizeMobiles2-1 && k == sizeTypeRoute-1) {
+							alActiveMobiles2.addAll(alActiveMobiles);
+
+							if(i == 0) {
+								i = 0;
+							} else {
+								i--;
+							}
+						}
+					}
+				}
+			}
+			
+			if(alPlanThu.size() == 0) {
+				alActiveMobiles2.addAll(alActiveMobiles);
+				
+				if(i == 0) {
+					i = 0;
+				} else {
+					i--;
+				}
+			} else {
+				if(alPlanThu.get(alPlanThu.size()-1).get(1) != alToursThu.get(i).get(0)) {
+					alActiveMobiles2.addAll(alActiveMobiles);
+
+					if(i == 0) {
+						i = 0;
+					} else {
+						i--;
+					}
+				}
+			}
+			
+			sizeMobiles2 = alActiveMobiles2.size();
+			
+			if(sizeMobiles2 > (sizeMobiles * 5)) {
+				i = sizeTours;
+			}
+		}
+		
+//		System.out.println("jueves: " + alToursThu.size());
+//		System.out.println("jueves plan: " + alPlanThu.size());
+		
+		alActiveMobiles2.addAll(alActiveMobiles);
+		
+		for(int i = 0; i < alToursFri.size(); i++) {
+//			System.out.println("i: " + i);
+			
+			alTypeRoute = plan.getTypeRoute(alToursFri.get(i).get(1));
+			sizeTypeRoute = alTypeRoute.size();
+			
+			if(alActiveMobiles2.isEmpty()) {
+				alActiveMobiles2.addAll(alActiveMobiles);
+				sizeMobiles2 = alActiveMobiles2.size();
+			}
+			
+			for(int j = 0; j < sizeMobiles2; j++) {
+//				System.out.println("j: " + j);
+				
+				for(int k = 0; k < sizeTypeRoute; k++) {
+//					System.out.println("k: " + k);
+//					System.out.println("size mobiles2: " + alActiveMobiles2.size());
+//					System.out.println("current mobiles2: " + alActiveMobiles2.get(j).get(1));
+//					System.out.println("size typeRoute: " + alTypeRoute.size());
+//					System.out.println("current typeRoute: " + alTypeRoute.get(k));
+					
+					if(alActiveMobiles2.get(j).get(1).equals(alTypeRoute.get(k))) {
+						ArrayList<String> current = new ArrayList<>();
+						
+						if(i == 0 || i == (alToursFri.size()-1)) {
+							bolBeginDay = false;
+							bolFinishDay = false;
+							
+							if(i == 0) {
+								if(hashBeginDay.get(alActiveMobiles2.get(j).get(0)) > 0) {
+									j++;
+									break;
+								} else {
+									hashBeginDay.put(alActiveMobiles2.get(j).get(0), Integer.parseInt(alToursFri.get(i).get(2)));
+									
+									current.add(alActiveMobiles2.get(j).get(0));
+									current.add(alToursFri.get(i).get(0));
+									
+									alPlanFri.add(current);
+									
+//									System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursFri.get(i).get(0));
+									
+									alActiveMobiles2.remove(j);
+									
+									k = sizeTypeRoute;
+									j = sizeMobiles2;
+									
+									bolBeginDay = true;
+								}
+							}
+							
+							if(i == (alToursFri.size()-1)) {								
+								if(hashFinishDay.get(alActiveMobiles2.get(j).get(0)) > 0) {
+									j++;
+									break;
+								} else {
+									if(hashBeginDay.get(alActiveMobiles2.get(j).get(0)) != Integer.parseInt(alToursFri.get(i).get(2))) {
+										hashFinishDay.put(alActiveMobiles2.get(j).get(0), Integer.parseInt(alToursFri.get(i).get(2)));
+										
+										current.add(alActiveMobiles2.get(j).get(0));
+										current.add(alToursFri.get(i).get(0));
+										
+										alPlanFri.add(current);
+										
+//										System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursFri.get(i).get(0));
+										
+										alActiveMobiles2.remove(j);
+										
+										k = sizeTypeRoute;
+										j = sizeMobiles2;
+										
+										bolFinishDay = true;
+									} else {
+										j++;									
+										break;
+									}
+								}
+							}
+							
+							if(bolBeginDay == false && bolFinishDay == false) {
+								alActiveMobiles2.addAll(alActiveMobiles);
+
+								if(i == 0) {
+									i = 0;
+								} else {
+									i--;
+								}
+								
+								k = sizeTypeRoute;
+								j = sizeMobiles2;
+							}
+						} else {
+							if(hashRoutesFri.containsKey(alToursFri.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0))) {
+								int v = hashRoutesFri.get(alToursFri.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0));
+								
+								if(v < hashAverageFri.get(alToursFri.get(i).get(1))) {
+									hashRoutesFri.put(alToursFri.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0), v+1);
+									
+									current.add(alActiveMobiles2.get(j).get(0));
+									current.add(alToursFri.get(i).get(0));
+									
+									alPlanFri.add(current);
+									
+//									System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursFri.get(i).get(0));
+									
+									alActiveMobiles2.remove(j);
+									
+									k = sizeTypeRoute;
+									j = sizeMobiles2;
+								}
+								
+							} else {
+								hashRoutesFri.put(alToursFri.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0), 1);
+								
+								current.add(alActiveMobiles2.get(j).get(0));
+								current.add(alToursFri.get(i).get(0));
+								
+								alPlanFri.add(current);
+								
+//								System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursFri.get(i).get(0));
+								
+								alActiveMobiles2.remove(j);
+								
+								k = sizeTypeRoute;
+								j = sizeMobiles2;
+							}
+						}
+					} else {
+						if(j == sizeMobiles2-1 && k == sizeTypeRoute-1) {
+							alActiveMobiles2.addAll(alActiveMobiles);
+							
+							if(i == 0) {
+								i = 0;
+							} else {
+								i--;
+							}
+						}
+					}
+				}
+			}
+			
+			if(alPlanFri.size() == 0) {
+				alActiveMobiles2.addAll(alActiveMobiles);
+				
+				if(i == 0) {
+					i = 0;
+				} else {
+					i--;
+				}
+			} else {
+				if(alPlanFri.get(alPlanFri.size()-1).get(1) != alToursFri.get(i).get(0)) {
+					alActiveMobiles2.addAll(alActiveMobiles);
+
+					if(i == 0) {
+						i = 0;
+					} else {
+						i--;
+					}
+				}
+			}
+			
+			sizeMobiles2 = alActiveMobiles2.size();
+			
+			if(sizeMobiles2 > (sizeMobiles * 5)) {
+				i = sizeTours;
+			}
+		}
+		
+//		System.out.println("viernes: " + alToursFri.size());
+//		System.out.println("viernes plan: " + alPlanFri.size());
+		
+		alActiveMobiles2.addAll(alActiveMobiles);
+		
+		for(int i = 0; i < alToursSat.size(); i++) {
+//			System.out.println("i: " + i);
+			
+			alTypeRoute = plan.getTypeRoute(alToursSat.get(i).get(1));
+			sizeTypeRoute = alTypeRoute.size();
+			
+			if(alActiveMobiles2.isEmpty()) {
+				alActiveMobiles2.addAll(alActiveMobiles);
+				sizeMobiles2 = alActiveMobiles2.size();
+			}
+			
+			for(int j = 0; j < sizeMobiles2; j++) {
+//				System.out.println("j: " + j);
+				
+				for(int k = 0; k < sizeTypeRoute; k++) {
+//					System.out.println("k: " + k);
+//					System.out.println("size mobiles2: " + alActiveMobiles2.size());
+//					System.out.println("current mobiles2: " + alActiveMobiles2.get(j).get(1));
+//					System.out.println("size typeRoute: " + alTypeRoute.size());
+//					System.out.println("current typeRoute: " + alTypeRoute.get(k));
+					
+					if(alActiveMobiles2.get(j).get(1).equals(alTypeRoute.get(k))) {
+						ArrayList<String> current = new ArrayList<>();
+						
+						if(i == 0 || i == (alToursSat.size()-1)) {
+							bolBeginDay = false;
+							bolFinishDay = false;
+							
+							if(i == 0) {
+								if(hashBeginDay.get(alActiveMobiles2.get(j).get(0)) > 0) {
+									j++;
+									break;
+								} else {
+									hashBeginDay.put(alActiveMobiles2.get(j).get(0), Integer.parseInt(alToursSat.get(i).get(2)));
+									
+									current.add(alActiveMobiles2.get(j).get(0));
+									current.add(alToursSat.get(i).get(0));
+									
+									alPlanSat.add(current);
+									
+//									System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursSat.get(i).get(0));
+									
+									alActiveMobiles2.remove(j);
+									
+									k = sizeTypeRoute;
+									j = sizeMobiles2;
+									
+									bolBeginDay = true;
+								}
+							}
+							
+							if(i == (alToursSat.size()-1)) {								
+								if(hashFinishDay.get(alActiveMobiles2.get(j).get(0)) > 0) {
+									j++;
+									break;
+								} else {
+									if(hashBeginDay.get(alActiveMobiles2.get(j).get(0)) != Integer.parseInt(alToursSat.get(i).get(2))) {
+										hashFinishDay.put(alActiveMobiles2.get(j).get(0), Integer.parseInt(alToursSat.get(i).get(2)));
+										
+										current.add(alActiveMobiles2.get(j).get(0));
+										current.add(alToursSat.get(i).get(0));
+										
+										alPlanSat.add(current);
+										
+//										System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursSat.get(i).get(0));
+										
+										alActiveMobiles2.remove(j);
+										
+										k = sizeTypeRoute;
+										j = sizeMobiles2;
+										
+										bolFinishDay = true;
+									} else {
+										j++;									
+										break;
+									}
+								}
+							}
+							
+							if(bolBeginDay == false && bolFinishDay == false) {
+								alActiveMobiles2.addAll(alActiveMobiles);
+
+								if(i == 0) {
+									i = 0;
+								} else {
+									i--;
+								}
+								
+								k = sizeTypeRoute;
+								j = sizeMobiles2;
+							}
+						} else {
+							if(hashRoutesSat.containsKey(alToursSat.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0))) {
+								int v = hashRoutesSat.get(alToursSat.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0));
+								
+								if(v < hashAverageSat.get(alToursSat.get(i).get(1))) {
+									hashRoutesSat.put(alToursSat.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0), v+1);
+									
+									current.add(alActiveMobiles2.get(j).get(0));
+									current.add(alToursSat.get(i).get(0));
+									
+									alPlanSat.add(current);
+									
+//									System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursSat.get(i).get(0));
+									
+									alActiveMobiles2.remove(j);
+									
+									k = sizeTypeRoute;
+									j = sizeMobiles2;
+								}
+								
+							} else {
+								hashRoutesSat.put(alToursSat.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0), 1);
+								
+								current.add(alActiveMobiles2.get(j).get(0));
+								current.add(alToursSat.get(i).get(0));
+								
+								alPlanSat.add(current);
+								
+//								System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursSat.get(i).get(0));
+								
+								alActiveMobiles2.remove(j);
+								
+								k = sizeTypeRoute;
+								j = sizeMobiles2;
+							}
+						}
+					} else {
+						if(j == sizeMobiles2-1 && k == sizeTypeRoute-1) {
+							alActiveMobiles2.addAll(alActiveMobiles);
+
+							if(i == 0) {
+								i = 0;
+							} else {
+								i--;
+							}
+						}
+					}
+				}
+			}
+			
+			if(alPlanSat.size() == 0) {
+				alActiveMobiles2.addAll(alActiveMobiles);
+				
+				if(i == 0) {
+					i = 0;
+				} else {
+					i--;
+				}
+			} else {
+				if(alPlanSat.get(alPlanSat.size()-1).get(1) != alToursSat.get(i).get(0)) {
+					alActiveMobiles2.addAll(alActiveMobiles);
+					
+					if(i == 0) {
+						i = 0;
+					} else {
+						i--;
+					}
+				}
+			}
+			
+			sizeMobiles2 = alActiveMobiles2.size();
+			
+			if(sizeMobiles2 > (sizeMobiles * 5)) {
+				i = sizeTours;
+			}
+		}
+		
+//		System.out.println("sabado: " + alToursSat.size());
+//		System.out.println("sabado plan: " + alPlanSat.size());
+		
+		alActiveMobiles2.addAll(alActiveMobiles);
+		
+		for(int i = 0; i < alToursSun.size(); i++) {
+//			System.out.println("i: " + i);
+			
+			alTypeRoute = plan.getTypeRoute(alToursSun.get(i).get(1));
+			sizeTypeRoute = alTypeRoute.size();
+			
+			if(alActiveMobiles2.isEmpty()) {
+				alActiveMobiles2.addAll(alActiveMobiles);
+				sizeMobiles2 = alActiveMobiles2.size();
+			}
+			
+			for(int j = 0; j < sizeMobiles2; j++) {
+//				System.out.println("j: " + j);
+				
+				for(int k = 0; k < sizeTypeRoute; k++) {
+//					System.out.println("k: " + k);
+//					System.out.println("size mobiles2: " + alActiveMobiles2.size());
+//					System.out.println("current mobiles2: " + alActiveMobiles2.get(j).get(1));
+//					System.out.println("size typeRoute: " + alTypeRoute.size());
+//					System.out.println("current typeRoute: " + alTypeRoute.get(k));
+					
+					if(alActiveMobiles2.get(j).get(1).equals(alTypeRoute.get(k))) {
+						ArrayList<String> current = new ArrayList<>();
+						
+						if(i == 0 || i == (alToursSun.size()-1)) {
+							bolBeginDay = false;
+							bolFinishDay = false;
+							
+							if(i == 0) {
+								if(hashBeginDay.get(alActiveMobiles2.get(j).get(0)) > 0) {
+									j++;
+									break;
+								} else {
+									hashBeginDay.put(alActiveMobiles2.get(j).get(0), Integer.parseInt(alToursSun.get(i).get(2)));
+									
+									current.add(alActiveMobiles2.get(j).get(0));
+									current.add(alToursSun.get(i).get(0));
+									
+									alPlanSun.add(current);
+									
+//									System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursSun.get(i).get(0));
+									
+									alActiveMobiles2.remove(j);
+									
+									k = sizeTypeRoute;
+									j = sizeMobiles2;
+									
+									bolBeginDay = true;
+								}
+							}
+							
+							if(i == (alToursSun.size()-1)) {								
+								if(hashFinishDay.get(alActiveMobiles2.get(j).get(0)) > 0) {
+									j++;
+									break;
+								} else {
+									if(hashBeginDay.get(alActiveMobiles2.get(j).get(0)) != Integer.parseInt(alToursSun.get(i).get(2))) {
+										hashFinishDay.put(alActiveMobiles2.get(j).get(0), Integer.parseInt(alToursSun.get(i).get(2)));
+										
+										current.add(alActiveMobiles2.get(j).get(0));
+										current.add(alToursSun.get(i).get(0));
+										
+										alPlanSun.add(current);
+										
+//										System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursSun.get(i).get(0));
+										
+										alActiveMobiles2.remove(j);
+										
+										k = sizeTypeRoute;
+										j = sizeMobiles2;
+										
+										bolFinishDay = true;
+									} else {
+										j++;									
+										break;
+									}
+								}
+							}
+							
+							if(bolBeginDay == false && bolFinishDay == false) {
+								alActiveMobiles2.addAll(alActiveMobiles);
+
+								if(i == 0) {
+									i = 0;
+								} else {
+									i--;
+								}
+								
+								k = sizeTypeRoute;
+								j = sizeMobiles2;
+							}
+						} else {
+							if(hashRoutesSun.containsKey(alToursSun.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0))) {
+								int v = hashRoutesSun.get(alToursSun.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0));
+								
+								if(v < hashAverageSun.get(alToursSun.get(i).get(1))) {
+									hashRoutesSun.put(alToursSun.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0), v+1);
+									
+									current.add(alActiveMobiles2.get(j).get(0));
+									current.add(alToursSun.get(i).get(0));
+									
+									alPlanSun.add(current);
+									
+//									System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursSun.get(i).get(0));
+									
+									alActiveMobiles2.remove(j);
+									
+									k = sizeTypeRoute;
+									j = sizeMobiles2;
+								}
+								
+							} else {
+								hashRoutesSun.put(alToursSun.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0), 1);
+								
+								current.add(alActiveMobiles2.get(j).get(0));
+								current.add(alToursSun.get(i).get(0));
+								
+								alPlanSun.add(current);
+								
+//								System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alToursSun.get(i).get(0));
+								
+								alActiveMobiles2.remove(j);
+								
+								k = sizeTypeRoute;
+								j = sizeMobiles2;
+							}
+						}
+					} else {
+						if(j == sizeMobiles2-1 && k == sizeTypeRoute-1) {
+							alActiveMobiles2.addAll(alActiveMobiles);
+							
+							if(i == 0) {
+								i = 0;
+							} else {
+								i--;
+							}
+						}
+					}
+				}
+			}
+			
+			if(alPlanSun.size() == 0) {
+				alActiveMobiles2.addAll(alActiveMobiles);
+				
+				if(i == 0) {
+					i = 0;
+				} else {
+					i--;
+				}
+			} else {
+				if(alPlanSun.get(alPlanSun.size()-1).get(1) != alToursSun.get(i).get(0)) {
+					alActiveMobiles2.addAll(alActiveMobiles);
+
+					if(i == 0) {
+						i = 0;
+					} else {
+						i--;
+					}
+				}
+			}
+			
+			sizeMobiles2 = alActiveMobiles2.size();
+			
+			if(sizeMobiles2 > (sizeMobiles * 5)) {
+				i = sizeTours;
+			}
+		}
+		
+//		System.out.println("domingo: " + alToursSun.size());
+//		System.out.println("domingo plan: " + alPlanSun.size());
+		
+		
+		
+		
+		
+		
+		
+		
+//		// AQUI
+//		
+//		// ESTO ES PROVISIONAL
+//		sizeMobiles = alActiveMobiles.size();
+//		sizeMobiles2 = 0;
+//		sizeTypeRoute = 0;
+//		sizeTours = alTours.size();
+//		randomBegin = 0;
+//		
+//		randomBegin = (int) (Math.random() * sizeMobiles);
+//		
+//		for(int i = 0; i < sizeMobiles; i++) {
+//			if(i >= randomBegin) {
+//				alActiveMobiles2.add(alActiveMobiles.get(i));
+//			}
+//		}
+//		
+//		sizeMobiles2 = alActiveMobiles2.size();		
+//		
+//		alActiveMobiles2 = new ArrayList<>();
+//		alActiveMobiles2.addAll(alActiveMobiles);		
+//		
+//		for(int i = 0; i < sizeTours; i++) {
+////			System.out.println("i=" + i);
+////			System.out.println("tour=" + alTours.get(i).get(0));
+//			alTypeRoute = plan.getTypeRoute(alTours.get(i).get(1));
+//			sizeTypeRoute = alTypeRoute.size();
 //			
-//			switch (alPlan.get(j).get(1)) {
-//				case "121":
-//					System.out.println("\n ----- Martes ----- \n");
-//					break;
-//				case "242":
-//					System.out.println("\n ----- Miércoles ----- \n");
-//					break;
-//				case "369":
-//					System.out.println("\n ----- Jueves ----- \n");
-//					break;
-//				case "490":
-//					System.out.println("\n ----- Viernes ----- \n");
-//					break;
-//				case "611":
-//					System.out.println("\n ----- Sábado ----- \n");
-//					break;
-//				case "732":
-//					System.out.println("\n ----- Domingo ----- \n");
-//					break;
-//				default:
-//					break;
+//			if(alActiveMobiles2.isEmpty()) {
+//				alActiveMobiles2.addAll(alActiveMobiles);
+//				sizeMobiles2 = alActiveMobiles2.size();
+//			}
+//			
+//			for(int j = 0; j < sizeMobiles2; j++) {
+////				System.out.println("j=" + j);
+////				System.out.println("sizeMobiles = " + sizeMobiles2);
+//				
+//				for(int k = 0; k < sizeTypeRoute; k++) {
+////					System.out.println("j dentro de j dentro de k todo dentro de i = " + j);
+//					
+//					if(alActiveMobiles2.get(j).get(1).equals(alTypeRoute.get(k))) {
+//						ArrayList<String> current = new ArrayList<>();
+//						
+//						if(alTours.get(i).get(3).equals("04:45:00") || alTours.get(i).get(3).equals("21:45:00")) {
+//							bolBegin = false;
+//							bolFinish = false;
+//							
+//							if(alTours.get(i).get(3).equals("04:45:00")) {
+//								if(hashBegin.get(alActiveMobiles2.get(j).get(0)) > 0) {
+//									j++;
+//									break;
+//								} else {
+//									hashBegin.put(alActiveMobiles2.get(j).get(0), Integer.parseInt(alTours.get(i).get(2)));
+//									
+//									current.add(alActiveMobiles2.get(j).get(0));
+//									current.add(alTours.get(i).get(0));
+//									
+//									alPlan.add(current);
+//									
+////									System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alTours.get(i).get(0));
+//									
+//									alActiveMobiles2.remove(j);
+//									
+//									k = sizeTypeRoute;
+//									j = sizeMobiles2;
+//									
+//									bolBegin = true;
+//								}
+//							}
+//
+//							if(alTours.get(i).get(3).equals("21:45:00")) {								
+//								if(hashFinish.get(alActiveMobiles2.get(j).get(0)) > 0) {
+//									j++;
+//									break;
+//								} else {
+//									if(hashBegin.get(alActiveMobiles2.get(j).get(0)) != Integer.parseInt(alTours.get(i).get(2))) {
+//										hashFinish.put(alActiveMobiles2.get(j).get(0), Integer.parseInt(alTours.get(i).get(2)));
+//										
+//										current.add(alActiveMobiles2.get(j).get(0));
+//										current.add(alTours.get(i).get(0));
+//										
+//										alPlan.add(current);
+//										
+////										System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alTours.get(i).get(0));
+//										
+//										alActiveMobiles2.remove(j);
+//										
+//										k = sizeTypeRoute;
+//										j = sizeMobiles2;
+//										
+//										bolFinish = true;
+//									} else {
+//										j++;									
+//										break;
+//									}
+//								}
+//							}
+//							
+//							if(bolBegin == false && bolFinish == false) {
+//								alActiveMobiles2.addAll(alActiveMobiles);
+//								i--;
+//								k = sizeTypeRoute;
+//								j = sizeMobiles2;
+//							}
+//						} else {
+//							if(hashRoutes.containsKey(alTours.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0))) {
+//								int v = hashRoutes.get(alTours.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0));
+//								boolean valid = false;
+//								
+//								if(hashRoutes.size() <= (alTours.size() / 8)) {
+//									if(v < hashAverageMin.get(alTours.get(i).get(1))) {
+//										valid = true;
+//									}
+//								} else {
+//									if(v < hashAverageMax.get(alTours.get(i).get(1))) {
+//										valid = true;
+//									}
+//								}
+//								
+//								if(valid) {
+//									hashRoutes.put(alTours.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0), v+1);
+//									
+//									current.add(alActiveMobiles2.get(j).get(0));
+//									current.add(alTours.get(i).get(0));
+//									
+//									alPlan.add(current);
+//									
+////									System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alTours.get(i).get(0));
+//									
+//									alActiveMobiles2.remove(j);
+//									
+//									k = sizeTypeRoute;
+//									j = sizeMobiles2;
+//								}
+//							} else {
+//								hashRoutes.put(alTours.get(i).get(1) + "-" + alActiveMobiles2.get(j).get(0), 1);
+//								
+//								current.add(alActiveMobiles2.get(j).get(0));
+//								current.add(alTours.get(i).get(0));
+//								
+//								alPlan.add(current);
+//								
+////								System.out.println("Movil " + alActiveMobiles2.get(j).get(0) + " asignado a recorrido " + alTours.get(i).get(0));
+//								
+//								alActiveMobiles2.remove(j);
+//								
+//								k = sizeTypeRoute;
+//								j = sizeMobiles2;
+//							}
+//						}
+//					} else {
+//						if(j == sizeMobiles2-1 && k == sizeTypeRoute-1) {
+//							alActiveMobiles2.addAll(alActiveMobiles);
+//							i--;
+//						}
+//					}
+//				}
+//			}
+//			
+//			if(alPlan.get(alPlan.size()-1).get(1) != alTours.get(i).get(0)) {
+//				alActiveMobiles2.addAll(alActiveMobiles);
+//				i--;
+//			}
+//			
+//			sizeMobiles2 = alActiveMobiles2.size();
+//			
+//			if(sizeMobiles2 > (sizeMobiles * 5)) {
+//				i = sizeTours;
+//			}
+//		}
+				
+//		for(int i = 0; i < alActiveRoutes.size(); i++) {
+//			for(int j = 0; j < alActiveMobiles.size(); j++) {
+//				System.out.println(hashRoutes.get(i + "-" + j));
 //			}
 //		}
 		
+//		System.out.println("alplan size: " + alPlan.size());		
+		alPlan.addAll(alPlanMon);
+		
+//		System.out.println("--- alPlan con lunes integrado ---");
+		
+//		for(int i = 0; i < alPlan.size(); i++) {
+//			System.out.println("movil: " + alPlan.get(i).get(0) + " -- ruta: " + alPlan.get(i).get(1));
+//		}
+		
+//		System.out.println("alplan size: " + alPlan.size());
+		alPlan.addAll(alPlanTue);
+//		System.out.println("alplan size: " + alPlan.size());
+		alPlan.addAll(alPlanWed);
+//		System.out.println("alplan size: " + alPlan.size());
+		alPlan.addAll(alPlanThu);
+//		System.out.println("alplan size: " + alPlan.size());
+		alPlan.addAll(alPlanFri);
+//		System.out.println("alplan size: " + alPlan.size());
+		alPlan.addAll(alPlanSat);
+//		System.out.println("alplan size: " + alPlan.size());
+		alPlan.addAll(alPlanSun);
+		
 		System.out.println("----------");
+//		System.out.println("Hash size: " + hashRoutes.size());
 		System.out.println("All tours: " + sizeTours);
 		System.out.println("Plan size: " + alPlan.size());
 		System.out.println("First mobile: " + alPlan.get(0).get(0));
 		
+		System.out.println("----------");
+		
+//		for(int i = 0; i < alPlan.size(); i++) {
+//			System.out.println("mobile: " + alPlan.get(i).get(0) + " -- tour: " + alPlan.get(i).get(1));
+//		}
+		
+//		if(sizeTours == alPlan.size()) {
+//			System.out.println("Primera parte bien");
+//		} else {
+//			System.out.println("Primera parte mal");
+//		}
+//		
+//		if(alPlan.get(alPlan.size()-1).get(1).equals(alTours.get(alTours.size()-1).get(0))) {
+//			System.out.println("Segunda parte bien");
+//		} else {
+//			System.out.println("Segunda parte mal");
+//		}
+//		
+//		System.out.println("alplan last pos: " + alPlan.get(alPlan.size()-1).get(1));
+//		System.out.println("altours last pos: " + alTours.get(alTours.size()-1).get(0));
+		
 		if(sizeTours == alPlan.size() && alPlan.get(alPlan.size()-1).get(1).equals(alTours.get(alTours.size()-1).get(0))) {
-			confirm = true;
+			confirm = "hecho";
 		}
+		
+		System.out.println("confirm: " + confirm);
+		
+		iterations++;
 	}
 	
 	void getInfo() {
-		if(!repeatData && !repeatDays) {
+//		if(!repeatData && !repeatDays) {
 			getData();
 			separatePerDays();
-		}
+//		}
 	}
 	
 	void getData() {
 		SQLTour tour = new SQLTour();
 		
+		alMobilesDoc = new ArrayList<>();
+		alToursDoc = new ArrayList<>();
 		String currentTour = "";
 		String[] splitTour = null;
 		String[] splitHour = null;
@@ -788,6 +2230,13 @@ public class GeneratePlan extends JFrame {
 	
 	void separatePerDays() {
 		ArrayList<String> alTourCurrent = new ArrayList<>();
+		alToursMonday = new ArrayList<>();
+		alToursTuesday = new ArrayList<>();
+		alToursWednesday = new ArrayList<>();
+		alToursThursday = new ArrayList<>();
+		alToursFriday = new ArrayList<>();
+		alToursSaturday = new ArrayList<>();
+		alToursSunday = new ArrayList<>();
 		
 		for(int i = 0; i < alToursDoc.size(); i++) {
 			alTourCurrent.add(alToursDoc.get(i).get(1));
@@ -829,7 +2278,7 @@ public class GeneratePlan extends JFrame {
 		repeatDays = true;
 	}
 	
-	void generateDocumentGeneral() throws IOException {		
+	void generateDocumentGeneral() throws IOException {
 		FileInputStream file = new FileInputStream(new File("C:\\Users\\DAVID  ROMERO M\\Desktop\\Gestor de rutas\\Plantillas\\PlantillaPlanGeneral.xlsx"));
 		
 		XSSFWorkbook wb = new XSSFWorkbook(file);
@@ -851,6 +2300,10 @@ public class GeneratePlan extends JFrame {
 		CellStyle styleTitle = wb.createCellStyle();
 		styleTitle.setAlignment(HorizontalAlignment.CENTER);
 		styleTitle.setVerticalAlignment(VerticalAlignment.CENTER);
+		styleTitle.setBorderBottom(BorderStyle.THIN);
+		styleTitle.setBorderLeft(BorderStyle.THIN);
+		styleTitle.setBorderRight(BorderStyle.THIN);
+		styleTitle.setBorderTop(BorderStyle.THIN);
 		styleTitle.setFont(fontTitle);
 		
 		CellStyle styleDayHour = wb.createCellStyle();

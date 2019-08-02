@@ -42,7 +42,9 @@ public class ListOwners extends JFrame {
 	String[] dataOwner;
 	
 	@SuppressWarnings("serial")
-	public ListOwners(String nameComp) {		
+	public ListOwners(String nameComp) {
+		nameCompany = nameComp;
+		
 		setTitle("Listado de propietarios");
 		setBounds(0, 0, 1200, 600);
 		setLocationRelativeTo(null);
@@ -63,7 +65,7 @@ public class ListOwners extends JFrame {
 		        }
 		};
 		
-		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("logo_anapoima.png")).getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("logo_cootransanapoima.png")).getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
 		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -96,8 +98,10 @@ public class ListOwners extends JFrame {
 		JButton btnDelete = new JButton("Eliminar", new ImageIcon(getClass().getClassLoader().getResource("delete.png")));
 		JButton btnBack = new JButton("Atrás", new ImageIcon(getClass().getClassLoader().getResource("back.png")));
 		
-		ImageIcon logo = new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("logo_anapoima.png")).getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_AREA_AVERAGING));
+		ImageIcon logo = new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("logo_cootransanapoima.png")).getImage().getScaledInstance(70, 60, java.awt.Image.SCALE_AREA_AVERAGING));
 		lImageLogo.setIcon(logo);
+		
+		lImageLogo.setPreferredSize(new Dimension(70, 60));
 		
 		tfName.setEditable(false);
 		tfDocument.setEditable(false);

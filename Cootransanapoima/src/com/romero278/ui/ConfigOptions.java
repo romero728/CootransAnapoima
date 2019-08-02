@@ -55,7 +55,7 @@ public class ConfigOptions extends JFrame {
 		        }
 		};
 		
-		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("logo_anapoima.png")).getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("logo_cootransanapoima.png")).getScaledInstance(48, 48, java.awt.Image.SCALE_AREA_AVERAGING));
 		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -88,8 +88,10 @@ public class ConfigOptions extends JFrame {
 		JButton btnAdd = new JButton("Agregar " + option.toLowerCase(), new ImageIcon(getClass().getClassLoader().getResource("add.png")));
 		JButton btnBack = new JButton("Atrás", new ImageIcon(getClass().getClassLoader().getResource("back.png")));
 		
-		ImageIcon logo = new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("logo_anapoima.png")).getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_AREA_AVERAGING));
+		ImageIcon logo = new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("logo_cootransanapoima.png")).getImage().getScaledInstance(70, 60, java.awt.Image.SCALE_AREA_AVERAGING));
 		lImageLogo.setIcon(logo);
+		
+		lImageLogo.setPreferredSize(new Dimension(70, 60));
 		
 		btnAdd.setPreferredSize(new Dimension(350, 36));
 		btnList.setPreferredSize(new Dimension(350, 36));

@@ -69,7 +69,7 @@ public class Login extends JFrame {
 		        }
 		};
 		
-		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("logo_anapoima.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("logo_cootransanapoima.png")));
 		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -87,10 +87,10 @@ public class Login extends JFrame {
 		JPasswordField pfPassword = new JPasswordField(20);
 		JButton btnNext = new JButton("Ingresar", new ImageIcon(getClass().getClassLoader().getResource("signin.png")));
 		
-		ImageIcon logo = new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("logo_anapoima.png")).getImage().getScaledInstance(200, 200, java.awt.Image.SCALE_AREA_AVERAGING));
+		ImageIcon logo = new ImageIcon(new ImageIcon(getClass().getClassLoader().getResource("logo_cootransanapoima.png")).getImage().getScaledInstance(220, 200, java.awt.Image.SCALE_AREA_AVERAGING));
 		lImageLogo.setIcon(logo);
 		
-		lImageLogo.setPreferredSize(new Dimension(200, 200));
+		lImageLogo.setPreferredSize(new Dimension(220, 200));
 		
 		btnNext.setPreferredSize(new Dimension(200, 36));
 		
